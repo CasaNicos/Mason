@@ -1,0 +1,219 @@
+/* static/v2/responsive.css — UI overhaul Task 8 (2026-11-16): every grid widget's internals reflow with its size.
+ *
+ * Reference behaviour (Nico): the dashboard's Sector Rotation and Reminders. Their items sit in an auto-fit CSS grid
+ * (repeat(auto-fit, minmax(min(X,100%),1fr))), so as the widget is resized the tiles move between rows and columns
+ * (horizontally, vertically, diagonally) and never overflow. This file applies the same idea to every widget:
+ *
+ * 1. One mechanism: every grid widget is a size container.
+ *      mw   the widget (.m-widget), inline-size: its header reads the widget's width
+ *      mwb  the widget body (.m-widget-body / chart canvas wrap), size: content reads width AND height
+ *    Nested MasonChart widgets inside React widgets (.mui-chart-host) are their own mw container.
+ * 2. One breakpoint vocabulary (rem, the values already used by the News / Crowd / API / Activities widgets):
+ *      width   xs <= 15rem · sm <= 22rem · md <= 32rem · lg >= 44rem
+ *      height  short <= 8rem · low <= 13rem          (mwb heights are the body's content box)
+ *    Secondary information hides first as space runs out; primary values shrink with container units (cqi/cqb).
+ * 3. Lists of cards flow into columns with auto-fit / auto-fill grids that never ask for more than 100% of the body.
+ *
+ * Scope: the template's vanilla widgets (dashboard, Positions) and the shared header. React widgets keep their
+ * rules in ui/src/widgets/<type>/*.css (their own root containers, so they also work in the harness).
+ * Nocturne tokens only. No scrollbar-width / scrollbar-color (Task 1 owns the scrollbar theme).
+ */
+
+/* ── 1. containers ─────────────────────────────────────────────────────────────────────────────────────────
+   :where() = zero specificity: these are defaults. A widget body that declares its own container keeps it (the
+   Activities / Notifications bodies are `anw`, the API Opus body is `apiopus`); those widgets query their own. */
+:where(.grid-stack-item-content > .m-widget, .mui-chart-host > .m-widget){container:mw / inline-size}
+:where(.grid-stack-item-content > .m-widget > .m-widget-body,
+       .grid-stack-item-content > .m-widget > .m-slot-canvas-wrap){container:mwb / size}
+
+/* ── 2. widget header: always one line; a long title gives way (ellipsis) before anything else ──────────── */
+.grid-stack-item-content > .m-widget > .m-widget-head,
+.mui-chart-host > .m-widget > .m-widget-head{flex-wrap:nowrap;min-width:0}
+.grid-stack-item-content > .m-widget > .m-widget-head > *,
+.mui-chart-host > .m-widget > .m-widget-head > *{flex-shrink:0}
+.grid-stack-item-content > .m-widget > .m-widget-head > .m-widget-title{
+  flex-shrink:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.m-chart-head .m-chart-sym,.m-chart-head .m-price,.m-chart-head .m-chg{white-space:nowrap}
+/* the chart engine's collapse button does nothing inside a React widget (the host's grid shim) */
+.mui-chart-host > .m-widget > .m-widget-head > .m-widget-collapse{display:none}
+
+@container mw (max-width: 22rem){
+  .m-widget-head{padding:.625rem .75rem .625rem .875rem;gap:.4375rem}
+  .m-widget-title{letter-spacing:.14em}
+}
+
+/* chart headers (MasonChart: Positions slots, dashboard charts, the RH / Scanner / Congress / Crowd chart widgets).
+   The ticker and the signed % change always stay (the sign means colour is never the only cue). As the widget
+   narrows, these give way in order: the absolute change, the chart-type label (an icon remains), the price, the
+   type menu, then the timeframe menu. Option charts also carry the UNDERLYING / CONTRACT toggle, so they start
+   earlier and shorten it to UND / OPT before dropping it. Thresholds measured on the Positions slots. */
+@container mw (max-width: 26rem){
+  .m-chart-head .m-chg-abs{display:none}
+  .m-chart-head .m-chg-pct::before,.m-chart-head .m-chg-pct::after{content:none}
+}
+@container mw (max-width: 24rem){
+  .m-chart-head{padding:.625rem .75rem .625rem .875rem;gap:.375rem}
+  .m-chart-head .m-chart-dds{gap:.25rem}
+  .m-chart-head .m-dd-btn{padding:.25rem .375rem;gap:.1875rem}
+  .m-chart-head .m-dd-caret{display:none}
+  .m-chart-head .m-src-toggle{padding:.25rem .375rem;letter-spacing:.04em}
+}
+@container mw (max-width: 22rem){
+  .m-chart-head .m-dd-type .m-dd-lbl{display:none}
+  .m-chart-head .m-dd-type .m-dd-ico{display:inline-block}
+}
+@container mw (max-width: 19rem){ .m-chart-head .m-price{display:none} }
+@container mw (max-width: 13rem){ .m-chart-head .m-dd-type{display:none} }
+@container mw (max-width: 10.5rem){ .m-chart-head .m-dd-tf{display:none} }
+/* option charts */
+@container mw (max-width: 34rem){
+  .m-chart-head:has(.m-src-toggle) .m-chg-abs{display:none}
+  .m-chart-head:has(.m-src-toggle) .m-chg-pct::before,.m-chart-head:has(.m-src-toggle) .m-chg-pct::after{content:none}
+  .m-chart-head .m-src-full{display:none}
+  .m-chart-head .m-src-short{display:inline}
+}
+@container mw (max-width: 30rem){
+  .m-chart-head:has(.m-src-toggle) .m-dd-type .m-dd-lbl{display:none}
+  .m-chart-head:has(.m-src-toggle) .m-dd-type .m-dd-ico{display:inline-block}
+}
+@container mw (max-width: 16rem){ .m-chart-head:has(.m-src-toggle) .m-dd-type{display:none} }
+/* title charts (PORTFOLIO TREND): the type label goes to its icon early, so the title keeps most of its words */
+@container mw (max-width: 30rem){
+  .m-chart-head:not(:has(.m-chart-sym)) .m-dd-type .m-dd-lbl{display:none}
+  .m-chart-head:not(:has(.m-chart-sym)) .m-dd-type .m-dd-ico{display:inline-block}
+}
+@container mw (max-width: 12.5rem){ .m-chart-head .m-src-toggle{display:none} }
+
+/* very narrow widgets (e.g. the Positions row of five at 24 columns on a ~900 px window): smaller header type, and the
+   collapse button floats over the header's right end (it shows on hover / focus) instead of taking width */
+@container mw (max-width: 8.5rem){
+  .grid-stack-item-content > .m-widget > .m-widget-head{padding:.5rem .5rem .5rem .625rem;gap:.3125rem}
+  .m-chart-head .m-chart-sym{font-size:.8125rem !important}     /* beats the engine's inline .906rem */
+  .m-chart-head .m-chg{font-size:.6875rem}
+  .grid-stack-item-content > .m-widget > .m-widget-head > .m-widget-collapse{
+    position:absolute;top:.3125rem;right:.3125rem;z-index:2;background:var(--color-neutral-800)}
+}
+@container mw (max-width: 6rem){   /* the last resort: the change ends in an ellipsis rather than being clipped */
+  .grid-stack-item-content > .m-widget > .m-widget-head.m-chart-head > .m-chg,
+  .mui-chart-host > .m-widget > .m-widget-head.m-chart-head > .m-chg{flex-shrink:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+}
+
+/* charts embedded in React widgets (Holdings, Scanner, Congress, Ticker Snapshot): their header is a second row under
+   the widget's own, so it slims down when the widget is short and the canvas keeps the height */
+@container mwb (max-height: 15rem){
+  .mui-chart-host > .m-widget > .m-chart-head{padding:.25rem .375rem .375rem;border-bottom-color:transparent}
+  .mui-chart-host > .m-widget > .m-chart-head .m-dd-btn{padding-top:.125rem;padding-bottom:.125rem}
+}
+
+/* narrow bodies: a little less padding so content keeps its room (gridPage `pad` inline paddings still win) */
+@container mw (max-width: 15rem){
+  .grid-stack-item-content > .m-widget > .m-widget-body:not(.an-host){padding:.75rem .75rem .75rem .875rem}
+}
+
+/* ── 3. dashboard widgets ──────────────────────────────────────────────────────────────────────────────── */
+/* HEADLINES: the reference grid, now without a 16rem floor (it overflowed narrow widgets); when the widget is
+   short the source line and Mason's implication give way to more headlines. */
+.m-headlines-grid{grid-template-columns:repeat(auto-fit,minmax(min(16rem,100%),1fr))}
+.m-headline > div{min-width:0}
+.m-headline .txt{overflow-wrap:anywhere}
+@container mwb (max-width: 15rem){
+  .m-headline{padding:.5rem .25rem;gap:.5rem}
+  .m-headline .txt{font-size:.75rem;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;line-clamp:4;overflow:hidden}
+}
+@container mwb (max-height: 13rem){ .m-headline .meta.impl{display:none} }
+@container mwb (max-height: 8rem){ .m-headline .meta{display:none} .m-headline{padding:.375rem .5rem} }
+
+/* KPI tiles (PAPER BALANCE, SESSION P/L, WIN RATE) + MARKET POSTURE: the value scales with the tile in both
+   directions (never wider than the tile); the caption line goes first when the tile gets short. */
+.m-widget-body.center .m-kpi-val{font-size:clamp(1.0625rem,min(13cqi,70cqb),2rem);white-space:nowrap;line-height:1.15}
+.m-widget-body.center .m-kpi-sub{font-size:clamp(.6875rem,5.5cqi,.781rem);margin-top:clamp(.1875rem,4cqb,.5625rem);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m-widget-body.center .m-posture-score{font-size:clamp(1.0625rem,min(12cqi,30cqb),1.75rem);line-height:1.15}
+/* a big tile gets a big number (the default tile size keeps its 2rem) */
+@container mwb (min-width: 24rem) and (min-height: 7rem){
+  .m-widget-body.center .m-kpi-val{font-size:clamp(2rem,min(8.5cqi,34cqb),3.25rem)}
+  .m-widget-body.center .m-posture-score{font-size:clamp(1.75rem,min(7.5cqi,26cqb),2.75rem)}
+}
+/* 2026-11-18 (Nico: "too much empty space"): the tiles are tighter top and bottom, the caption and the detail
+   rows show as soon as they fit, and a tall tile fills up with rows (Cash / Buying power, Day start / Open
+   positions, Breadth / VIX / Sectors) before it leaves blank space. */
+.grid-stack-item-content > .m-widget > .m-widget-body.center{padding-top:.5rem;padding-bottom:.5rem}
+.m-kpi-rows{display:flex;flex-direction:column;gap:.3125rem;margin-top:.625rem}
+.m-kpi-rows .row{display:flex;justify-content:space-between;gap:.625rem;font-size:.75rem;white-space:nowrap;min-width:0}
+.m-kpi-rows .row span{color:var(--color-neutral-400);overflow:hidden;text-overflow:ellipsis}
+.m-kpi-rows .row b{font-weight:600;font-variant-numeric:tabular-nums}
+@container mwb (max-height: 6.75rem){ .m-kpi-rows{margin-top:.375rem} .m-kpi-rows .row + .row{display:none} }
+@container mwb (max-height: 5rem){ .m-kpi-rows{display:none} }
+@container mwb (max-height: 3.5rem){ .m-widget-body.center .m-kpi-sub{display:none} }
+@container mwb (max-height: 9.5rem){ .m-posture-rows .row + .row + .row{display:none} }
+@container mwb (max-height: 7.5rem){ .m-posture-rows{gap:.25rem;margin-top:.375rem} .m-posture-rows .row + .row{display:none} }
+@container mwb (max-height: 5.5rem){ .m-posture-rows{display:none} }
+/* a narrow posture tile stacks label over value, so each row is taller: keep the old, later cut-offs there */
+@container mwb (max-width: 13rem) and (max-height: 10.5rem){ .m-posture-rows .row + .row{display:none} }
+@container mwb (max-width: 13rem) and (max-height: 8rem){ .m-posture-rows{display:none} }
+@container mwb (max-width: 13rem){
+  .m-posture-rows .row{grid-template-columns:minmax(0,1fr)}
+  .m-posture-rows .row b{text-align:left}
+}
+@container mwb (max-height: 3.25rem){ .m-posture-label{display:none} }
+
+/* OPEN OPTIONS / OPEN SECURITIES / PERSONAL POSITIONS cards: same auto-fit grid, no 12rem floor */
+.m-pos-grid{grid-template-columns:repeat(auto-fit,minmax(min(12rem,100%),1fr))}
+.m-pos-grid .m-pos-row > div:last-child{flex-shrink:0}
+.m-pos-row .sym,.m-pos-row .qty{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m-opt-row .top{flex-wrap:wrap;row-gap:.125rem;min-width:0}
+.m-opt-row .meta,.m-opt-row .risk{overflow-wrap:anywhere}
+/* a very narrow card or list row stacks: ticker on top, price + change under it (the ticker never shrinks away) */
+.m-pos-row > div:first-child{min-width:0}
+@container mwb (max-width: 11rem){
+  .m-pos-row{flex-wrap:wrap;row-gap:.25rem}
+  .m-pos-row > div:first-child{flex:1 1 100% !important}
+  .m-pos-row > div:last-child{text-align:left !important;flex:1 1 100%}
+}
+
+/* PERSONAL POSITIONS: action buttons wrap; an account's total moves under its name when the row is tight */
+.m-pp-actions{flex-wrap:wrap}
+.m-pp-acct-head{flex-wrap:wrap;gap:.25rem .625rem}
+.m-pp-acct-head > span:first-child{min-width:0;overflow-wrap:anywhere}
+.m-pp-acct-right{margin-left:auto;min-width:0}
+.m-pp-acct-total{white-space:normal;text-align:right}
+@container mwb (max-width: 15rem){
+  .m-pp-actions{gap:.375rem}
+  .m-pp-actions button{padding:.3125rem .5rem}
+  .m-pp-acct-head{letter-spacing:.06em}
+}
+
+/* SECTOR ROTATION (reference): unchanged, plus no tile ever wider than the body and tighter tiles when short */
+.m-sector-grid{grid-template-columns:repeat(auto-fit,minmax(min(6.5rem,100%),1fr))}
+@container mwb (max-height: 8rem){ .m-sector-grid{gap:.4375rem} .m-sector{padding:.5rem .625rem} .m-sector .val{margin-top:.125rem} }
+
+/* FOLLOWING: rows flow into columns when the widget is wide (the reference pattern); inside a row the quote
+   columns compact on their own width, the dollar change giving way before the percentage. */
+.m-follow-add input{min-width:0}
+.m-follow-rows{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(19rem,100%),1fr));gap:.375rem .5rem}
+.m-follow-row{container:mfrow / inline-size;min-width:0}
+.m-follow-row .f-name-full{min-width:0}                  /* lets the company name's ellipsis work */
+.f-src{grid-template-columns:3.75rem minmax(0,5.5rem) minmax(0,5.5rem) auto}
+.f-src > span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@container mfrow (max-width: 17.5rem){
+  .f-src{grid-template-columns:3.25rem minmax(0,1fr) auto;gap:.375rem}
+  .f-src .f-ch{display:none}
+}
+@container mfrow (max-width: 11rem){
+  .f-src{grid-template-columns:minmax(0,1fr) auto}
+  .f-src .f-lbl{display:none}
+  .m-follow-row .f-src + .f-src{display:none}     /* one quote line (Real) when there is no room for two */
+}
+
+/* REMINDERS (reference) and WATCHLIST (folds its rows at 30rem, template :557) need nothing more. */
+
+/* ── 4. Positions page: the Securities / Options lists flow into columns when the list widget is widened ── */
+.m-plist-rows{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(15rem,100%),1fr));align-content:start}
+.m-plist-rows > .muted{grid-column:1/-1}
+@container mwb (max-width: 12rem){
+  .m-plist-rows .m-pos-row,.m-plist-rows .m-opt-row{padding-left:.75rem;padding-right:.75rem}
+}
+
+/* ── 5. page header (shell, not a widget; noted in PROGRESS): a long page subtitle (Crowd's, since Task 4) wraps
+   inside the title block instead of pushing the chat button onto a second header line ─────────────────── */
+.m-topbar > div:has(> .m-topbar-title){min-width:0;max-width:36rem}

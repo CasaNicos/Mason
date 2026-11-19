@@ -1,0 +1,156 @@
+/* newsHud — HUD header + wire tape (UI overhaul Task 5). Nocturne tokens only. */
+.mui-root .nw-hud { container: nwhud / size; gap: 0.375rem; justify-content: space-between; overflow: hidden; }
+
+/* top row: brand · readouts · gauge · window + freshness */
+.mui-root .nw-hud__top { display: flex; align-items: center; gap: 0.625rem; min-width: 0; flex: none; }
+.mui-root .nw-hud__brand { display: flex; align-items: center; gap: 0.5rem; flex: none; }
+.mui-root .nw-hud__title {
+  font-family: var(--nw-hud-font); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.32em; color: var(--mui-accent-300);
+  text-shadow: 0 0 0.625rem rgba(74, 158, 255, 0.55), 0 0 1.5rem rgba(74, 158, 255, 0.25);
+}
+.mui-root .nw-live {
+  display: inline-flex; align-items: center; gap: 0.3125rem; font-family: var(--nw-hud-font); font-size: 0.5625rem; font-weight: 700;
+  letter-spacing: 0.16em; color: var(--mui-up); border: 1px solid color-mix(in srgb, var(--mui-up) 45%, transparent);
+  border-radius: 999px; padding: 0.0625rem 0.4375rem; background: color-mix(in srgb, var(--mui-up) 8%, transparent);
+}
+.mui-root .nw-live i {
+  width: 0.4375rem; height: 0.4375rem; border-radius: 50%; background: currentColor; box-shadow: 0 0 0.5rem currentColor;
+  animation: nw-live-pulse 1.8s ease-in-out infinite; /* the page's second (and last) continuous effect: CSS, opacity only */
+}
+.mui-root .nw-live.is-stale { color: var(--mui-warn); border-color: color-mix(in srgb, var(--mui-warn) 45%, transparent); background: transparent; }
+.mui-root .nw-live.is-stale i { animation: none; }
+@keyframes nw-live-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+.mui-root .nw-hud__stats {
+  flex: 1 1 auto; min-width: 0; height: 2.375rem; display: grid; grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr); gap: 0.375rem;
+}
+.mui-root .nw-stat { min-width: 0; height: 100%; }
+.mui-root .nw-stat .glass-surface { width: 100% !important; height: 100% !important; }
+.mui-root .nw-stat .glass-surface__content { width: 100%; height: 100%; padding: 0; }
+.mui-root .nw-stat__in {
+  display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%; padding: 0 0.625rem; min-width: 0;
+}
+.mui-root .nw-stat__label {
+  font-family: var(--nw-hud-font); font-size: 0.5313rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mui-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.mui-root .nw-stat__value { font-size: 0.9375rem; font-weight: 700; color: var(--mui-text); white-space: nowrap; font-variant-numeric: tabular-nums; line-height: 1.15; }
+.mui-root .nw-stat--up .nw-stat__value { color: var(--mui-up); }
+.mui-root .nw-stat--down .nw-stat__value { color: var(--mui-down); }
+.mui-root .nw-stat--warn .nw-stat__value { color: var(--mui-warn); }
+
+.mui-root .nw-gauge { flex: 0 1 11rem; min-width: 6rem; display: flex; align-items: center; gap: 0.375rem; font-family: var(--nw-hud-font); font-size: 0.625rem; }
+.mui-root .nw-gauge__lab--up { color: var(--mui-up); white-space: nowrap; }
+.mui-root .nw-gauge__lab--down { color: var(--mui-down); white-space: nowrap; }
+.mui-root .nw-gauge__bar { flex: 1 1 auto; display: flex; height: 0.375rem; border-radius: 999px; overflow: hidden; background: rgba(120, 150, 220, 0.12); gap: 2px; }
+.mui-root .nw-gauge__up { display: block; background: var(--mui-up); box-shadow: 0 0 0.5rem color-mix(in srgb, var(--mui-up) 60%, transparent); transition: width 0.6s ease; }
+.mui-root .nw-gauge__down { display: block; background: var(--mui-down); box-shadow: 0 0 0.5rem color-mix(in srgb, var(--mui-down) 60%, transparent); transition: width 0.6s ease; }
+
+.mui-root .nw-hud__right { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem; }
+.mui-root .nw-hud__asof { font-family: var(--nw-hud-font); font-size: 0.5938rem; color: var(--mui-faint); white-space: nowrap; display: inline-flex; align-items: center; }
+
+/* middle row: category chips · active filters · fallback note */
+.mui-root .nw-hud__mid { display: flex; align-items: center; gap: 0.375rem 0.75rem; flex-wrap: wrap; flex: none; min-width: 0; }
+.mui-root .nw-chips { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+.mui-root .nw-chip {
+  font: inherit; font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.02em; color: var(--mui-text-2); cursor: pointer;
+  background: rgba(10, 13, 24, 0.45); border: 1px solid var(--nw-line); border-radius: 999px; padding: 0.125rem 0.625rem;
+  display: inline-flex; align-items: center; gap: 0.3125rem; white-space: nowrap;
+}
+.mui-root .nw-chip:hover { border-color: rgba(120, 165, 255, 0.4); color: var(--mui-text); }
+.mui-root .nw-chip.is-on {
+  color: var(--color-accent-100, #eaf4ff); background: rgba(74, 158, 255, 0.16); border-color: rgba(120, 165, 255, 0.6);
+  box-shadow: 0 0 0.75rem rgba(74, 158, 255, 0.25), inset 0 0 0.5rem rgba(74, 158, 255, 0.15);
+}
+.mui-root .nw-chip__n { font-family: var(--nw-hud-font); font-size: 0.5938rem; color: var(--mui-faint); font-variant-numeric: tabular-nums; }
+.mui-root .nw-chip.is-on .nw-chip__n { color: var(--mui-accent-300); }
+.mui-root .nw-filters { display: flex; align-items: center; gap: 0.25rem; flex-wrap: wrap; min-width: 0; }
+.mui-root .nw-filters__n { font-family: var(--nw-hud-font); font-size: 0.5938rem; color: var(--mui-accent-300); white-space: nowrap; }
+.mui-root .nw-mode { font-size: 0.625rem; color: var(--mui-warn); }
+
+/* the newest headline: types in when it arrives */
+.mui-root .nw-latest {
+  font: inherit; display: flex; align-items: baseline; gap: 0.5rem; min-width: 0; flex: none; width: 100%; text-align: left; cursor: pointer;
+  background: linear-gradient(90deg, rgba(74, 158, 255, 0.1), transparent 70%); border: 0; border-left: 2px solid var(--mui-accent);
+  border-radius: 0 0.25rem 0.25rem 0; padding: 0.1875rem 0.5rem; color: var(--mui-text);
+}
+.mui-root .nw-latest--up { border-left-color: var(--mui-up); }
+.mui-root .nw-latest--down { border-left-color: var(--mui-down); }
+.mui-root .nw-latest:hover .nw-latest__hl { text-decoration: underline; text-decoration-color: var(--mui-accent-300); }
+.mui-root .nw-latest__k { flex: none; font-family: var(--nw-hud-font); font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.18em; color: var(--mui-accent-300); }
+.mui-root .nw-latest__meta { flex: none; font-family: var(--nw-hud-font); font-size: 0.5938rem; color: var(--mui-muted); white-space: nowrap; }
+.mui-root .nw-latest__hl { min-width: 0; flex: 1 1 auto; font-size: 0.78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+
+/* the wire tape (React Bits LogoLoop) */
+.mui-root .nw-hud__tape {
+  flex: none; height: 1.5rem; display: flex; align-items: center; min-width: 0; overflow: hidden;
+  border-top: 1px solid var(--nw-line); padding-top: 0.25rem;
+}
+.mui-root .nw-hud__tape .logoloop { width: 100%; }
+.mui-root .nw-hud__quiet { font-size: 0.6875rem; color: var(--mui-faint); }
+.mui-root .nw-wire {
+  font: inherit; font-size: 0.71875rem; display: inline-flex; align-items: center; gap: 0.375rem; white-space: nowrap; cursor: pointer;
+  background: transparent; border: 0; padding: 0; color: var(--mui-text-2); line-height: 1.2;
+}
+.mui-root .nw-wire:hover { color: var(--mui-text); }
+.mui-root .nw-wire:hover .nw-wire__hl { text-decoration: underline; text-decoration-color: var(--mui-accent-300); }
+.mui-root .nw-wire__time { font-family: var(--nw-hud-font); font-size: 0.5938rem; color: var(--mui-faint); }
+.mui-root .nw-wire__dir { font-size: 0.625rem; color: var(--mui-muted); }
+.mui-root .nw-wire--up .nw-wire__dir { color: var(--mui-up); }
+.mui-root .nw-wire--down .nw-wire__dir { color: var(--mui-down); }
+.mui-root .nw-wire__src { font-weight: 700; color: var(--mui-accent-300); }
+.mui-root .nw-wire__tk { font-family: var(--nw-hud-font); font-size: 0.5938rem; color: var(--mui-accent-300); border: 1px solid rgba(74, 158, 255, 0.25); border-radius: 0.25rem; padding: 0 0.25rem; }
+
+/* one-shot scan sweep when new stories land (no loop) */
+.mui-root .nw-hud.is-ping::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 2; border-radius: inherit;
+  background: linear-gradient(90deg, transparent 0%, rgba(141, 196, 255, 0.16) 50%, transparent 100%);
+  background-size: 40% 100%; background-repeat: no-repeat;
+  animation: nw-sweep 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1 both;
+}
+@keyframes nw-sweep { from { background-position: -40% 0; } to { background-position: 140% 0; } }
+
+/* ── reflow: width ── */
+@container nwhud (max-width: 64rem) {
+  .mui-root .nw-gauge { display: none; }
+}
+@container nwhud (max-width: 48rem) {
+  .mui-root .nw-hud__title { display: none; }
+  .mui-root .nw-hud__stats { height: 2rem; }
+  .mui-root .nw-stat__label { font-size: 0.5rem; letter-spacing: 0.08em; }
+  .mui-root .nw-stat__value { font-size: 0.8125rem; }
+  .mui-root .nw-latest__meta { display: none; }
+}
+@container nwhud (max-width: 34rem) {
+  .mui-root .nw-hud__top { flex-wrap: wrap; row-gap: 0.25rem; }
+  .mui-root .nw-hud__stats { order: 3; flex-basis: 100%; }
+  .mui-root .nw-hud__right { flex-direction: row; align-items: center; margin-left: auto; }
+  .mui-root .nw-hud__asof { display: none; }
+  .mui-root .nw-stat[data-stat='mat'] { display: none; }
+}
+@container nwhud (max-width: 22rem) {
+  .mui-root .nw-stat__label { display: none; }
+  .mui-root .nw-chip { padding: 0.0625rem 0.4375rem; font-size: 0.625rem; }
+}
+/* ── reflow: height ── */
+@container nwhud (max-height: 8.25rem) {
+  .mui-root .nw-latest { display: none; }
+}
+@container nwhud (max-height: 6rem) {
+  .mui-root .nw-hud__mid { display: none; }
+}
+@container nwhud (max-height: 4.25rem) {
+  .mui-root .nw-hud__stats, .mui-root .nw-gauge { display: none; }
+  .mui-root .nw-hud__top { justify-content: space-between; }
+}
+@container nwhud (max-height: 2.75rem) {
+  .mui-root .nw-hud__top { display: none; }
+  .mui-root .nw-hud__tape { border-top: 0; padding-top: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mui-root .nw-live i { animation: none; }
+  .mui-root .nw-hud.is-ping::after { animation: none; display: none; }
+  .mui-root .nw-gauge__up, .mui-root .nw-gauge__down { transition: none; }
+}

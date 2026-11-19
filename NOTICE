@@ -1,0 +1,11 @@
+Mason
+Copyright (c) 2026 CasaNicos. All rights reserved (see LICENSE).
+
+This repository includes third-party software:
+
+  skills/  -- a vendored subset of tradermonty/claude-trading-skills,
+              MIT licence. See skills/LICENSE and skills/NOTICE.
+
+"Ordis" and "Cephalon" are names from the game Warframe by Digital Extremes.
+Mason is an unofficial fan-styled personal project and is not affiliated
+with or endorsed by Digital Extremes.

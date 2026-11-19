@@ -1,0 +1,31 @@
+/* S3-F1 congressLeaderboard — scoped under .mui-root; Nocturne tokens only. */
+.mui-root .lb { display: flex; flex-direction: column; height: 100%; min-height: 0; gap: 0.375rem; }
+.mui-root .lb-head { flex: none; display: flex; align-items: baseline; gap: 0.375rem; flex-wrap: wrap; }
+.mui-root .lb-title { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.12em; color: var(--mui-text-2); }
+.mui-root .lb-how { font-size: 0.625rem; color: var(--mui-faint); cursor: help; border-bottom: 1px dotted var(--mui-line-strong); }
+.mui-root .lb-toggle {
+  margin-left: auto; font: inherit; font-size: 0.6875rem; cursor: pointer; color: var(--mui-muted);
+  background: transparent; border: 1px solid var(--mui-line); border-radius: 999px; padding: 0.0625rem 0.5rem;
+}
+.mui-root .lb-toggle.is-on { color: var(--mui-accent-300); border-color: var(--mui-accent); background: var(--mui-accent-900); }
+.mui-root .lb-body { flex: 1 1 auto; min-height: 0; overflow: auto; }
+.mui-root .lb-note { margin: 0 0 0.375rem; font-size: 0.6875rem; color: var(--mui-muted); font-style: italic; }
+.mui-root .lb-list { display: flex; flex-direction: column; gap: 0.3125rem; }
+.mui-root .lb-card.card-spotlight { padding: 0.4375rem 0.625rem; border-radius: var(--mui-radius-sm); }
+.mui-root .lb-grid {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: 2rem minmax(0, 1fr) auto; grid-template-areas: 'rank name big' 'rank sub sub' 'bar bar bar';
+  column-gap: 0.5rem; row-gap: 0.1875rem; align-items: baseline;
+}
+.mui-root .lb-rank { grid-area: rank; font-weight: 800; color: var(--mui-faint); font-size: 0.75rem; }
+.mui-root .lb-name { grid-area: name; font-weight: 600; color: var(--mui-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.mui-root .lb-big { grid-area: big; font-size: 1rem; font-weight: 700; white-space: nowrap; font-variant-numeric: normal; }
+.mui-root .lb-sub { grid-area: sub; display: flex; gap: 0.5rem; flex-wrap: wrap; font-size: 0.6875rem; color: var(--mui-muted); }
+.mui-root .lb-n { color: var(--mui-text-2); font-weight: 600; }
+.mui-root .lb-few { color: var(--mui-warn); }
+.mui-root .lb-bar { grid-area: bar; position: relative; height: 0.25rem; border-radius: 2px; background: var(--mui-line); }
+.mui-root .lb-bar__zero { position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--mui-line-strong); }
+.mui-root .lb-bar__fill { position: absolute; top: 0; bottom: 0; border-radius: 2px; background: currentColor; }
+.mui-root .lb-row.is-muted { opacity: 0.55; }
+.mui-root .lb-row.is-muted .lb-big { color: var(--mui-muted); }
+.mui-root .lb-cap { margin: 0 0 0.3125rem; font-size: 0.6875rem; color: var(--mui-muted); }

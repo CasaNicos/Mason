@@ -1,0 +1,65 @@
+/* scannerList: Robinhood columns as a dense grid inside an AnimatedList. Scoped under .mui-root. */
+.mui-root .sc-list { display: flex; flex-direction: column; height: 100%; min-height: 0; min-width: 0; }
+.mui-root .sc-table { flex: 1 1 auto; min-height: 0; overflow-x: auto; overflow-y: hidden; }
+.mui-root .sc-inner { height: 100%; display: flex; flex-direction: column; min-height: 0; }
+.mui-root .sc-inner > .scroll-list-container { flex: 1 1 auto; min-height: 0; }
+.mui-root .sc-list .scroll-list { padding-right: 0.25rem; }
+.mui-root .sc-list .scroll-list > [data-index] { margin-bottom: 2px !important; }
+.mui-root .sc-list .scroll-list .item { padding: 0.25rem 0.375rem; }
+.mui-root .sc-row { display: grid; align-items: baseline; column-gap: 0.375rem; font-size: 0.75rem; min-width: 0; }
+.mui-root .sc-head {
+  flex: none; padding: 0 0.6875rem 0.25rem 0.4375rem; font-size: 0.625rem; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--mui-faint); border-bottom: 1px solid var(--mui-line); margin-bottom: 0.25rem;
+}
+.mui-root .sc-c { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mui-root .sc-head .sc-c:not(:first-child), .mui-root .sc-cell, .mui-root .sc-seen { text-align: right; font-variant-numeric: tabular-nums; }
+.mui-root .sc-tk b { font-size: 0.8125rem; letter-spacing: 0.03em; }
+.mui-root .sc-tk { display: flex; align-items: baseline; gap: 0.25rem; }
+.mui-root .sc-on { color: var(--sc-link); font-size: 0.75rem; }
+.mui-root .sc-re { font-size: 0.625rem; color: var(--mui-muted); }
+.mui-root .sc-row.is-exited > .sc-c:not(.sc-actc) { opacity: 0.55; }
+.mui-root .sc-row.is-charted .sc-tk b { color: var(--sc-link); }
+.mui-root .sc-watch { color: var(--mui-text-2); }
+.mui-root .sc-watch--proposed { color: var(--mui-accent-300); }
+.mui-root .sc-actc { text-align: right; overflow: visible; }
+.mui-root .sc-act {
+  font: inherit; font-size: 0.6875rem; cursor: pointer; color: var(--mui-text); background: var(--mui-accent-700);
+  border: 1px solid var(--mui-line-strong); border-radius: var(--mui-radius-sm); padding: 0.0625rem 0.5rem;
+}
+.mui-root .sc-act:hover:not(:disabled) { border-color: var(--mui-accent); }
+.mui-root .sc-act:disabled { cursor: not-allowed; opacity: 0.45; background: transparent; }
+.mui-root .sc-actmsg { grid-column: 1 / -1; font-size: 0.6875rem; padding-top: 0.125rem; white-space: normal; }
+.mui-root .sc-actmsg.is-ok { color: var(--mui-up); }
+.mui-root .sc-actmsg.is-err { color: var(--mui-down); }
+/* SC-D5 advice: dashed amber rail + "ADVICE ONLY" tag; text only, never an action */
+.mui-root .sc-advice {
+  grid-column: 1 / -1; display: flex; gap: 0.375rem; align-items: baseline; margin-top: 0.1875rem;
+  padding: 0.1875rem 0.375rem; border-left: 2px dashed var(--mui-warn); white-space: normal;
+  background: color-mix(in srgb, var(--mui-warn) 7%, transparent); font-size: 0.6875rem; color: var(--mui-text-2);
+}
+.mui-root .sc-advice-tag {
+  flex: none; font-size: 0.5625rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--mui-warn); border: 1px solid color-mix(in srgb, var(--mui-warn) 55%, transparent); border-radius: 999px; padding: 0 0.3125rem;
+}
+.mui-root .sc-advice-text { font-style: italic; overflow-wrap: anywhere; }
+
+/* ── compact rows (widget narrower than the full table; set by a ResizeObserver in index.jsx) ──
+   line 1: ticker · qwen · watch · action (Mason columns stay visible); line 2: first seen + every
+   Robinhood cell as a wrapping label/value chip, so nothing is clipped and nothing scrolls sideways. */
+.mui-root .sc-table.is-compact { overflow-x: hidden; }
+.mui-root .sc-row--compact { grid-template-columns: minmax(0, 1fr) auto auto auto; row-gap: 0.125rem; }
+.mui-root .sc-row--compact .sc-qword { display: none; }
+.mui-root .sc-row--compact .sc-watch { font-size: 0.6875rem; }
+.mui-root .sc-chips { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0.125rem 0.5rem; font-size: 0.6875rem; min-width: 0; }
+.mui-root .sc-chip { color: var(--mui-text-2); font-variant-numeric: tabular-nums; max-width: 100%; overflow-wrap: anywhere; }
+.mui-root .sc-chip > i { font-style: normal; color: var(--mui-faint); font-size: 0.625rem; }
+.mui-root .sc-chip--more { color: var(--mui-muted); }
+
+/* narrow header: sort + last run move into the scan picker's tooltip */
+.mui-root .sc-list { container-type: inline-size; }
+@container (max-width: 34rem) {
+  .mui-root .sc-list .sc-sort, .mui-root .sc-list .sc-run { display: none; }
+}
+@container (max-width: 20rem) {
+  .mui-root .sc-list .sc-count { display: none; }
+}

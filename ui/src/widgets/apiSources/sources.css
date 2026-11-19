@@ -1,0 +1,69 @@
+/* apiSources (UI overhaul Task 6). Scoped under .mui-root; Nocturne tokens only. Container queries:
+   one column when narrow, a card grid when wide. No scrollbar-width / scrollbar-color (global webkit theme). */
+.mui-root .apil {
+  flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 0.5rem;
+  container: apil / inline-size;
+}
+.mui-root .apil-bar { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; flex: none; }
+.mui-root .apil-filters { display: inline-flex; gap: 0.25rem; padding: 0.1875rem; border-radius: 999px; background: rgba(10, 13, 24, 0.45); border: 1px solid var(--mui-line); }
+.mui-root .apil-filter {
+  font: inherit; font-size: 0.6875rem; cursor: pointer; color: var(--mui-muted);
+  background: transparent; border: 0; border-radius: 999px; padding: 0.1875rem 0.625rem;
+}
+.mui-root .apil-filter b { font-weight: 700; color: var(--mui-text-2); margin-left: 0.125rem; font-variant-numeric: tabular-nums; }
+.mui-root .apil-filter:hover { color: var(--mui-text); }
+.mui-root .apil-filter[aria-pressed='true'] { color: var(--mui-text); background: var(--mui-accent-700); box-shadow: 0 0 0 1px var(--mui-line-strong); }
+.mui-root .apil-list { flex: 1 1 auto; min-height: 0; }
+.mui-root .apil .scroll-list .item { padding: 0; background: transparent; border: 0; }
+.mui-root .apil .scroll-list .item-text { margin: 0; }
+
+.mui-root .apil-row {
+  position: relative; padding: 0.625rem 0.75rem 0.625rem 0.875rem; border-radius: var(--mui-radius-md);
+  background: rgba(10, 13, 24, 0.38); border: 1px solid var(--mui-line);
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.2s ease;
+}
+.mui-root .apil-row::before {
+  content: ''; position: absolute; left: 0; top: 0.625rem; bottom: 0.625rem; width: 2px; border-radius: 2px;
+  background: var(--api-tone); box-shadow: 0 0 8px color-mix(in srgb, var(--api-tone) 60%, transparent);
+}
+.mui-root .scroll-list .item:hover .apil-row { border-color: var(--mui-line-strong); background: rgba(14, 31, 56, 0.5); }
+.mui-root .scroll-list .item.selected .apil-row,
+.mui-root .apil-row.is-sel {
+  border-color: color-mix(in srgb, var(--api-tone) 55%, var(--mui-line-strong));
+  background: color-mix(in srgb, var(--api-tone) 7%, rgba(14, 31, 56, 0.55));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--api-tone) 25%, transparent), 0 0 18px color-mix(in srgb, var(--api-tone) 14%, transparent);
+}
+.mui-root .apil-row__top { display: flex; align-items: center; gap: 0.5rem; min-width: 0; }
+.mui-root .apil-row__name { font-size: 0.8125rem; font-weight: 600; color: var(--mui-text); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mui-root .apil-row__kind {
+  flex: none; font-size: 0.5625rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mui-muted);
+  border: 1px solid var(--mui-line-strong); border-radius: 0.3rem; padding: 0.0625rem 0.3125rem;
+}
+.mui-root .apil-row__lat { margin-left: auto; flex: none; font-size: 0.6875rem; color: var(--mui-muted); font-variant-numeric: tabular-nums; }
+.mui-root .apil-row__detail { margin-top: 0.375rem; font-size: 0.75rem; color: var(--mui-text-2); line-height: 1.35; overflow-wrap: anywhere; }
+.mui-root .apil-row__meta { margin-top: 0.3125rem; display: flex; flex-wrap: wrap; gap: 0.125rem 0.625rem; font-size: 0.625rem; color: var(--mui-faint); }
+.mui-root .apil-row__hint { margin-top: 0.25rem; }
+/* R3-C: not configured = calm and intentional: dotted accent bar, no glow, quieter card */
+.mui-root .apil-row.api-tone--off::before { background: none; box-shadow: none; border-left: 2px dotted var(--api-tone); width: 0; }
+.mui-root .apil-row.api-tone--off .apil-row__name { color: var(--mui-text-2); }
+.mui-root .apil-row__note { margin-top: 0.25rem; font-size: 0.625rem; color: var(--mui-faint); font-style: italic; overflow-wrap: anywhere; }
+/* APIGPU: the local AI model's numbers (model, memory, temperature, power, card) and its "what this means" line */
+.mui-root .apil-row__facts { margin-top: 0.3125rem; display: flex; flex-wrap: wrap; gap: 0.125rem 0.75rem; font-size: 0.6875rem; color: var(--mui-text); }
+.mui-root .apil-row__fact { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.mui-root .apil-row__fk { color: var(--mui-faint); font-size: 0.5625rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+.mui-root .apil-row__fact--model, .mui-root .apil-row__fact--card { font-family: var(--mui-mono); font-size: 0.625rem; }
+.mui-root .apil-row__fact--model .apil-row__fk, .mui-root .apil-row__fact--card .apil-row__fk { font-family: var(--mui-font); }
+.mui-root .apil-row__hint--model { color: var(--mui-text-2); }
+.mui-root .apil-row__hint--model > span[aria-hidden] { color: var(--api-tone); }
+
+@container apil (min-width: 40rem) {
+  .mui-root .apil .scroll-list {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr)); gap: 0.5rem; align-content: start;
+  }
+  .mui-root .apil .scroll-list > [data-index] { margin-bottom: 0 !important; }
+  .mui-root .apil .scroll-list .item, .mui-root .apil .scroll-list .item-text, .mui-root .apil-row { height: 100%; }
+}
+@container apil (max-width: 20rem) {
+  .mui-root .apil-row__kind, .mui-root .apil-row__note, .mui-root .apil-row__fact--card { display: none; }
+  .mui-root .apil-row { padding: 0.5rem 0.5625rem 0.5rem 0.75rem; }
+}

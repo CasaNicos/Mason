@@ -1,0 +1,105 @@
+/* tickerSearch — header ticker search results (React Bits AnimatedList). The panel around it (position, glass,
+ * border, shadow) is the template's dropdown host in static/v2/ticker-lookup.css. Scoped under .mui-root. */
+.mui-root .mui-tks { display: flex; flex-direction: column; min-height: 0; }
+.mui-root .mui-tks__head {
+  padding: 0.625rem 0.875rem 0.25rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mui-faint);
+}
+.mui-root .mui-tks > .scroll-list-container { height: auto; }
+.mui-root .mui-tks .scroll-list { max-height: min(22rem, 56vh); padding: 0.375rem 0.375rem 0.375rem; }
+.mui-root .mui-tks .scroll-list > [data-index] { margin-bottom: 0.125rem !important; }
+.mui-root .mui-tks .scroll-list .item,
+.mui-root .mui-tks .scroll-list .item.selected { padding: 0; background: transparent; border: 0; border-radius: 0; }
+.mui-root .mui-tks .scroll-list-container > .top-gradient {
+  height: 1rem;
+  background: linear-gradient(to bottom, var(--mv-tk-dd-bg, rgb(16, 22, 38)), transparent);
+}
+.mui-root .mui-tks .scroll-list-container > .bottom-gradient {
+  height: 1.5rem;
+  background: linear-gradient(to top, var(--mv-tk-dd-bg, rgb(16, 22, 38)), transparent);
+}
+
+.mui-root .mui-tks__row {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: 0.5625rem;
+  border: 1px solid transparent;
+  transition: background-color 0.12s ease, border-color 0.12s ease, opacity 0.15s ease;
+}
+.mui-root .mui-tks__row:hover { background: rgba(120, 150, 220, 0.07); }
+.mui-root .mui-tks__row.is-sel {
+  background: linear-gradient(90deg, rgba(74, 158, 255, 0.18), rgba(74, 158, 255, 0.05));
+  border-color: rgba(74, 158, 255, 0.4);
+  box-shadow: inset 2px 0 0 var(--mui-accent), 0 0 1.125rem rgba(74, 158, 255, 0.08);
+}
+.mui-root .mui-tks__sym {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mui-root .mui-tks__name {
+  min-width: 0;
+  font-size: 0.78rem;
+  color: var(--mui-text-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mui-root .mui-tks__row.is-lookup .mui-tks__name { color: var(--mui-muted); font-style: italic; }
+.mui-root .mui-tks__hl { background: none; color: var(--mui-accent-300); font-weight: inherit; }
+.mui-root .mui-tks__tag {
+  flex: none;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mui-faint);
+  border: 1px solid var(--mui-line-strong);
+  border-radius: 999px;
+  padding: 0.0625rem 0.4375rem;
+}
+.mui-root .mui-tks__tag.is-exact { color: var(--mui-accent-300); border-color: rgba(74, 158, 255, 0.45); background: rgba(74, 158, 255, 0.1); }
+.mui-root .mui-tks__tags { display: inline-flex; align-items: center; gap: 0.25rem; flex: none; }
+.mui-root .mui-tks__tag.is-type { color: var(--mui-warn); border-color: color-mix(in srgb, var(--mui-warn) 45%, transparent); background: color-mix(in srgb, var(--mui-warn) 9%, transparent); }
+.mui-root .mui-tks__tag.is-recent { border: 0; padding: 0; font-size: 0.8125rem; letter-spacing: 0; }
+/* rows from the previous answer, filtered locally, while the new one loads */
+.mui-root .mui-tks.is-loading .mui-tks__row:not(.is-sel) { opacity: 0.6; }
+
+.mui-root .mui-tks__skel { display: flex; flex-direction: column; gap: 0.25rem; padding: 0.5rem 0.75rem; }
+.mui-root .mui-tks__skelrow { display: grid; grid-template-columns: 3.5rem minmax(0, 1fr); gap: 0.75rem; padding: 0.375rem 0; }
+.mui-root .mui-tks__skelrow .mui-skel { height: 0.6875rem; }
+.mui-root .mui-tks__skelrow .mui-skel + .mui-skel { width: 70%; }
+.mui-root .mui-tks__note { padding: 0.625rem 0.875rem; font-size: 0.78rem; color: var(--mui-muted); line-height: 1.45; overflow-wrap: anywhere; }
+.mui-root .mui-tks__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.875rem;
+  padding: 0.4375rem 0.875rem;
+  border-top: 1px solid var(--mui-line);
+  font-size: 0.625rem;
+  color: var(--mui-faint);
+}
+.mui-root .mui-tks__foot kbd {
+  font-family: inherit;
+  font-size: 0.6rem;
+  color: var(--mui-text-2);
+  border: 1px solid var(--mui-line-strong);
+  border-radius: 0.25rem;
+  padding: 0 0.25rem;
+  margin-right: 0.1875rem;
+}
+.mui-root .mui-tks__live { margin-left: auto; color: var(--mui-accent-300); }
+@media (hover: none) {
+  .mui-root .mui-tks__foot { display: none; }
+}

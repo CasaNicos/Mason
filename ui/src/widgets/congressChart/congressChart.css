@@ -1,0 +1,37 @@
+/* S3-F1 congressChart — scoped under .mui-root; Nocturne tokens only. Reuses the feed's .cf-side label. */
+.mui-root .cc { display: flex; flex-direction: column; height: 100%; min-height: 0; gap: 0.375rem; }
+.mui-root .cc-head { flex: none; display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
+.mui-root .cc-sym { font-size: 1rem; font-weight: 800; letter-spacing: 0.03em; color: var(--mui-accent-300); }
+.mui-root .cc-sub { font-size: 0.6875rem; color: var(--mui-faint); }
+.mui-root .cc-count { margin-left: auto; font-size: 0.6875rem; color: var(--mui-muted); }
+.mui-root .cc-chart { flex: 1 1 auto; min-height: 6rem; min-width: 0; }
+.mui-root .cc-foot { flex: 0 1 auto; max-height: 40%; min-height: 3.5rem; overflow: auto; border-top: 1px solid var(--mui-line); padding-top: 0.3125rem; }
+.mui-root .cc-foot__title { font-size: 0.625rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mui-text-2); margin-bottom: 0.25rem; }
+.mui-root .cc-foot__note { font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--mui-faint); }
+.mui-root .cc-none { margin: 0; font-size: 0.6875rem; color: var(--mui-faint); font-style: italic; }
+.mui-root .cc-dates { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.1875rem; }
+.mui-root .cc-date { display: flex; align-items: baseline; gap: 0.375rem; flex-wrap: wrap; font-size: 0.6875rem; color: var(--mui-muted); }
+.mui-root .cc-date__d { font-weight: 700; color: var(--mui-text); min-width: 3.25rem; }
+.mui-root .cc-date__who { color: var(--mui-text-2); }
+.mui-root .cc-date__tx { color: var(--mui-faint); }
+.mui-root .cc .cf-side {
+  font-size: 0.5625rem; font-weight: 800; letter-spacing: 0.1em; padding: 0 0.3125rem; border-radius: 0.25rem;
+  border: 1px solid currentColor; line-height: 1.35;
+}
+.mui-root .cc .cf-side.is-buy { color: var(--mui-up); }
+.mui-root .cc .cf-side.is-sell { color: var(--mui-down); }
+.mui-root .cc .cf-side.is-other { color: var(--mui-muted); }
+
+/* compact: short widget (min size on 1280/900 px viewports) → the footnote and the chart's floor give way
+   so at least one full disclosure date stays visible (Tests/ui/test_rhx_f1.py min-size @1280/900/600). */
+.mui-root .cc { container-type: size; container-name: cc; }
+@container cc (max-height: 17rem) {
+  .mui-root .cc-foot__note { display: none; }
+  .mui-root .cc-chart { min-height: 4rem; overflow: hidden; }
+  .mui-root .cc .mui-chart-host { min-height: 0; }
+  .mui-root .cc-foot { max-height: 50%; min-height: 3rem; }
+  .mui-root .cc-head { gap: 0.375rem; }
+  .mui-root .cc-sub { display: none; }
+}
+.mui-root .cc-cap { margin: 0.25rem 0 0; font-size: 0.625rem; color: var(--mui-muted); }
+.mui-root .cc-date__ug { color: var(--mui-faint); font-style: italic; font-size: 0.625rem; cursor: help; }

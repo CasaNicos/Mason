@@ -1,0 +1,25 @@
+three.js r128 (npm three@0.128.0), vendored for Mason on 2026-11-18 (UIFIX2 item 3).
+
+Why: templates/mason_v2.html loaded this file from cdnjs for the 3D crystal and the background effects. It now
+ships with Mason, so those work with no internet and the public repository has no CDN dependency.
+
+Source (byte-for-byte what the page loaded before):
+  https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js
+How verified: the sha512 equals the value cdnjs publishes for r128 (api.cdnjs.com/libraries/three.js/r128, field
+sri), and the file is byte-identical to build/three.min.js in the npm package three@0.128.0 (package integrity
+sha512-i0ap/E+OaSfzw7bD1TtYnPo3VEplkl70WX5fZqZnfZsE3k3aSFudqrrC9ldFZfYFkn1zwDmBcdGfiIm/hnbyZA==, checked against
+`npm view three@0.128.0 dist.integrity`).
+
+Licence: MIT, Copyright (c) 2010-2021 three.js authors.
+  LICENSE   the project's licence text (npm package three@0.128.0, file LICENSE)
+Project: https://threejs.org/  ·  https://github.com/mrdoob/three.js
+
+Do not edit these files. To upgrade, add a new versioned folder and change the one script tag at the top of
+templates/mason_v2.html.
+
+file                           bytes   sha256
+LICENSE                          1081  7dddf7c5b8fd10ee654db8857d75d104b5557889aa5a91fc4ca545ea7c07062f
+three.min.js                   603445  9274bbcec8d96168626c732b5d31c775aa8cfb7eaa0599bec0c175908a2c1ce2
+
+sha512 (the form cdnjs and npm publish):
+three.min.js  sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ==

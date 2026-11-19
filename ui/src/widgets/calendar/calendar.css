@@ -1,0 +1,386 @@
+/* calendar. Nocturne tokens only: the twelve type colors are mixes of the existing tokens, and every
+   type also has a written label, so color is never the only signal. Scoped under .mui-root.
+   Width: container queries. Height: data-tier, set from a ResizeObserver in index.jsx, and a size container
+   on the month (calmonth). The day popover is portalled to <body> but carries .mui-cal itself. */
+.mui-root .mui-cal {
+  --cal-earnings: var(--mui-accent);
+  --cal-fed: var(--mui-warn);
+  --cal-econ: color-mix(in oklab, var(--mui-warn) 50%, var(--mui-down));
+  --cal-congress: color-mix(in oklab, var(--mui-accent) 55%, var(--mui-down));
+  --cal-court: color-mix(in oklab, var(--mui-accent) 22%, var(--mui-down));
+  --cal-fda: var(--mui-up);
+  --cal-market: var(--mui-text-2);
+  --cal-conference: color-mix(in oklab, var(--mui-accent) 45%, var(--mui-up));
+  --cal-company: var(--mui-accent-300);
+  --cal-ipo: color-mix(in oklab, var(--mui-up) 50%, var(--mui-warn));
+  --cal-expiry: var(--mui-down);
+  --cal-personal: var(--color-neutral-100, #f3f6fd);
+  --cal-mason: color-mix(in oklab, var(--mui-muted) 65%, var(--mui-accent));
+  --chip-h: 1.3125rem;
+  position: relative; container-type: inline-size; display: flex; flex-direction: column; flex: 1 1 auto;
+  height: 100%; min-height: 0; min-width: 0; font-size: 0.75rem; color: var(--mui-text-2);
+}
+.mui-root .mui-cal [data-type='earnings'] { --c: var(--cal-earnings); }
+.mui-root .mui-cal [data-type='fed'] { --c: var(--cal-fed); }
+.mui-root .mui-cal [data-type='econ'] { --c: var(--cal-econ); }
+.mui-root .mui-cal [data-type='congress'] { --c: var(--cal-congress); }
+.mui-root .mui-cal [data-type='court'] { --c: var(--cal-court); }
+.mui-root .mui-cal [data-type='fda'] { --c: var(--cal-fda); }
+.mui-root .mui-cal [data-type='market'] { --c: var(--cal-market); }
+.mui-root .mui-cal [data-type='conference'] { --c: var(--cal-conference); }
+.mui-root .mui-cal [data-type='company'] { --c: var(--cal-company); }
+.mui-root .mui-cal [data-type='ipo'] { --c: var(--cal-ipo); }
+.mui-root .mui-cal [data-type='expiry'] { --c: var(--cal-expiry); }
+.mui-root .mui-cal [data-type='personal'] { --c: var(--cal-personal); }
+.mui-root .mui-cal [data-type='mason'] { --c: var(--cal-mason); }
+.mui-root .mui-cal__dot { display: inline-block; flex: none; width: 0.4375rem; height: 0.4375rem; border-radius: 50%; background: var(--c, var(--mui-muted)); }
+.mui-root .mui-cal__grow { flex: 1 1 0; }
+.mui-root .mui-cal__k { font-size: 0.625rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--mui-muted); }
+.mui-root .mui-cal__k > i { font-style: normal; letter-spacing: 0; text-transform: none; color: var(--mui-faint); }
+
+.mui-root .mui-cal__body { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; gap: 0.4375rem; }
+.mui-root .mui-cal.is-busy::before {
+  content: ''; position: absolute; z-index: 3; top: -0.25rem; left: 0; right: 0; height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--mui-accent), transparent); background-size: 40% 100%; background-repeat: no-repeat;
+  animation: mui-cal-busy 0.9s linear infinite;
+}
+@keyframes mui-cal-busy { from { background-position: -40% 0; } to { background-position: 140% 0; } }
+
+/* ── bar ── */
+.mui-root .mui-cal__bar { flex: none; display: flex; align-items: center; flex-wrap: wrap; gap: 0.25rem 0.625rem; }
+.mui-root .mui-cal__nav { display: flex; align-items: center; gap: 0.25rem; min-width: 0; }
+.mui-root .mui-cal__mtitle { margin: 0; min-width: 8.25rem; font-size: 0.9375rem; font-weight: 650; line-height: 1.2; text-align: center; white-space: nowrap; color: var(--mui-text); }
+.mui-root .mui-cal__navbtn {
+  display: inline-flex; align-items: center; justify-content: center; flex: none; width: 1.5rem; height: 1.5rem; margin: 0; padding: 0 0 0.125rem;
+  border: 1px solid var(--mui-line); border-radius: 50%; background: none; color: var(--mui-text-2); font: inherit; font-size: 1rem; line-height: 1; cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.mui-root .mui-cal__navbtn:hover:not(:disabled) { border-color: var(--mui-accent); color: var(--mui-text); }
+.mui-root .mui-cal__navbtn:disabled { opacity: 0.35; cursor: default; }
+.mui-root .mui-cal__today {
+  margin: 0 0 0 0.25rem; padding: 0.0625rem 0.5rem; border: 1px solid var(--mui-line-strong); border-radius: 999px; background: none;
+  color: var(--mui-accent-300); font: inherit; font-size: 0.6875rem; cursor: pointer;
+}
+.mui-root .mui-cal__today:hover { color: var(--mui-text); border-color: var(--mui-accent); }
+.mui-root .mui-cal__sum { color: var(--mui-muted); white-space: nowrap; }
+.mui-root .mui-cal__sum b { color: var(--mui-text); font-weight: 600; font-size: 0.875rem; }
+.mui-root .mui-cal__switch { gap: 0.375rem; }
+.mui-root .mui-cal__switch .squish-switch:focus-visible { outline: 2px solid var(--mui-accent); outline-offset: 2px; border-radius: 999px; }
+.mui-root .mui-cal__switch .squish-switch__label { font-size: 0.6875rem; color: var(--mui-text-2); white-space: nowrap; }
+.mui-root .mui-cal__add { flex: none; padding: 0.1875rem 0.5625rem; font-size: 0.6875rem; font-weight: 600; white-space: nowrap; }
+
+/* ── the month grid: React Bits BorderGlow boxes ── */
+@property --mui-cal-spin { syntax: '<angle>'; inherits: true; initial-value: 0deg; }
+@keyframes mui-cal-spin { to { --mui-cal-spin: 360deg; } }
+.mui-root .mui-cal__month { flex: 1 1 auto; min-height: 9rem; display: flex; flex-direction: column; gap: 0.25rem; container: calmonth / size; }
+.mui-root .mui-cal__wkdays {
+  flex: none; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.25rem;
+  font-size: 0.5625rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; color: var(--mui-muted);
+}
+.mui-root .mui-cal__grid {
+  flex: 1 1 auto; min-height: 0; display: grid; gap: 0.25rem;
+  grid-template-columns: repeat(7, minmax(0, 1fr)); grid-template-rows: repeat(var(--weeks, 6), minmax(1.75rem, 1fr));
+}
+.mui-root .mui-cal .border-glow-card.mui-cal__box {
+  position: relative; min-width: 0; min-height: 0; border-color: var(--mui-line); box-shadow: none;
+  transition: border-color 0.15s ease, opacity 0.15s ease;
+}
+.mui-root .mui-cal .border-glow-card.mui-cal__box > .border-glow-inner { min-height: 0; overflow: hidden; border-radius: inherit; }
+.mui-root .mui-cal .border-glow-card.mui-cal__box:hover { z-index: 1; border-color: var(--mui-line-strong); }
+.mui-root .mui-cal .border-glow-card.mui-cal__box.is-out { opacity: 0.42; }
+.mui-root .mui-cal .border-glow-card.mui-cal__box.is-out:hover { opacity: 0.8; }
+.mui-root .mui-cal .border-glow-card.mui-cal__box.is-today {
+  border-color: color-mix(in srgb, var(--mui-accent) 70%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--mui-accent) 16%, transparent), transparent 80%), var(--mui-panel-3);
+}
+.mui-root .mui-cal .border-glow-card.mui-cal__box.is-big { box-shadow: inset 0 2px 0 var(--mui-accent-300); }
+/* the selected day: its glow stays on and slowly circles the box while the popover is open */
+.mui-root .mui-cal .border-glow-card.mui-cal__box.is-selected {
+  z-index: 2; border-color: var(--mui-line-strong);
+  --edge-proximity: 100 !important; --cursor-angle: var(--mui-cal-spin) !important;
+  animation: mui-cal-spin 3.6s linear infinite;
+}
+.mui-root .mui-cal .border-glow-card.mui-cal__box.is-selected::before,
+.mui-root .mui-cal .border-glow-card.mui-cal__box.is-selected > .edge-light { opacity: 1; }
+.mui-root .mui-cal .border-glow-card.mui-cal__box.is-selected::after { opacity: var(--fill-opacity, 0.3); }
+
+.mui-root .mui-cal__cell {
+  position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 0.125rem;
+  width: 100%; height: 100%; min-height: 0; margin: 0; padding: 0.25rem 0.3125rem 0.3125rem; border: 0; border-radius: inherit;
+  background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
+}
+.mui-root .mui-cal__cell:focus-visible { outline-offset: -2px; }
+.mui-root .mui-cal__num {
+  display: inline-flex; align-items: center; justify-content: center; align-self: flex-start; flex: none;
+  min-width: 1.375rem; height: 1.375rem; margin: -0.0625rem 0 0 -0.125rem; padding: 0 0.1875rem; border-radius: 999px;
+  font-size: 0.8125rem; font-weight: 600; line-height: 1; color: var(--mui-text);
+}
+.mui-root .mui-cal__box.is-past:not(.is-today) .mui-cal__num { color: var(--mui-muted); font-weight: 500; }
+.mui-root .mui-cal__box.is-today .mui-cal__num { background: var(--mui-accent); color: var(--mui-bg); font-weight: 700; }
+.mui-root .mui-cal__mine { position: absolute; top: 0.3125rem; right: 0.375rem; font-size: 0.5625rem; line-height: 1; color: var(--mui-up); }
+.mui-root .mui-cal__dots { display: flex; flex-wrap: wrap; align-items: center; gap: 0.1875rem; min-width: 0; max-width: calc(100% - 1.375rem); max-height: 0.875rem; overflow: hidden; }
+.mui-root .mui-cal__dots .mui-cal__dot { width: 0.375rem; height: 0.375rem; box-shadow: 0 0 0.25rem color-mix(in srgb, var(--c) 55%, transparent); }
+.mui-root .mui-cal__dots > em { font-style: normal; font-size: 0.5625rem; line-height: 0.5; color: var(--mui-faint); }
+.mui-root .mui-cal__badge {
+  position: absolute; right: 0.3125rem; bottom: 0.25rem; min-width: 1.0625rem; height: 1.0625rem; padding: 0 0.25rem; border-radius: 999px;
+  font-size: 0.625rem; font-weight: 650; line-height: 1.0625rem; text-align: center; color: var(--mui-text); background: rgba(120, 150, 220, 0.16);
+}
+.mui-root .mui-cal__box.is-big .mui-cal__badge { background: color-mix(in srgb, var(--mui-accent) 38%, transparent); }
+.mui-root .mui-cal__box.is-out .mui-cal__badge { background: rgba(120, 150, 220, 0.1); }
+.mui-root .mui-cal__on { position: absolute; left: 0.3125rem; right: 1.75rem; bottom: 0.1875rem; height: 1px; border-top: 1px dashed var(--cal-conference); opacity: 0.8; }
+
+/* ── filter chips ── */
+.mui-root .mui-cal__chipbar { flex: none; display: flex; align-items: flex-start; gap: 0.375rem; }
+.mui-root .mui-cal__chips { flex: 1 1 auto; min-width: 0; display: flex; flex-wrap: wrap; gap: 0.25rem; padding: 2px; margin: -2px; max-height: calc(var(--chip-h) + 4px); overflow: hidden; }
+.mui-root .mui-cal__chip:focus-visible { outline-offset: 0; }
+.mui-root .mui-cal__chipbar.is-open .mui-cal__chips { max-height: none; overflow: visible; }
+.mui-root .mui-cal__chiptoggle { flex: none; margin: 0; padding: 0.0625rem 0.125rem; border: 0; background: none; font: inherit; font-size: 0.6875rem; line-height: 1.5; color: var(--mui-accent-300); white-space: nowrap; cursor: pointer; }
+.mui-root .mui-cal__chiptoggle:hover { color: var(--mui-text); }
+.mui-root .mui-cal__chip {
+  display: inline-flex; align-items: center; gap: 0.3125rem; flex: none; margin: 0; padding: 0.0625rem 0.4375rem; white-space: nowrap;
+  font: inherit; font-size: 0.6875rem; line-height: 1.5; color: var(--mui-muted); cursor: pointer;
+  background: transparent; border: 1px solid var(--mui-line); border-radius: 999px; transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+.mui-root .mui-cal__chip:hover { border-color: var(--mui-line-strong); color: var(--mui-text); }
+.mui-root .mui-cal__chip[aria-pressed='true'] {
+  color: var(--mui-text); border-color: color-mix(in srgb, var(--c, var(--mui-accent)) 70%, transparent);
+  background: color-mix(in srgb, var(--c, var(--mui-accent)) 16%, transparent);
+}
+.mui-root .mui-cal__chip[aria-pressed='true']::before { content: '✓'; font-size: 0.5625rem; margin-right: -0.0625rem; }
+.mui-root .mui-cal__chipn { font-size: 0.625rem; color: var(--mui-faint); }
+.mui-root .mui-cal__chip[aria-pressed='true'] .mui-cal__chipn { color: var(--mui-text-2); }
+.mui-root .mui-cal__chip--more { border-style: dashed; }
+
+/* ── the agenda (React Bits AnimatedList, themed dense) ── */
+.mui-root .mui-cal__listwrap { flex: 1 1 auto; min-height: 0; display: flex; }
+.mui-root .mui-cal .scroll-list { position: relative; padding: 0 0.25rem 0.5rem 0; }
+.mui-root .mui-cal .scroll-list > [data-index] { margin-bottom: 0.125rem !important; }
+.mui-root .mui-cal .scroll-list > [data-sep='1'] { position: sticky; top: 0; z-index: 2; }
+.mui-root .mui-cal .scroll-list-container > .top-gradient { display: none; } /* the sticky day header sits there */
+.mui-root .mui-cal .scroll-list .item { padding: 0; background: transparent; border: 0; border-radius: var(--mui-radius-sm); }
+.mui-root .mui-cal .scroll-list .item.selected { background: rgba(74, 158, 255, 0.1); box-shadow: inset 0 0 0 1px rgba(74, 158, 255, 0.32); }
+.mui-root .mui-cal__dayhead {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; padding: 0.25rem 0.5rem;
+  background: var(--mui-panel-2); border: 1px solid var(--mui-line); border-radius: var(--mui-radius-sm);
+}
+.mui-root .mui-cal__dayname { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.03em; color: var(--mui-accent-300); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mui-root .mui-cal__dayn { font-size: 0.625rem; color: var(--mui-faint); }
+
+.mui-root .mui-cal__row {
+  display: grid; grid-template-columns: 3.75rem minmax(0, 1fr); gap: 0 0.5rem; padding: 0.3125rem 0.5rem 0.3125rem 0.4375rem;
+  border-left: 2px solid color-mix(in srgb, var(--c, var(--mui-muted)) 70%, transparent); border-radius: 0.125rem var(--mui-radius-sm) var(--mui-radius-sm) 0.125rem;
+}
+.mui-root .mui-cal__row.imp-3 { border-left-color: var(--c, var(--mui-accent)); background: linear-gradient(90deg, color-mix(in srgb, var(--c, var(--mui-accent)) 13%, transparent), transparent 70%); }
+.mui-root .mui-cal__row.imp-1 { border-left-color: color-mix(in srgb, var(--c, var(--mui-muted)) 35%, transparent); }
+.mui-root .mui-cal__when { padding-top: 0.0625rem; font-size: 0.6875rem; color: var(--mui-text-2); white-space: nowrap; text-align: right; }
+.mui-root .mui-cal__when > i { font-style: normal; font-size: 0.5625rem; color: var(--mui-faint); }
+.mui-root .mui-cal__row:not(.imp-3) .mui-cal__when { color: var(--mui-muted); }
+.mui-root .mui-cal__main { min-width: 0; display: flex; flex-direction: column; gap: 0.125rem; }
+.mui-root .mui-cal__title { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; line-height: 1.35; color: var(--mui-text); font-weight: 500; }
+.mui-root .mui-cal__row.imp-3 .mui-cal__title { font-weight: 650; }
+.mui-root .mui-cal__row.imp-1 .mui-cal__title { font-weight: 400; color: var(--mui-text-2); }
+.mui-root .mui-cal__type {
+  display: inline-flex; align-items: center; gap: 0.25rem; margin-right: 0.375rem; vertical-align: 0.0625rem; white-space: nowrap;
+  font-size: 0.5625rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: color-mix(in srgb, var(--c, var(--mui-muted)) 72%, var(--mui-text));
+}
+.mui-root .mui-cal__star { margin-right: 0.25rem; color: var(--mui-warn); font-size: 0.6875rem; }
+.mui-root .mui-cal__sub { color: var(--mui-muted); font-size: 0.6875rem; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mui-root .mui-cal__row.imp-3 .mui-cal__sub { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; white-space: normal; overflow-wrap: anywhere; }
+.mui-root .mui-cal__row.imp-1 .mui-cal__sub { color: var(--mui-faint); }
+.mui-root .mui-cal__tags { display: flex; flex-wrap: wrap; align-items: center; gap: 0.1875rem 0.3125rem; margin-top: 0.0625rem; }
+.mui-root .mui-cal__tk {
+  display: inline-flex; align-items: baseline; gap: 0.1875rem; padding: 0 0.3125rem; white-space: nowrap; font-family: var(--mui-mono); font-size: 0.625rem; line-height: 1.5;
+  color: var(--mui-text-2); background: rgba(120, 150, 220, 0.07); border: 1px solid var(--mui-line); border-radius: 0.25rem;
+}
+.mui-root .mui-cal__tk.is-held { color: var(--mui-up); border-color: color-mix(in srgb, var(--mui-up) 50%, transparent); background: color-mix(in srgb, var(--mui-up) 10%, transparent); }
+.mui-root .mui-cal__tk > em { font-style: normal; font-family: var(--mui-font); font-size: 0.5625rem; letter-spacing: 0.05em; text-transform: uppercase; }
+.mui-root .mui-cal__tk--more { font-family: var(--mui-font); color: var(--mui-faint); background: none; border-color: transparent; padding: 0; }
+.mui-root .mui-cal__flag { font-size: 0.625rem; color: var(--mui-muted); white-space: nowrap; }
+.mui-root .mui-cal__flag--held { color: var(--mui-up); }
+.mui-root .mui-cal__flag--range { color: var(--mui-text-2); }
+.mui-root .mui-cal__flag--maybe { color: var(--mui-warn); padding: 0 0.3125rem; border: 1px dashed color-mix(in srgb, var(--mui-warn) 55%, transparent); border-radius: 0.25rem; }
+.mui-root .mui-cal__flag--moved { color: var(--mui-warn); }
+.mui-root .mui-cal__flag--done { color: var(--mui-up); }
+.mui-root .mui-cal__row.is-done { opacity: 0.6; }
+.mui-root .mui-cal__row.is-done .mui-cal__name, .mui-root .mui-cal__dettitle.is-done { text-decoration: line-through; text-decoration-color: var(--mui-faint); }
+
+/* ── messages ── */
+.mui-root .mui-cal__empty, .mui-root .mui-cal__msg {
+  flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.375rem;
+  padding: 0.75rem; text-align: center; color: var(--mui-muted); font-size: 0.8125rem;
+}
+.mui-root .mui-cal__empty p, .mui-root .mui-cal__msg p { margin: 0; max-width: 22rem; }
+.mui-root .mui-cal__emptysub { font-size: 0.6875rem; color: var(--mui-faint); }
+.mui-root .mui-cal__msgicon { display: inline-flex; align-items: center; justify-content: center; width: 1.75rem; height: 1.75rem; border: 1px solid currentColor; border-radius: 50%; font-size: 0.875rem; color: var(--mui-accent-300); }
+.mui-root .mui-cal__msg--error .mui-cal__msgicon { color: var(--mui-warn); font-weight: 700; }
+.mui-root .mui-cal__linkbtn { margin: 0; padding: 0; border: 0; background: none; font: inherit; color: var(--mui-accent-300); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.mui-root .mui-cal__linkbtn:hover { color: var(--mui-text); }
+
+/* ── footer ── */
+.mui-root .mui-cal__foot { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 0.125rem 0.625rem; font-size: 0.625rem; color: var(--mui-faint); }
+.mui-root .mui-cal__foot > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.mui-root .mui-cal__warn { color: var(--mui-warn); }
+.mui-root .mui-cal__notice { color: var(--mui-up); }
+.mui-root .mui-cal__foot .mui-cal__linkbtn { font-size: 0.6875rem; white-space: nowrap; }
+
+/* ── the agenda drop-down ── */
+.mui-root .mui-cal__agenda { flex: 0 1 auto; max-height: 45%; min-height: 0; display: flex; flex-direction: column; overflow: hidden; border-top: 1px solid var(--mui-line); padding-top: 0.375rem; }
+.mui-root .mui-cal__agempty { margin: 0; padding: 0.5rem; text-align: center; color: var(--mui-faint); }
+.mui-root .mui-cal__agbtn {
+  display: inline-flex; align-items: center; gap: 0.3125rem; flex: none; margin: 0; padding: 0.1875rem 0.5625rem;
+  border: 1px solid var(--mui-line-strong); border-radius: 999px; background: rgba(120, 150, 220, 0.06);
+  color: var(--mui-text-2); font: inherit; font-size: 0.6875rem; font-weight: 600; white-space: nowrap; cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+.mui-root .mui-cal__agbtn:hover { color: var(--mui-text); border-color: var(--mui-accent); }
+.mui-root .mui-cal__agbtn[aria-expanded='true'] { color: var(--mui-text); background: var(--mui-accent-900); border-color: var(--mui-accent); }
+.mui-root .mui-cal__chev { display: inline-block; transform: rotate(-90deg); transition: transform 0.2s ease; }
+.mui-root .mui-cal__agbtn[aria-expanded='true'] .mui-cal__chev { transform: none; }
+.mui-root .mui-cal__agn { font-weight: 400; color: var(--mui-faint); }
+.mui-root .mui-cal__none { color: var(--mui-muted); }
+
+/* ── the day popover (portalled to <body>; .mui-cal__pop is also .mui-cal) ── */
+.mui-cal-host { position: relative; z-index: 1000; }
+.mui-root .mui-cal.mui-cal__pop {
+  position: fixed; z-index: 1000; display: flex; flex-direction: column; flex: none; container-type: normal;
+  width: min(19.5rem, calc(100vw - 1rem)); height: auto; max-height: min(26rem, calc(100vh - 1rem)); overflow: hidden;
+  background: var(--mui-panel-2); border: 1px solid var(--mui-line-strong); border-radius: var(--mui-radius-md);
+  box-shadow: 0 0.75rem 2.5rem rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(0, 0, 0, 0.25);
+}
+.mui-root .mui-cal__pop.is-placed { transition: left 0.18s ease, top 0.18s ease; }
+.mui-root .mui-cal__popview { display: flex; flex-direction: column; flex: 0 1 auto; min-height: 0; }
+.mui-root .mui-cal__popday { display: flex; flex-direction: column; flex: 0 1 auto; min-height: 0; }
+.mui-root .mui-cal__pophead { flex: none; display: flex; align-items: center; gap: 0.5rem; padding: 0.4375rem 0.4375rem 0.375rem 0.75rem; border-bottom: 1px solid var(--mui-line); }
+.mui-root .mui-cal__poptitle { flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--mui-text-2); }
+.mui-root .mui-cal__poptitle b { color: var(--mui-text); font-weight: 650; font-size: 0.8125rem; }
+.mui-root .mui-cal__poprel { color: var(--mui-muted); }
+.mui-root .mui-cal__popn { flex: none; font-size: 0.625rem; color: var(--mui-faint); white-space: nowrap; }
+.mui-root .mui-cal__poplist { display: flex; flex-direction: column; flex: 0 1 auto; min-height: 0; padding: 0.375rem 0.125rem 0.125rem 0.4375rem; }
+.mui-root .mui-cal__poplist .scroll-list-container { flex: 0 1 auto; height: auto; }
+.mui-root .mui-cal__poplist .scroll-list { flex: 0 1 auto; max-height: none; overflow-y: auto; }
+.mui-root .mui-cal__dayhead--on { padding-block: 0.125rem; background: transparent; border-style: dashed; }
+.mui-root .mui-cal__popempty { margin: 0; padding: 0.875rem 0.75rem; text-align: center; color: var(--mui-muted); }
+.mui-root .mui-cal__popfoot { flex: none; display: flex; justify-content: flex-end; padding: 0.375rem 0.5rem; border-top: 1px solid var(--mui-line); }
+.mui-root .mui-cal__popadd { font-size: 0.6875rem; padding: 0.1875rem 0.5625rem; }
+.mui-root .mui-cal__popnav { flex: none; padding: 0.375rem 0.5rem 0; }
+.mui-root .mui-cal__back {
+  flex: none; margin: 0; padding: 0.0625rem 0.375rem 0.0625rem 0.125rem; border: 0; border-radius: var(--mui-radius-sm); background: none;
+  color: var(--mui-accent-300); font: inherit; font-size: 0.6875rem; white-space: nowrap; cursor: pointer;
+}
+.mui-root .mui-cal__back:hover { color: var(--mui-text); background: rgba(120, 150, 220, 0.08); }
+.mui-root .mui-cal__pop .mui-cal__det { flex: 0 1 auto; }
+.mui-root .mui-cal__dethead .mui-cal__type { margin-right: auto; }
+.mui-root .mui-cal__det { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; margin: 0; }
+.mui-root .mui-cal__dethead { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.4375rem 0.5rem 0.25rem 0.75rem; }
+.mui-root .mui-cal__dethead .mui-cal__type { font-size: 0.625rem; }
+.mui-root .mui-cal__formtitle { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--mui-accent-300); }
+.mui-root .mui-cal__x { width: 1.5rem; height: 1.5rem; margin: 0; padding: 0; border: 1px solid transparent; border-radius: 50%; background: none; color: var(--mui-muted); font: inherit; font-size: 1.125rem; line-height: 1; cursor: pointer; }
+.mui-root .mui-cal__x:hover { color: var(--mui-text); border-color: var(--mui-line-strong); }
+.mui-root .mui-cal__detbody { flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; padding: 0.125rem 0.75rem 0.625rem; }
+.mui-root .mui-cal__detbody p { margin: 0; overflow-wrap: anywhere; }
+.mui-root .mui-cal__dettitle { margin: 0; font-size: 0.9375rem; font-weight: 600; line-height: 1.3; color: var(--mui-text); overflow-wrap: anywhere; }
+.mui-root .mui-cal__detwhen { color: var(--mui-text-2); }
+.mui-root .mui-cal__detwhen b { color: var(--mui-text); font-weight: 600; }
+.mui-root .mui-cal__detrel { color: var(--mui-muted); }
+.mui-root .mui-cal__detrange { display: block; color: var(--mui-accent-300); }
+.mui-root .mui-cal__detsub { color: var(--mui-text-2); line-height: 1.45; }
+.mui-root .mui-cal__detnote { padding: 0.375rem 0.5rem; border-left: 2px solid var(--cal-personal); background: rgba(120, 150, 220, 0.06); border-radius: 0 var(--mui-radius-sm) var(--mui-radius-sm) 0; color: var(--mui-text); white-space: pre-wrap; }
+.mui-root .mui-cal__detnote .mui-cal__k, .mui-root .mui-cal__dettk .mui-cal__k { display: block; margin-bottom: 0.125rem; }
+.mui-root .mui-cal__dettk { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.3125rem; }
+.mui-root .mui-cal__dettk .mui-cal__k { flex: 0 0 100%; }
+.mui-root .mui-cal__tk--btn { margin: 0; padding: 0.0625rem 0.4375rem; font-size: 0.6875rem; cursor: pointer; }
+.mui-root .mui-cal__tk--btn:hover { border-color: var(--mui-accent); color: var(--mui-text); }
+.mui-root .mui-cal__facts { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.1875rem 0.75rem; margin: 0; padding: 0.375rem 0 0; border-top: 1px solid var(--mui-line); }
+.mui-root .mui-cal__facts dt { font-size: 0.625rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--mui-muted); padding-top: 0.0625rem; white-space: nowrap; }
+.mui-root .mui-cal__facts dd { margin: 0; color: var(--mui-text-2); overflow-wrap: anywhere; }
+.mui-root .mui-cal__link { align-self: flex-start; color: var(--mui-accent-300); text-decoration: underline; text-underline-offset: 2px; }
+.mui-root .mui-cal__link:hover { color: var(--mui-text); }
+.mui-root .mui-cal__err, .mui-root .mui-cal__fielderr { color: var(--mui-down); font-size: 0.6875rem; }
+.mui-root .mui-cal__err::before, .mui-root .mui-cal__fielderr::before { content: '! '; font-weight: 700; }
+.mui-root .mui-cal__acts { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem; padding: 0.5rem 0.75rem 0.625rem; border-top: 1px solid var(--mui-line); }
+.mui-root .mui-cal__acts .mui-btn { font-size: 0.6875rem; padding: 0.25rem 0.625rem; }
+.mui-root .mui-cal__acts .mui-btn:disabled { opacity: 0.55; cursor: default; }
+.mui-root .mui-cal__ask { flex: 1 1 100%; color: var(--mui-text); }
+.mui-root .mui-cal__danger { color: var(--mui-down); border-color: color-mix(in srgb, var(--mui-down) 55%, transparent); }
+.mui-root .mui-cal__danger:not(.mui-btn--ghost) { background: color-mix(in srgb, var(--mui-down) 16%, transparent); }
+
+.mui-root .mui-cal__field { display: flex; flex-direction: column; gap: 0.1875rem; min-width: 0; flex: none; }
+.mui-root .mui-cal__fieldrow > .mui-cal__field { flex: 1 1 8rem; }
+.mui-root .mui-cal__fieldrow > .mui-cal__field--half { flex: 0 1 calc(50% - 0.25rem); min-width: 7rem; }
+.mui-root .mui-cal__fieldrow { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.mui-root .mui-cal__field input, .mui-root .mui-cal__field textarea {
+  width: 100%; min-width: 0; margin: 0; padding: 0.3125rem 0.5rem; font: inherit; font-size: 0.8125rem; color: var(--mui-text); color-scheme: dark;
+  background: var(--mui-panel-3); border: 1px solid var(--mui-line-strong); border-radius: var(--mui-radius-sm); resize: vertical;
+}
+.mui-root .mui-cal__field input::placeholder { color: var(--mui-faint); }
+.mui-root .mui-cal__field input:focus, .mui-root .mui-cal__field textarea:focus { border-color: var(--mui-accent); }
+.mui-root .mui-cal__field.has-error input, .mui-root .mui-cal__field.has-error textarea { border-color: var(--mui-down); }
+
+/* ── height tiers (data-tier from the ResizeObserver): a small widget keeps the grid ── */
+.mui-root .mui-cal[data-tier='short'] .mui-cal__chipbar,
+.mui-root .mui-cal[data-tier='tiny'] .mui-cal__chipbar,
+.mui-root .mui-cal[data-tier='tiny'] .mui-cal__switch,
+.mui-root .mui-cal[data-tier='tiny'] .mui-cal__wkdays,
+.mui-root .mui-cal[data-tier='micro'] .mui-cal__chipbar,
+.mui-root .mui-cal[data-tier='micro'] .mui-cal__switch,
+.mui-root .mui-cal[data-tier='micro'] .mui-cal__sum,
+.mui-root .mui-cal[data-tier='micro'] .mui-cal__wkdays,
+.mui-root .mui-cal[data-tier='micro'] .mui-cal__foot > span { display: none; }
+.mui-root .mui-cal[data-tier='micro'] .mui-cal__month { min-height: 6rem; }
+
+/* ── small boxes (the month's own size) ── */
+@container calmonth (max-height: 15rem) {
+  .mui-root .mui-cal__cell { padding: 0.125rem 0.25rem 0.1875rem; }
+  .mui-root .mui-cal__num { min-width: 1.125rem; height: 1.125rem; font-size: 0.6875rem; }
+  .mui-root .mui-cal__badge { min-width: 0.875rem; height: 0.875rem; line-height: 0.875rem; font-size: 0.5625rem; bottom: 0.125rem; right: 0.1875rem; }
+  .mui-root .mui-cal__dots { gap: 0.125rem; }
+  .mui-root .mui-cal__dots .mui-cal__dot { width: 0.3125rem; height: 0.3125rem; }
+}
+@container calmonth (max-width: 22rem) {
+  .mui-root .mui-cal__mine { display: none; }
+  .mui-root .mui-cal__cell { padding-inline: 0.1875rem; }
+  .mui-root .mui-cal__dots { max-width: 100%; }
+  .mui-root .mui-cal__badge { top: 0.25rem; bottom: auto; right: 0.1875rem; }
+  .mui-root .mui-cal__on { right: 0.3125rem; }
+}
+@container calmonth (min-width: 40rem) and (min-height: 22rem) {
+  .mui-root .mui-cal__num { font-size: 0.9375rem; min-width: 1.625rem; height: 1.625rem; }
+  .mui-root .mui-cal__dots .mui-cal__dot { width: 0.4375rem; height: 0.4375rem; }
+  .mui-root .mui-cal__badge { font-size: 0.6875rem; min-width: 1.25rem; height: 1.25rem; line-height: 1.25rem; }
+  .mui-root .mui-cal__wkdays { font-size: 0.625rem; }
+}
+
+/* ── width ── */
+@container (min-width: 34rem) {
+  .mui-root .mui-cal__row { grid-template-columns: 4.25rem minmax(0, 1fr); }
+}
+@container (max-width: 26rem) {
+  .mui-root .mui-cal__mtitle { min-width: 0; font-size: 0.8125rem; }
+  .mui-root .mui-cal__sum { display: none; }
+}
+@container (max-width: 20rem) {
+  .mui-root .mui-cal__row { grid-template-columns: minmax(0, 1fr); }
+  .mui-root .mui-cal__when { text-align: left; font-size: 0.625rem; }
+  .mui-root .mui-cal__addw { display: none; }
+  .mui-root .mui-cal__bar { flex-wrap: nowrap; gap: 0.375rem; }
+  .mui-root .mui-cal__switch .squish-switch__label { display: none; }
+}
+/* fingers: taller chips and buttons */
+@media (pointer: coarse) {
+  .mui-root .mui-cal { --chip-h: 1.8125rem; }
+  .mui-root .mui-cal__chip { padding-block: 0.3125rem; }
+  .mui-root .mui-cal__chiptoggle { padding-block: 0.3125rem; }
+  .mui-root .mui-cal__add { padding: 0.375rem 0.6875rem; }
+  .mui-root .mui-cal__x { width: 2rem; height: 2rem; }
+  .mui-root .mui-cal__foot .mui-cal__linkbtn { padding: 0.3125rem 0; }
+  .mui-root .mui-cal__navbtn { width: 2rem; height: 2rem; }
+  .mui-root .mui-cal__agbtn { padding: 0.375rem 0.75rem; }
+  .mui-root .mui-cal__acts .mui-btn { padding: 0.4375rem 0.75rem; }
+  .mui-root .mui-cal__tk--btn { padding: 0.25rem 0.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mui-root .mui-cal.is-busy::before { animation: none; background-size: 100% 100%; opacity: 0.5; }
+  .mui-root .mui-cal__chip, .mui-root .mui-cal .border-glow-card.mui-cal__box, .mui-root .mui-cal__chev { transition: none; }
+  .mui-root .mui-cal .border-glow-card.mui-cal__box.is-selected { animation: none; --mui-cal-spin: 315deg; }
+  .mui-root .mui-cal__pop.is-placed { transition: none; }
+}

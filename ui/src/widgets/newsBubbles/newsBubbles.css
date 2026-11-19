@@ -1,0 +1,66 @@
+/* newsBubbles — the Impact map (UI overhaul Task 5). Nocturne tokens only. */
+.mui-root .nw-bub { container: nwbub / size; gap: 0.3125rem; }
+.mui-root .nw-bub__bar { display: flex; align-items: center; gap: 0.5rem; flex: none; min-width: 0; }
+.mui-root .nw-bub__hint { font-size: 0.6875rem; color: var(--mui-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.mui-root .nw-bub__hint b { color: var(--mui-accent-300); font-weight: 600; }
+
+.mui-root .nw-bub__stage {
+  position: relative; flex: 1 1 auto; min-height: 0; border-radius: var(--mui-radius-md); overflow: hidden;
+  /* static radar backdrop: soft core + concentric rings */
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(74, 158, 255, 0.09), transparent 65%),
+    repeating-radial-gradient(circle at 50% 50%, transparent 0 2.75rem, rgba(120, 150, 220, 0.07) 2.75rem calc(2.75rem + 1px));
+  border: 1px solid rgba(120, 150, 220, 0.08);
+}
+.mui-root .nw-bub__svg { display: block; overflow: visible; }
+
+.mui-root .nw-bubble { cursor: pointer; outline: none; --nw-b: var(--mui-accent); }
+.mui-root .nw-bubble--up { --nw-b: var(--mui-up); }
+.mui-root .nw-bubble--down { --nw-b: var(--mui-down); }
+.mui-root .nw-bubble--flat { --nw-b: var(--mui-accent-300); }
+.mui-root .nw-bubble__body {
+  fill: var(--nw-b); fill-opacity: calc(0.1 + var(--nw-int, 0.4) * 0.34);
+  stroke: var(--nw-b); stroke-opacity: 0.85; stroke-width: 1.2;
+  transition: fill-opacity 0.2s ease, stroke-width 0.2s ease;
+}
+.mui-root .nw-bubble__gloss { fill: rgba(234, 244, 255, 0.05); pointer-events: none; }
+.mui-root .nw-bubble__ring { fill: none; stroke: transparent; stroke-width: 1.5; pointer-events: none; }
+.mui-root .nw-bubble.has-mat .nw-bubble__ring { stroke: var(--mui-warn); stroke-dasharray: 3 3; stroke-opacity: 0.85; }
+.mui-root .nw-bubble:hover .nw-bubble__body, .mui-root .nw-bubble:focus-visible .nw-bubble__body {
+  fill-opacity: calc(0.22 + var(--nw-int, 0.4) * 0.4); stroke-width: 2; filter: drop-shadow(0 0 0.375rem var(--nw-b));
+}
+.mui-root .nw-bubble:focus-visible .nw-bubble__ring { stroke: var(--mui-accent); stroke-dasharray: none; stroke-width: 2; }
+.mui-root .nw-bubble.is-sel .nw-bubble__body { stroke-width: 2.5; fill-opacity: calc(0.3 + var(--nw-int, 0.4) * 0.4); filter: drop-shadow(0 0 0.625rem var(--nw-b)); }
+.mui-root .nw-bubble.is-sel .nw-bubble__ring { stroke: var(--color-accent-100, #eaf4ff); stroke-dasharray: none; stroke-width: 1.5; stroke-opacity: 0.9; }
+.mui-root .nw-bubble__tk {
+  fill: var(--mui-text); font-family: var(--mui-mono); font-weight: 700; letter-spacing: 0.02em;
+  text-anchor: middle; dominant-baseline: middle; pointer-events: none;
+}
+.mui-root .nw-bubble__n { fill: var(--mui-text-2); font-family: var(--mui-mono); text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
+
+.mui-root .nw-bub__tip {
+  position: absolute; transform: translate(-50%, -100%); pointer-events: none; z-index: 3;
+  display: flex; flex-direction: column; gap: 0.125rem; white-space: nowrap; font-size: 0.6875rem; color: var(--mui-text-2);
+  background: rgba(10, 13, 24, 0.94); border: 1px solid var(--mui-line-strong); border-radius: var(--mui-radius-sm);
+  padding: 0.375rem 0.5625rem; box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(74, 158, 255, 0.12);
+}
+.mui-root .nw-bub__tip.is-below { transform: translate(-50%, 0); }
+.mui-root .nw-bub__tip b { color: var(--mui-text); font-family: var(--mui-mono); letter-spacing: 0.03em; }
+.mui-root .nw-bub__tip-sub { color: var(--mui-muted); font-size: 0.625rem; }
+
+.mui-root .nw-bub__legend { display: flex; flex-wrap: wrap; gap: 0.125rem 0.625rem; font-size: 0.625rem; color: var(--mui-faint); flex: none; }
+.mui-root .nw-bub__legend-mat { color: var(--mui-warn); }
+.mui-root .nw-bub__legend-more { color: var(--mui-muted); }
+
+@container nwbub (max-width: 21rem) {
+  .mui-root .nw-bub__hint { display: none; }
+}
+@container nwbub (max-height: 13rem) {
+  .mui-root .nw-bub__legend { display: none; }
+}
+@container nwbub (max-height: 8rem) {
+  .mui-root .nw-bub__bar { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mui-root .nw-bubble__body { transition: none; }
+}

@@ -1,0 +1,85 @@
+/* S3-F1 congressFeed — scoped under .mui-root; Nocturne tokens only (theme.css). */
+.mui-root .cf {
+  display: flex; flex-direction: column; height: 100%; min-height: 0; gap: 0.25rem;
+  container-type: inline-size; container-name: cf;
+}
+.mui-root .cf-head { display: flex; align-items: center; gap: 0.375rem; flex-wrap: wrap; flex: none; }
+.mui-root .cf-title { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.12em; color: var(--mui-text-2); }
+.mui-root .cf-asof { margin-left: auto; color: var(--mui-faint); font-size: 0.6875rem; white-space: nowrap; }
+.mui-root .cf-chip {
+  display: inline-flex; align-items: center; gap: 0.25rem; padding: 0 0.125rem 0 0.4375rem;
+  border-radius: 999px; border: 1px solid var(--mui-accent); background: var(--mui-accent-900);
+  color: var(--mui-accent-300); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.04em;
+  max-width: 10rem; overflow: hidden;
+}
+.mui-root .cf-chip > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mui-root .cf-chip__x {
+  font: inherit; font-size: 0.625rem; cursor: pointer; color: inherit; background: transparent;
+  border: 0; border-radius: 50%; width: 1.125rem; height: 1.125rem; line-height: 1; padding: 0;
+}
+.mui-root .cf-chip__x:hover { background: var(--mui-accent-700); }
+.mui-root .cf-toggle {
+  font: inherit; font-size: 0.6875rem; cursor: pointer; color: var(--mui-muted);
+  background: transparent; border: 1px solid var(--mui-line); border-radius: 999px; padding: 0.0625rem 0.5rem;
+}
+.mui-root .cf-toggle.is-on { color: var(--mui-accent-300); border-color: var(--mui-accent); background: var(--mui-accent-900); }
+.mui-root .cf-body { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.mui-root .cf-meta { flex: none; font-size: 0.6875rem; color: var(--mui-muted); padding: 0 0 0.125rem; }
+.mui-root .cf-meta b { color: var(--mui-text); font-weight: 700; }
+.mui-root .cf-list { flex: 1 1 auto; min-height: 0; }
+.mui-root .cf-empty { color: var(--mui-faint); font-style: italic; font-size: 0.75rem; padding: 0.5rem 0.25rem; }
+.mui-root .cf-linkbtn { font-style: normal; padding: 0 0.375rem; font-size: 0.6875rem; }
+.mui-root .cf-caption {
+  flex: none; margin: 0; font-size: 0.625rem; line-height: 1.3; color: var(--mui-faint);
+  border-top: 1px solid var(--mui-line); padding-top: 0.25rem;
+}
+
+/* rows (inside AnimatedList .item) */
+.mui-root .cf .scroll-list .item { padding: 0.375rem 0.5rem 0.375rem 0.625rem; position: relative; }
+.mui-root .cf-row { display: flex; flex-direction: column; gap: 0.125rem; min-width: 0; }
+.mui-root .cf-row::before {
+  content: ''; position: absolute; left: 0; top: 0.375rem; bottom: 0.375rem; width: 2px; border-radius: 2px;
+  background: var(--mui-line-strong);
+}
+.mui-root .cf-row.is-buy::before { background: var(--mui-up); }
+.mui-root .cf-row.is-sell::before { background: var(--mui-down); }
+.mui-root .cf-l1, .mui-root .cf-l2, .mui-root .cf-l3 { display: flex; align-items: baseline; gap: 0.375rem; min-width: 0; flex-wrap: wrap; }
+.mui-root .cf-side {
+  font-size: 0.625rem; font-weight: 800; letter-spacing: 0.1em; padding: 0 0.3125rem; border-radius: 0.25rem;
+  border: 1px solid currentColor; line-height: 1.35;
+}
+.mui-root .cf-side.is-buy { color: var(--mui-up); background: color-mix(in srgb, var(--mui-up) 12%, transparent); }
+.mui-root .cf-side.is-sell { color: var(--mui-down); background: color-mix(in srgb, var(--mui-down) 12%, transparent); }
+.mui-root .cf-side.is-other { color: var(--mui-muted); }
+.mui-root .cf-tk { font-weight: 800; letter-spacing: 0.02em; font-size: 0.875rem; max-width: 9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mui-root .cf-tag {
+  font-size: 0.5625rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--mui-muted); border: 1px solid var(--mui-line); border-radius: 999px; padding: 0 0.3125rem;
+}
+.mui-root .cf-tag--own { color: var(--mui-accent-300); border-color: color-mix(in srgb, var(--mui-accent) 55%, transparent); }
+.mui-root .cf-tag--inv { color: var(--mui-warn); border-color: color-mix(in srgb, var(--mui-warn) 45%, transparent); }
+.mui-root .cf-amt { margin-left: auto; font-weight: 600; color: var(--mui-text-2); white-space: nowrap; }
+.mui-root .cf-who { color: var(--mui-text); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; max-width: 100%; }
+.mui-root .cf-party { font-size: 0.5625rem; padding: 0 0.375rem; }
+.mui-root .cf-charted { margin-left: auto; font-size: 0.625rem; color: var(--mui-accent-300); letter-spacing: 0.04em; }
+.mui-root .cf-l3 { font-size: 0.6875rem; color: var(--mui-muted); }
+.mui-root .cf-lag { color: var(--mui-faint); }
+.mui-root .cf-fwd { display: inline-flex; gap: 0.25rem; flex-wrap: wrap; margin-left: auto; align-items: baseline; }
+.mui-root .cf-fwd__cell {
+  display: inline-flex; gap: 0.1875rem; align-items: baseline; padding: 0 0.3125rem; border-radius: 0.25rem;
+  background: color-mix(in srgb, var(--mui-line) 45%, transparent); white-space: nowrap;
+}
+.mui-root .cf-fwd__h { color: var(--mui-faint); font-size: 0.5625rem; font-weight: 700; }
+.mui-root .cf-fwd__cell.is-pending .cf-fwd__v { color: var(--mui-faint); font-style: italic; }
+.mui-root .cf-fwd__v { font-weight: 600; }
+.mui-root .cf .scroll-list .item.selected .cf-row::before { width: 3px; }
+.mui-root .cf-row.is-charted .cf-tk { color: var(--mui-accent-300); }
+
+/* compact: narrow widgets (catalog at min size) */
+@container cf (max-width: 22rem) {
+  .mui-root .cf-asof { display: none; }
+  .mui-root .cf-fwd { margin-left: 0; }
+  .mui-root .cf-tk { font-size: 0.8125rem; }
+}
+/* OQ-3: rows the backend never grades — one muted text cell instead of three "pending" cells */
+.mui-root .cf-fwd__cell.is-ungraded { color: var(--mui-faint); font-style: italic; font-size: 0.625rem; cursor: help; }

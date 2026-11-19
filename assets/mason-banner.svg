@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="1200" height="340" role="img" aria-label="MASON - Autonomous Market Intelligence">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="42%" r="70%">
+      <stop offset="0%" stop-color="#0e2a4e" />
+      <stop offset="55%" stop-color="#07152a" />
+      <stop offset="100%" stop-color="#050810" />
+    </radialGradient>
+    <linearGradient id="wordmark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6ab4ff" />
+      <stop offset="45%" stop-color="#4a9eff" />
+      <stop offset="75%" stop-color="#22d3ee" />
+      <stop offset="100%" stop-color="#a78bfa" />
+    </linearGradient>
+    <linearGradient id="ruleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4a9eff" stop-opacity="0" />
+      <stop offset="20%" stop-color="#4a9eff" stop-opacity="1" />
+      <stop offset="50%" stop-color="#22d3ee" stop-opacity="1" />
+      <stop offset="80%" stop-color="#a78bfa" stop-opacity="1" />
+      <stop offset="100%" stop-color="#a78bfa" stop-opacity="0" />
+    </linearGradient>
+    <filter id="blueGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="b" />
+      <feMerge>
+        <feMergeNode in="b" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.2" result="b" />
+      <feMerge>
+        <feMergeNode in="b" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- backdrop -->
+  <rect width="1200" height="340" fill="#050810" />
+  <rect width="1200" height="340" fill="url(#glow)" />
+
+  <!-- subtle grid -->
+  <g stroke="#12365f" stroke-width="1" opacity="0.35">
+    <line x1="0"   y1="56"  x2="1200" y2="56" />
+    <line x1="0"   y1="284" x2="1200" y2="284" />
+    <line x1="60"  y1="0"   x2="60"   y2="340" />
+    <line x1="1140" y1="0"  x2="1140" y2="340" />
+  </g>
+  <g stroke="#0e2444" stroke-width="1" opacity="0.18">
+    <line x1="0" y1="100" x2="1200" y2="100" stroke="#0e2444" />
+    <line x1="0" y1="140" x2="1200" y2="140" stroke="#0e2444" />
+    <line x1="0" y1="200" x2="1200" y2="200" stroke="#0e2444" />
+    <line x1="0" y1="240" x2="1200" y2="240" stroke="#0e2444" />
+  </g>
+
+  <!-- corner brackets (Cephalon HUD) -->
+  <g stroke="#22d3ee" stroke-width="2.5" fill="none" opacity="0.85" filter="url(#softGlow)">
+    <polyline points="60,40 60,20 100,20" />
+    <polyline points="1140,40 1140,20 1100,20" />
+    <polyline points="60,300 60,320 100,320" />
+    <polyline points="1140,300 1140,320 1100,320" />
+  </g>
+
+  <!-- faux ticker tape top -->
+  <g font-family="'DejaVu Sans Mono', Menlo, monospace" font-size="13" opacity="0.55">
+    <text x="120" y="46" fill="#3ddc84">ACME +2.4%</text>
+    <text x="250" y="46" fill="#3ddc84">DEMO +5.1%</text>
+    <text x="380" y="46" fill="#ff5566">XMPL -0.3%</text>
+    <text x="490" y="46" fill="#3ddc84">MOCK +1.8%</text>
+    <text x="600" y="46" fill="#a78bfa">VIX 14.2</text>
+    <text x="710" y="46" fill="#3ddc84">FAKE +3.6%</text>
+    <text x="850" y="46" fill="#ff9944">0DTE ARMED</text>
+    <text x="990" y="46" fill="#6ab4ff">REGIME: RISK-ON</text>
+  </g>
+
+  <!-- wordmark -->
+  <text x="600" y="196" text-anchor="middle" font-family="'DejaVu Sans', Arial, sans-serif"
+        font-size="128" font-weight="800" letter-spacing="14"
+        fill="url(#wordmark)" filter="url(#blueGlow)">MASON</text>
+
+  <!-- subtitle -->
+  <text x="600" y="240" text-anchor="middle" font-family="'DejaVu Sans Mono', Menlo, monospace"
+        font-size="19" letter-spacing="7" fill="#7fd0ff" opacity="0.92">
+    AUTONOMOUS  MARKET  INTELLIGENCE
+  </text>
+
+  <!-- accent rule -->
+  <rect x="330" y="258" width="540" height="2.5" fill="url(#ruleGrad)" filter="url(#softGlow)" />
+
+  <!-- cephalon tag -->
+  <text x="600" y="292" text-anchor="middle" font-family="'DejaVu Sans Mono', Menlo, monospace"
+        font-size="13" letter-spacing="3" fill="#4a6080">
+    // VOICED BY CEPHALON ORDIS  ·  CLAUDE + LOCAL MODEL TEAM  ·  TRADING ON ALPACA MARKETS
+  </text>
+</svg>

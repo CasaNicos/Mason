@@ -1,0 +1,232 @@
+/* Mason UI theme — React Bits on Nocturne (bundle design §5 "Theming": no new palette).
+ *
+ * Every value below resolves to a Nocturne token from templates/mason_v2.html :root
+ * (--color-*, --radius-*, --font-*), with the same literal as a fallback so a widget still looks
+ * right in the harness or anywhere the tokens are missing. Everything is scoped under .mui-root
+ * (the wrapper of every MasonUI React root), so nothing here can restyle the vanilla template.
+ * React Bits stylesheets are scoped the same way at build time (vite.config.js, MODS.md M-ALL-2).
+ */
+.mui-root {
+  --mui-bg: var(--color-bg, #070a12);
+  --mui-panel: rgba(21, 29, 52, 0.94);
+  --mui-panel-2: var(--color-neutral-800, #141a2e);
+  --mui-panel-3: var(--color-neutral-900, #0a0d18);
+  --mui-line: rgba(120, 150, 220, 0.14);
+  --mui-line-strong: rgba(130, 170, 255, 0.32);
+  --mui-text: var(--color-text, #e8edf7);
+  --mui-text-2: var(--color-neutral-300, #b7c1dc);
+  --mui-muted: var(--color-neutral-400, #8b96b8);
+  --mui-faint: var(--color-neutral-500, #657196);
+  --mui-accent: var(--color-accent, #4a9eff);
+  --mui-accent-300: var(--color-accent-300, #8dc4ff);
+  --mui-accent-700: var(--color-accent-700, #1c3f6e);
+  --mui-accent-900: var(--color-accent-900, #0e1f38);
+  --mui-up: var(--color-positive, #5fd1a0);
+  --mui-down: var(--color-negative, #e0768a);
+  --mui-warn: var(--color-warn, #e0b35a);
+  --mui-radius-sm: var(--radius-sm, 0.4375rem);
+  --mui-radius-md: var(--radius-md, 0.6875rem);
+  --mui-radius-lg: var(--radius-lg, 1.125rem);
+  --mui-font: var(--font-body, 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif);
+  --mui-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  font-family: var(--mui-font);
+  color: var(--mui-text);
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+  box-sizing: border-box;
+}
+.mui-root *,
+.mui-root *::before,
+.mui-root *::after {
+  box-sizing: inherit;
+}
+.mui-root.mui-widget {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.mui-root.mui-mount {
+  /* MasonUI.mount(): fill the host element when it has a size (auto otherwise) */
+  width: 100%;
+  height: 100%;
+}
+.mui-root :focus-visible {
+  outline: 2px solid var(--mui-accent);
+  outline-offset: 2px;
+}
+
+/* ── direction: color is never the only signal (pair with ▲/▼ or a sign, see lib/fmt.js) ── */
+.mui-root .mui-up { color: var(--mui-up); }
+.mui-root .mui-down { color: var(--mui-down); }
+.mui-root .mui-flat { color: var(--mui-muted); }
+.mui-root .mui-muted { color: var(--mui-muted); }
+.mui-root .mui-n { color: var(--mui-faint); font-size: 0.6875rem; letter-spacing: 0.02em; }
+.mui-sr {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* ── shared states (lib/states.jsx) ── */
+.mui-root .mui-state {
+  display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+  padding: 0.75rem; color: var(--mui-text-2); font-size: 0.75rem;
+}
+.mui-root .mui-state--loading { flex-direction: column; align-items: stretch; gap: 0.5rem; }
+.mui-root .mui-state__icon {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 1.25rem; height: 1.25rem; border-radius: 50%;
+  border: 1px solid currentColor; font-size: 0.6875rem; font-weight: 700;
+}
+.mui-root .mui-state--off { color: var(--mui-muted); }
+.mui-root .mui-state--error { color: var(--mui-down); }
+.mui-root .mui-state--error .mui-state__text { color: var(--mui-text-2); overflow-wrap: anywhere; }
+.mui-root .mui-state--empty { color: var(--mui-faint); font-style: italic; }
+.mui-root .mui-state__badges { display: flex; gap: 0.375rem; padding: 0 0 0.375rem; }
+.mui-root .mui-skel {
+  height: 0.75rem; border-radius: 0.25rem;
+  background: linear-gradient(90deg, rgba(120, 150, 220, 0.08), rgba(120, 150, 220, 0.18), rgba(120, 150, 220, 0.08));
+  background-size: 200% 100%;
+  animation: mui-skel 1.4s ease-in-out infinite;
+}
+@keyframes mui-skel { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+.mui-root .mui-code {
+  font-family: var(--mui-mono); font-size: 0.6875rem; color: var(--mui-accent-300);
+  background: var(--mui-accent-900); border: 1px solid var(--mui-line); border-radius: 0.25rem;
+  padding: 0.0625rem 0.3125rem; overflow-wrap: anywhere;
+}
+.mui-root .mui-badge {
+  display: inline-flex; align-items: center; gap: 0.25rem; white-space: nowrap;
+  font-size: 0.625rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 0.125rem 0.4375rem; border-radius: 999px; border: 1px solid var(--mui-line-strong);
+  color: var(--mui-text-2); background: rgba(120, 150, 220, 0.08);
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis;
+}
+.mui-root .mui-badge--warn {
+  color: var(--mui-warn); border-color: color-mix(in srgb, var(--mui-warn) 55%, transparent);
+  background: color-mix(in srgb, var(--mui-warn) 12%, transparent);
+}
+.mui-root .mui-btn {
+  font: inherit; font-size: 0.75rem; cursor: pointer; color: var(--mui-text);
+  background: var(--mui-accent-700); border: 1px solid var(--mui-line-strong);
+  border-radius: var(--mui-radius-sm); padding: 0.25rem 0.625rem;
+}
+.mui-root .mui-btn:hover { border-color: var(--mui-accent); }
+.mui-root .mui-btn--ghost { background: transparent; }
+
+/* ── MasonChartHost ── */
+.mui-root .mui-chart-host { position: relative; width: 100%; height: 100%; min-height: 6rem; }
+.mui-root .mui-chart-host > .m-widget {
+  /* the engine builds a full .m-widget; inside our widget it must not draw a second card */
+  width: 100%; height: 100%; border: 0; box-shadow: none; background: transparent; border-radius: 0;
+}
+.mui-root .mui-chart-host--placeholder {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.375rem;
+  color: var(--mui-faint); border: 1px dashed var(--mui-line-strong); border-radius: var(--mui-radius-md);
+}
+
+/* ── MasonUI.effects overlays ── */
+.mui-fx { position: fixed; pointer-events: none; z-index: 45; }
+.mui-fx-electric { opacity: 0; transition: opacity 0.4s ease; } /* duration is overridden inline by effects.electrify (fadeMs) */
+.mui-fx-electric.is-in { opacity: 1; }
+.mui-fx-electric .electric-border { width: 100%; height: 100%; }
+.mui-fx-electric.mui-fx-fade {
+  border-radius: var(--radius-lg, 1.125rem);
+  box-shadow: 0 0 0 2px var(--mui-fx-color, #4a9eff), 0 0 18px color-mix(in srgb, var(--mui-fx-color, #4a9eff) 45%, transparent);
+  transition: opacity 0.15s ease;
+}
+.mui-fx-pixel { border-radius: var(--radius-lg, 1.125rem); overflow: hidden; transition: opacity 0.18s ease, transform 0.18s ease; }
+.mui-fx-pixel.is-out { opacity: 0; transform: scale(0.96); }
+.mui-fx-pixel .mui-fx-pixel__card { width: 100%; height: 100%; border: 0; border-radius: 0; background: transparent; }
+.mui-fx-spark { overflow: visible; }
+.mui-fx-spark.mui-fx-fade {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--mui-fx-color, #4a9eff);
+  opacity: 1; transition: opacity 0.15s ease;
+}
+.mui-fx-spark.mui-fx-fade.is-out { opacity: 0; }
+
+/* ── React Bits → Nocturne ──────────────────────────────────────────────────────────────── */
+/* AnimatedList: fluid width/height inside a widget, Nocturne rows */
+.mui-root .scroll-list-container { width: 100%; height: 100%; min-height: 0; display: flex; flex-direction: column; }
+.mui-root .scroll-list { flex: 1 1 auto; min-height: 0; max-height: 100%; height: auto; padding: 0.25rem 0.375rem 0.5rem 0; outline: none; }
+/* keyboard focus ring for the AnimatedList listbox (the outline:none above only hides the mouse-focus ring) */
+.mui-root .scroll-list:focus-visible { outline: 2px solid var(--mui-accent); outline-offset: -2px; border-radius: var(--mui-radius-sm); }
+/* AnimatedList.css (vendor, kept verbatim) styles .scroll-list's scrollbar (8px, #120F17 track, #2F293A thumb):
+   restate the global theme from templates/mason_v2.html :root (--scrollbar-*) so it matches every other scroller.
+   Its .no-scrollbar hidden case stays as upstream wrote it (hidden in Chromium and Firefox alike). */
+.mui-root .scroll-list::-webkit-scrollbar { width: var(--scrollbar-size, 0.5rem); height: var(--scrollbar-size, 0.5rem); }
+.mui-root .scroll-list::-webkit-scrollbar-track { background: var(--scrollbar-track, transparent); }
+.mui-root .scroll-list::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb, rgba(120, 150, 220, 0.25)); border-radius: var(--scrollbar-radius, 0.5rem); }
+.mui-root .scroll-list::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover, rgba(120, 150, 220, 0.42)); }
+.mui-root .scroll-list::-webkit-scrollbar-thumb:active { background: var(--scrollbar-thumb-active, rgba(141, 196, 255, 0.55)); }
+.mui-root .scroll-list::-webkit-scrollbar-corner { background: transparent; }
+.mui-root .scroll-list .item {
+  padding: 0.5rem 0.625rem; margin-bottom: 0; border-radius: var(--mui-radius-sm);
+  background: rgba(120, 150, 220, 0.05); border: 1px solid transparent;
+}
+.mui-root .scroll-list .item.selected { background: rgba(74, 158, 255, 0.1); border-color: rgba(74, 158, 255, 0.35); }
+.mui-root .scroll-list .item-text { color: var(--mui-text); }
+.mui-root .scroll-list > [data-index] { margin-bottom: 0.375rem !important; }
+.mui-root .scroll-list-container > .top-gradient { height: 1.5rem; background: linear-gradient(to bottom, var(--mui-panel), transparent); }
+.mui-root .scroll-list-container > .bottom-gradient { height: 2rem; background: linear-gradient(to top, var(--mui-panel), transparent); }
+
+/* Counter: its .top-/.bottom-gradient share names with AnimatedList; pin them to the counter */
+.mui-root .counter-container .top-gradient { position: absolute; top: 0; left: 0; right: 0; }
+.mui-root .counter-container .bottom-gradient { left: 0; right: 0; }
+
+/* SpotlightCard */
+.mui-root .card-spotlight {
+  border-radius: var(--mui-radius-md); border: 1px solid var(--mui-line); background: rgba(10, 13, 24, 0.55);
+  padding: 0.75rem; --spotlight-color: rgba(74, 158, 255, 0.18);
+}
+
+/* StarBorder (pass color="var(--color-accent)" etc. as props; container defaults below) */
+.mui-root .star-border-container { border-radius: 999px; }
+.mui-root .star-border-container .inner-content {
+  background: var(--mui-accent-900); border-color: var(--mui-line-strong); color: var(--mui-text);
+  font-size: 0.6875rem; padding: 0.125rem 0.5rem; border-radius: 999px;
+}
+
+/* GlassSurface: dark glass, not the light default */
+.mui-root .glass-surface--fallback {
+  background: rgba(21, 29, 52, 0.55); border: 1px solid var(--mui-line-strong);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.06), 0 6px 20px rgba(0, 0, 0, 0.35);
+  /* Frosted blur, restated UNPREFIXED on purpose (fin T-E5). Upstream GlassSurface.css writes the standard
+     property first and the -webkit- one second; the build's lightningcss minify (targets from es2022) folds that
+     pair into -webkit-backdrop-filter only, which Chromium and Firefox ignore. A lone standard declaration is
+     kept, and lightningcss adds the -webkit- twin for Safari 16.4 itself. Values = upstream's fallback blur. */
+  backdrop-filter: blur(12px) saturate(1.8) brightness(1.1);
+}
+
+/* Dock */
+.mui-root .dock-panel, .mui-root .dock-item, .mui-root .dock-label {
+  background-color: var(--mui-panel-3); border-color: var(--mui-line-strong); color: var(--mui-text);
+}
+.mui-root .dock-item:focus-visible { outline: 2px solid var(--mui-accent); }
+
+/* Stepper */
+.mui-root .step-circle-container { background: var(--mui-panel); border: 1px solid var(--mui-line); box-shadow: none; }
+.mui-root .next-button, .mui-root .next-button:hover, .mui-root .next-button:active { background-color: var(--mui-accent-700); color: var(--mui-text); }
+.mui-root .back-button { color: var(--mui-muted); }
+.mui-root .step-connector { background-color: var(--mui-panel-2); }
+
+/* Stack */
+.mui-root .stack-container { width: 100%; height: 100%; }
+
+/* LogoLoop: text tickers, fade into the panel color */
+.mui-root .logoloop { --logoloop-fadeColorAuto: var(--mui-panel); }
+
+/* Reduced motion: CSS-driven loops off (JS loops are gated in the components, MODS.md) */
+@media (prefers-reduced-motion: reduce) {
+  .mui-root .border-gradient-top, .mui-root .border-gradient-bottom { animation: none !important; }
+  .mui-root .mui-skel { animation: none; }
+  .mui-root .card-spotlight::before, .mui-root .scroll-list-container > div { transition: none; }
+  /* GlassSurface fades in over 260 ms upstream; reduced motion caps it at a 150 ms fade (WM report §6) */
+  .mui-root .glass-surface { transition-duration: .15s; }
+}
+.mui-root .mui-list-cap { color: var(--mui-faint); font-size: 0.6875rem; text-align: center; padding: 0.25rem 0 0.5rem; }
+.mui-root .mui-state__icon--svg { border: 0; }

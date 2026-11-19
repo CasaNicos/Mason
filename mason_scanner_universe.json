@@ -1,0 +1,18 @@
+{
+  "description": "Static scan universe for mason_scanner.py (Roadmap 4.0a). Large/mid-cap, growth-and-momentum tilted, Nasdaq-100-like shape. Deliberately static per build constraints — edit by hand, no live constituent fetching. Tickers held in the Alpaca paper account are always unioned in at runtime regardless of this list.",
+  "updated": "2026-07-21",
+  "tilt": "growth/momentum, tech-heavy, plus liquid leaders from semis, software, consumer, health, industrials, and a small speculative-momentum sleeve",
+  "tickers": [
+    "AAPL", "MSFT", "NVDA", "GOOGL", "AMZN", "META", "TSLA", "AVGO",
+    "AMD", "QCOM", "MU", "TXN", "ARM", "ANET", "MRVL", "LRCX",
+    "AMAT", "KLAC", "ASML", "TSM", "SMCI", "VRT",
+    "CRM", "ORCL", "ADBE", "NOW", "SNOW", "CRWD", "PANW", "ZS",
+    "DDOG", "NET", "MDB", "PLTR", "SHOP", "TEAM", "INTU",
+    "UBER", "ABNB", "COIN", "HOOD", "PYPL", "SOFI", "MELI",
+    "NFLX", "DIS", "SPOT", "ROKU",
+    "COST", "PEP", "SBUX", "NKE", "LULU",
+    "LLY", "UNH", "ISRG", "REGN", "VRTX", "AMGN", "GILD",
+    "CAT", "DE", "GE", "RTX", "BA",
+    "RKLB", "IONQ", "MRNA"
+  ]
+}

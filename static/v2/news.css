@@ -1,0 +1,51 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Task 5 (UI overhaul 2026-11-16): the News page's HUD / holo-terminal skin for its MasonGrid widget shells
+   (paired with static/v2/news.js; the widgets' own styles are in ui/src/widgets/news* → static/ui/mason-ui.css).
+   Scoped to #page-news, so no other page changes. Nocturne tokens only. No scrollbar-width / scrollbar-color
+   (Task 1 owns the scrollbar theme). Static decoration only: nothing here animates.
+   ═══════════════════════════════════════════════════════════════════════════ */
+#page-news .mv-nw-legacy[hidden], #page-news .mv-nw-grid[hidden]{display:none}
+
+/* glass shell: deeper navy, a cool inner top edge */
+#page-news .mv-nw-grid .m-widget{
+  --nw-corner:rgba(141,196,255,.55);
+  background:linear-gradient(180deg,rgba(21,29,52,.93),rgba(14,20,38,.95));
+  border-color:rgba(130,170,255,.26);
+  box-shadow:0 0 0 1px rgba(74,158,255,.05),0 .875rem 2.5rem rgba(0,0,0,.55),inset 0 1px 0 rgba(141,196,255,.1);
+}
+#page-news .mv-nw-grid .m-widget:hover{border-color:rgba(120,165,255,.42)}
+/* HUD corner brackets (4 corners, 1 px, accent) */
+#page-news .mv-nw-grid .m-widget::after{
+  content:"";position:absolute;inset:.3125rem;pointer-events:none;z-index:5;opacity:.6;transition:opacity .2s ease;
+  background:
+    linear-gradient(var(--nw-corner),var(--nw-corner)) 0 0/.75rem 1px no-repeat,
+    linear-gradient(var(--nw-corner),var(--nw-corner)) 0 0/1px .75rem no-repeat,
+    linear-gradient(var(--nw-corner),var(--nw-corner)) 100% 0/.75rem 1px no-repeat,
+    linear-gradient(var(--nw-corner),var(--nw-corner)) 100% 0/1px .75rem no-repeat,
+    linear-gradient(var(--nw-corner),var(--nw-corner)) 0 100%/.75rem 1px no-repeat,
+    linear-gradient(var(--nw-corner),var(--nw-corner)) 0 100%/1px .75rem no-repeat,
+    linear-gradient(var(--nw-corner),var(--nw-corner)) 100% 100%/.75rem 1px no-repeat,
+    linear-gradient(var(--nw-corner),var(--nw-corner)) 100% 100%/1px .75rem no-repeat;
+}
+#page-news .mv-nw-grid .m-widget:hover::after{opacity:1}
+/* a thin light line along the top edge (holo glass) */
+#page-news .mv-nw-grid .m-widget::before{
+  content:"";position:absolute;left:10%;right:10%;top:0;height:1px;pointer-events:none;z-index:5;
+  background:linear-gradient(90deg,transparent,rgba(141,196,255,.7),transparent);
+}
+#page-news .mv-nw-grid .m-widget.collapsed::after{opacity:.35}
+
+/* header: terminal-style title */
+#page-news .mv-nw-grid .m-widget-head{padding:.5625rem 1rem;border-bottom-color:rgba(120,150,220,.1);
+  background:linear-gradient(180deg,rgba(74,158,255,.06),transparent)}
+#page-news .mv-nw-grid .m-widget-title{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+  font-size:.625rem;letter-spacing:.22em;color:var(--color-accent-300);text-shadow:0 0 .5rem rgba(74,158,255,.35);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+#page-news .mv-nw-grid .m-widget-title::before{content:"// ";color:var(--color-neutral-500)}
+#page-news .mv-nw-grid .m-widget-head i{color:var(--color-accent-400)}
+
+/* bodies: the React roots fill them and scroll themselves (feeds, story card) */
+#page-news .mv-nw-grid .mv-nw-body{display:flex;flex-direction:column;overflow:hidden}
+#page-news .mv-nw-grid .mv-nw-body > .mui-root{flex:1 1 auto;min-height:0}
+/* the HUD reads as one instrument strip: a little denser header */
+#page-news .mv-nw-grid .m-widget[data-widget-id="hud"] .m-widget-head{padding:.4375rem 1rem}

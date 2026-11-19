@@ -1,0 +1,128 @@
+/* rhPvr — Paper vs Real. Scoped under .mui-root; Nocturne tokens only (theme.css).
+ * Series identity: You (real) = --mui-accent, solid line, square markers;
+ *                  Mason paper = --color-neutral-200, dashed line, circle markers.
+ * (validate_palette.js: CVD ΔE 22.2, normal ΔE 25.6 — PASS; see packet.) */
+.mui-root .mui-pvr {
+  --pvr-real: var(--mui-accent);
+  --pvr-paper: var(--color-neutral-200, #d9e0f0);
+  --pvr-surface: var(--mui-panel-2);
+  display: flex; flex-direction: column; height: 100%; min-height: 0; gap: 0.25rem;
+  container-type: size; /* height queries too: compact layout at the meta minimum */
+}
+.mui-root .mui-pvr__spacer { flex: 1; }
+.mui-root .mui-pvr__top { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; flex: none; }
+.mui-root .mui-pvr__legend { display: inline-flex; align-items: center; gap: 0.3rem; color: var(--mui-muted); font-size: 0.6875rem; }
+.mui-root .mui-pvr__body { display: flex; flex-direction: column; flex: 1; min-height: 0; gap: 0.25rem; }
+.mui-root .mui-pvr__bar { display: flex; align-items: center; gap: 0.375rem; flex-wrap: wrap; flex: none; }
+.mui-root .mui-pvr__acct select {
+  font: inherit; font-size: 0.75rem; color: var(--mui-text); background: var(--mui-panel-3);
+  border: 1px solid var(--mui-line-strong); border-radius: var(--mui-radius-sm); padding: 0.125rem 0.375rem;
+}
+
+/* legend / tooltip keys: a short stroke in the series' own dash, never a filled box */
+.mui-root .mui-pvr__key { display: inline-block; width: 1.1rem; height: 0; vertical-align: middle; margin-right: 0.25rem; }
+.mui-root .mui-pvr__key--real { border-top: 2px solid var(--pvr-real); }
+.mui-root .mui-pvr__key--paper { border-top: 2px dashed var(--pvr-paper); }
+
+.mui-root .mui-pvr__heroes { display: flex; align-items: flex-end; gap: 0.75rem; flex-wrap: wrap; flex: none; }
+.mui-root .mui-pvr__hero { display: flex; flex-direction: column; gap: 0.0625rem; min-width: 0; }
+.mui-root .mui-pvr__herolabel { font-size: 0.6875rem; color: var(--mui-muted); letter-spacing: 0.04em; white-space: nowrap; }
+.mui-root .mui-pvr__heroval { font-size: 1.25rem; line-height: 1.1; }
+.mui-root .mui-pvr__vs { color: var(--mui-faint); font-size: 0.6875rem; padding-bottom: 0.25rem; }
+.mui-root .mui-pvr__gap { color: var(--mui-text-2); font-size: 0.75rem; padding-bottom: 0.25rem; }
+
+.mui-root .mui-pvr__main { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 0.375rem; overflow-y: auto; overflow-x: hidden; padding-right: 0.125rem; }
+.mui-root .mui-pvr__chartcol { display: block; flex: none; min-width: 0; } /* stacked: block sized by its content (chart + scope), so it never overlaps the panel below */
+.mui-root .mui-pvr__side { display: flex; flex-direction: column; gap: 0.375rem; flex: none; min-width: 0; }
+.mui-root .mui-pvr__side > * { flex-shrink: 0; }
+@container (min-width: 640px) {
+  .mui-root .mui-pvr__main { flex-direction: row; overflow: hidden; }
+  .mui-root .mui-pvr__chartcol { display: flex; flex-direction: column; flex: 1 1 60%; min-height: 0; }
+  .mui-root .mui-pvr__side { flex: 0 1 40%; max-width: 22rem; overflow-y: auto; min-height: 0; }
+}
+
+.mui-root .mui-pvr__chartbox { position: relative; flex: 1 0 auto; height: 7rem; min-width: 0; }
+.mui-root .mui-pvr__chart { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; outline: none; border-radius: var(--mui-radius-sm); }
+.mui-root .mui-pvr__chart:focus-visible { outline: 2px solid var(--mui-accent); outline-offset: 2px; }
+.mui-root .mui-pvr__grid { stroke: var(--mui-line); stroke-width: 1; shape-rendering: crispEdges; }
+.mui-root .mui-pvr__zero { stroke: var(--mui-line-strong); stroke-width: 1; shape-rendering: crispEdges; }
+.mui-root .mui-pvr__tick { fill: var(--mui-faint); font-size: 10px; }
+.mui-root .mui-pvr__axislabel { fill: var(--mui-muted); font-size: 10px; letter-spacing: 0.04em; }
+.mui-root .mui-pvr__line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.mui-root .mui-pvr__s--real .mui-pvr__line { stroke: var(--pvr-real); }
+.mui-root .mui-pvr__s--paper .mui-pvr__line { stroke: var(--pvr-paper); }
+.mui-root .mui-pvr__mk { stroke: var(--pvr-surface); stroke-width: 2; }
+.mui-root .mui-pvr__s--real .mui-pvr__mk { fill: var(--pvr-real); }
+.mui-root .mui-pvr__s--paper .mui-pvr__mk { fill: var(--pvr-paper); }
+.mui-root .mui-pvr__cross { stroke: var(--mui-text-2); stroke-width: 1; shape-rendering: crispEdges; pointer-events: none; }
+.mui-root .mui-pvr__leader { stroke: var(--mui-faint); stroke-width: 1; }
+.mui-root .mui-pvr__endlabel { font-size: 10.5px; }
+.mui-root .mui-pvr__endname { fill: var(--mui-muted); }
+.mui-root .mui-pvr__endval { fill: var(--mui-text); font-weight: 600; }
+
+.mui-root .mui-pvr__tip {
+  position: absolute; top: 0; transform: translateX(-50%); pointer-events: none; z-index: 2;
+  background: var(--mui-panel-3); border: 1px solid var(--mui-line-strong); border-radius: var(--mui-radius-sm);
+  padding: 0.3125rem 0.5rem; font-size: 0.6875rem; white-space: nowrap; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+.mui-root .mui-pvr__tipdate { color: var(--mui-muted); margin-bottom: 0.125rem; }
+.mui-root .mui-pvr__tiprow { display: flex; align-items: center; gap: 0.3rem; }
+.mui-root .mui-pvr__tiprow b { color: var(--mui-text); }
+
+.mui-root .mui-pvr__scope { font-size: 0.6875rem; color: var(--mui-text-2); padding-top: 0.25rem; flex: none; overflow-wrap: anywhere; }
+
+.mui-root .mui-pvr__h2h { padding: 0.5rem 0.625rem; }
+.mui-root .mui-pvr__h2htitle { font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mui-muted); margin-bottom: 0.25rem; }
+.mui-root .mui-pvr__h2htitle .mui-n { text-transform: none; letter-spacing: 0.02em; }
+.mui-root .mui-pvr__h2hrow { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; }
+.mui-root .mui-pvr__h2hcell b { font-weight: 500; color: var(--mui-text-2); font-size: 0.75rem; }
+.mui-root .mui-pvr__h2hnum { font-size: 1.125rem; font-weight: 700; color: var(--mui-text); }
+.mui-root .mui-pvr__hit { font-size: 0.6875rem; color: var(--mui-text-2); margin-top: 0.125rem; }
+
+.mui-root .mui-pvr__ovtitle { font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mui-muted); }
+.mui-root .mui-pvr__ovlist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+.mui-root .mui-pvr__ovbtn {
+  width: 100%; display: grid; grid-template-columns: minmax(2.75rem, auto) 2.5rem 1fr 1fr auto; gap: 0.375rem; align-items: baseline;
+  font: inherit; font-size: 0.75rem; text-align: left; color: var(--mui-text); cursor: pointer;
+  background: rgba(120, 150, 220, 0.05); border: 1px solid transparent; border-radius: var(--mui-radius-sm); padding: 0.3125rem 0.5rem;
+}
+.mui-root .mui-pvr__ovbtn:hover { border-color: var(--mui-line-strong); }
+.mui-root .mui-pvr__ovbtn > * { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mui-root .mui-pvr__tk { font-weight: 700; }
+.mui-root .mui-pvr__dir { color: var(--mui-muted); font-size: 0.6875rem; }
+.mui-root .mui-pvr__win { font-weight: 600; font-size: 0.6875rem; }
+.mui-root .mui-pvr__win--mason { color: var(--mui-text); }
+.mui-root .mui-pvr__win--nico { color: var(--mui-accent-300); }
+.mui-root .mui-pvr__win--tie, .mui-root .mui-pvr__win--pending { color: var(--mui-muted); }
+.mui-root .mui-pvr__ov.is-pending .mui-pvr__ovbtn { opacity: 0.75; }
+.mui-root .mui-pvr__ovmore { font-size: 0.6875rem; color: var(--mui-text-2); padding: 0.25rem 0.5rem 0.125rem; display: flex; flex-direction: column; gap: 0.125rem; }
+
+.mui-root .mui-pvr__recon { font-size: 0.6875rem; color: var(--mui-text-2); }
+.mui-root .mui-pvr__recon .is-bad { color: var(--mui-warn); }
+.mui-root .mui-pvr__errors { margin: 0; padding-left: 1rem; font-size: 0.6875rem; color: var(--mui-warn); overflow-wrap: anywhere; }
+
+/* caveats: never scroll out of view — their own small scroller pinned at the bottom */
+.mui-root .mui-pvr__caveats {
+  flex: none; max-height: 3.6em; overflow-y: auto; font-size: 0.65625rem; line-height: 1.35; color: var(--mui-muted);
+  border-top: 1px solid var(--mui-line); padding-top: 0.25rem;
+}
+.mui-root .mui-pvr__caveats b { color: var(--mui-text-2); font-weight: 600; margin-right: 0.25rem; }
+.mui-root .mui-pvr__caveats ul { display: inline; margin: 0; padding: 0; list-style: none; }
+.mui-root .mui-pvr__caveats li { display: inline; }
+.mui-root .mui-pvr__caveats li + li::before { content: ' · '; color: var(--mui-faint); }
+
+/* ── compact layouts (meta minimum at 1280 / 900 / 600 px viewports, where a grid row is ~34 px) ── */
+@container (max-width: 460px) {
+  /* overlap rows wrap instead of ellipsizing returns */
+  .mui-root .mui-pvr__ovbtn { display: flex; flex-wrap: wrap; gap: 0.125rem 0.5rem; }
+  .mui-root .mui-pvr__ovbtn > * { overflow: visible; white-space: nowrap; }
+  .mui-root .mui-pvr__win { margin-left: auto; }
+}
+@container (max-height: 400px) {
+  .mui-root .mui-pvr { gap: 0.125rem; }
+  .mui-root .mui-pvr__heroes { gap: 0 0.5rem; }
+  .mui-root .mui-pvr__heroval { font-size: 1rem; }
+  .mui-root .mui-pvr__gap { display: none; } /* both values are already in the heroes */
+  .mui-root .mui-pvr__chartbox { height: 5.25rem; }
+  .mui-root .mui-pvr__caveats { max-height: 2.75em; }
+}

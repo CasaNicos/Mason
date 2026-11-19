@@ -1,0 +1,55 @@
+# Mason: files that should not be committed.
+# Local configuration and credentials
+mason.config.json
+mason.secrets.json
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+.npmrc
+.netrc
+.pypirc
+
+# Runtime data written by Mason
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.log
+*.jsonl
+*.csv
+conversation_state.json
+mason_memory.json
+mason_accuracy.json
+mason_executions.json
+mason_intelligence.json
+mason_token_usage.json
+*journal*.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Node and the UI build
+node_modules/
+ui/dist/
+coverage/
+
+# Backups, temporary and editor files
+backups/
+*.tmp
+*.bak
+*.orig
+*.rej
+*.swp
+*~
+.DS_Store
+.vscode/
+.idea/

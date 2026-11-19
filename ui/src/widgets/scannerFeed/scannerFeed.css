@@ -1,0 +1,30 @@
+/* scannerFeed: one-line compact rows (WM compact feed contract). Scoped under .mui-root. */
+.mui-root .scf { display: flex; flex-direction: column; height: 100%; min-height: 0; min-width: 0; }
+.mui-root .scf-list { flex: 1 1 auto; min-height: 0; }
+.mui-root .scf-list .scroll-list > [data-index] { margin-bottom: 2px !important; }
+.mui-root .scf-list .scroll-list .item { padding: 0.3125rem 0.5rem; }
+.mui-root .scf-row {
+  display: grid; grid-template-columns: minmax(3.5rem, auto) minmax(0, 1fr) auto auto;
+  align-items: baseline; column-gap: 0.5rem; font-size: 0.75rem; min-width: 0;
+}
+.mui-root .scf-tk { font-size: 0.8125rem; letter-spacing: 0.03em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mui-root .scf-scan { color: var(--mui-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.mui-root .scf-seen { color: var(--mui-faint); font-variant-numeric: tabular-nums; }
+.mui-root .scf-q-l { color: var(--mui-faint); font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.mui-root .scf-tags { grid-column: 1 / -1; display: flex; gap: 0.375rem; flex-wrap: wrap; }
+.mui-root .scf-own {
+  font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mui-warn);
+  border: 1px dashed color-mix(in srgb, var(--mui-warn) 55%, transparent); border-radius: 999px; padding: 0 0.375rem;
+}
+.mui-root .scf-row.is-exited .scf-tk, .mui-root .scf-row.is-exited .scf-scan { opacity: 0.6; }
+.mui-root .scf { container-type: inline-size; }
+/* narrow: the scan name wraps to its own line instead of being cut */
+@container (max-width: 17rem) {
+  .mui-root .scf .scf-q-l { display: none; }
+  .mui-root .scf .scf-row { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'tk q' 'scan seen' 'tags tags'; }
+  .mui-root .scf .scf-tk { grid-area: tk; }
+  .mui-root .scf .sc-qwen { grid-area: q; }
+  .mui-root .scf .scf-seen { grid-area: seen; }
+  .mui-root .scf .scf-scan { grid-area: scan; white-space: normal; overflow-wrap: anywhere; }
+  .mui-root .scf .scf-tags { grid-area: tags; }
+}

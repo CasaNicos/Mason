@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mason UI harness</title>
+<!-- Mock-mode test surface for the React Bits bundle (bundle design §2, S3 §3 F0).
+     Served by Flask at /static/ui/harness.html — open with ?rhx_mock=1 for fixture data.
+     Flags: ?rhx_mock=1 fixtures · ?nochart=1 no MasonChart stub (placeholder path) · #<page> start tab.
+     Same Gridstack build as templates/mason_v2.html; loads ./mason-ui.js exactly like the template. -->
+<!-- Timer/rAF counters for MasonUI.__debug: a classic script, so it runs before ANY module chunk
+     (vendor chunks capture requestAnimationFrame when they evaluate). Installs only with
+     ?rhx_mock=1 / ?rhx_debug=1. -->
+<script src="./debug-boot.js"></script>
+<!-- Same vendored files as templates/mason_v2.html (static/vendor/, no outside request). The harness is served at /static/ui/harness.html. -->
+<link rel="stylesheet" href="/static/vendor/inter-v20/inter.css">
+<link rel="stylesheet" href="/static/vendor/phosphor-icons-2.0.3/style.css">
+<link rel="stylesheet" href="/static/vendor/gridstack-13.2.0/gridstack.min.css">
+<script src="/static/vendor/gridstack-13.2.0/gridstack-all.min.js"></script>
+<link rel="stylesheet" href="./harness/harness.css">
+<link rel="stylesheet" href="./mason-ui.css">
+</head>
+<body>
+<div class="hx-shell">
+  <header class="hx-top">
+    <div class="hx-brand"><i class="ph ph-flask"></i> MASON UI <span>HARNESS</span></div>
+    <nav class="hx-tabs" id="hx-tabs" role="tablist" aria-label="Harness pages"></nav>
+    <div class="hx-meta">
+      <span class="hx-pill" id="hx-mode">…</span>
+      <button type="button" class="hx-pill hx-dbg" id="hx-dbg" title="MasonUI.__debug.snapshot() — click to refresh">debug</button>
+    </div>
+  </header>
+  <main class="hx-pages" id="hx-pages"></main>
+</div>
+<script src="./harness/masonchart-stub.js"></script>
+<script type="module" src="./mason-ui.js"></script>
+<script type="module" src="./harness/harness.js"></script>
+</body>
+</html>

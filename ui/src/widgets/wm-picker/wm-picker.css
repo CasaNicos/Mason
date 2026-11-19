@@ -1,0 +1,113 @@
+/* wm-picker — palette "Add widget…" list (WM §6.2 / §7.1). Everything scoped under .mui-root.
+ * Host knobs (set on the mount element or any ancestor):
+ *   --wm-picker-max-h  list height cap (default min(26rem, 62vh))
+ *   --wm-picker-bg     colour the top/bottom gradient fades blend into (default the palette box bg)
+ */
+.mui-root .wm-picker {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: var(--wm-picker-max-h, min(26rem, 62vh));
+  min-height: 0;
+}
+.mui-root .wm-picker > .scroll-list-container { flex: 1 1 auto; height: auto; min-height: 0; }
+.mui-root .wm-picker .scroll-list { padding: 0.25rem 0.375rem 0.75rem 0.25rem; }
+.mui-root .wm-picker .scroll-list > [data-index] { margin-bottom: 0.125rem !important; }
+/* AnimatedList's own .item box is neutral here: the row below draws the highlight */
+.mui-root .wm-picker .scroll-list .item,
+.mui-root .wm-picker .scroll-list .item.selected { padding: 0; background: transparent; border: 0; border-radius: 0; }
+.mui-root .wm-picker .scroll-list-container > .top-gradient {
+  height: 1.25rem; background: linear-gradient(to bottom, var(--wm-picker-bg, rgb(16, 22, 38)), transparent);
+}
+.mui-root .wm-picker .scroll-list-container > .bottom-gradient {
+  height: 2rem; background: linear-gradient(to top, var(--wm-picker-bg, rgb(16, 22, 38)), transparent);
+}
+
+/* group header */
+.mui-root .wm-pick-head {
+  display: flex; align-items: center; gap: 0.625rem;
+  padding: 0.625rem 0.5rem 0.3125rem;
+  font-size: 0.625rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--mui-faint); cursor: default;
+}
+.mui-root .wm-pick-head::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, var(--mui-line-strong), transparent);
+}
+
+/* row: icon · title/desc · state */
+.mui-root .wm-pick-row {
+  display: grid; grid-template-columns: 2rem minmax(0, 1fr) auto; align-items: center; gap: 0.75rem;
+  padding: 0.4375rem 0.625rem; border-radius: var(--mui-radius-md);
+  border: 1px solid transparent; position: relative;
+  transition: background-color 0.12s ease, border-color 0.12s ease, opacity 0.12s ease;
+}
+.mui-root .wm-pick-row:hover { background: rgba(120, 150, 220, 0.07); }
+.mui-root .wm-pick-row.is-sel {
+  background: linear-gradient(90deg, rgba(74, 158, 255, 0.16), rgba(74, 158, 255, 0.05));
+  border-color: rgba(74, 158, 255, 0.38);
+  box-shadow: inset 2px 0 0 var(--mui-accent), 0 0 18px rgba(74, 158, 255, 0.08);
+}
+.mui-root .wm-pick-row.is-on { opacity: 0.5; }
+.mui-root .wm-pick-row.is-on.is-sel { opacity: 0.78; }
+.mui-root .wm-pick-ico {
+  width: 2rem; height: 2rem; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--mui-radius-sm); font-size: 1.0625rem;
+  color: var(--mui-accent-300); background: var(--mui-accent-900); border: 1px solid var(--mui-line);
+}
+.mui-root .wm-pick-row.is-sel .wm-pick-ico { border-color: rgba(74, 158, 255, 0.5); color: var(--mui-text); }
+.mui-root .wm-pick-main { display: flex; flex-direction: column; min-width: 0; gap: 0.0625rem; }
+.mui-root .wm-pick-title {
+  font-size: 0.8125rem; font-weight: 600; color: var(--mui-text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.mui-root .wm-pick-desc {
+  font-size: 0.6875rem; color: var(--mui-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.mui-root .wm-pick-state {
+  font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.12em; white-space: nowrap;
+  padding: 0.1875rem 0.5rem; border-radius: 999px; border: 1px solid var(--mui-line);
+}
+.mui-root .wm-pick-state.is-add {
+  color: var(--mui-accent-300);
+  border-color: color-mix(in srgb, var(--mui-accent) 45%, transparent);
+  background: color-mix(in srgb, var(--mui-accent) 10%, transparent);
+}
+.mui-root .wm-pick-state.is-on { color: var(--mui-muted); background: transparent; }
+
+/* inline ticker input (chart) */
+.mui-root .wm-pick-tk { margin: 0.25rem 0.25rem 0.375rem 3.375rem; cursor: default; }
+.mui-root .wm-pick-tk__row { display: flex; align-items: center; gap: 0.375rem; color: var(--mui-accent-300); }
+.mui-root .wm-pick-ticker {
+  flex: 1 1 auto; min-width: 0;
+  font: inherit; font-family: var(--mui-mono); font-size: 0.8125rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--mui-text); background: var(--mui-panel-3);
+  border: 1px solid color-mix(in srgb, var(--mui-accent) 45%, transparent);
+  border-radius: var(--mui-radius-sm); padding: 0.375rem 0.5rem; outline: none;
+}
+.mui-root .wm-pick-ticker::placeholder { color: var(--mui-faint); text-transform: none; letter-spacing: 0; }
+.mui-root .wm-pick-ticker:focus-visible { outline: 2px solid var(--mui-accent); outline-offset: 1px; }
+.mui-root .wm-pick-ticker[aria-invalid='true'] { border-color: var(--mui-down); }
+.mui-root .wm-pick-tk__btn {
+  font: inherit; font-size: 0.6875rem; cursor: pointer; white-space: nowrap;
+  color: var(--mui-text-2); background: transparent;
+  border: 1px solid var(--mui-line-strong); border-radius: var(--mui-radius-sm); padding: 0.3125rem 0.5rem;
+}
+.mui-root .wm-pick-tk__btn--add { color: var(--mui-text); background: var(--mui-accent-700); }
+.mui-root .wm-pick-tk__btn:hover { border-color: var(--mui-accent); }
+.mui-root .wm-pick-tk kbd {
+  font-family: var(--mui-mono); font-size: 0.625rem; color: var(--mui-muted);
+  border: 1px solid var(--mui-line); border-radius: 0.25rem; padding: 0 0.25rem; margin-left: 0.125rem;
+}
+.mui-root .wm-pick-err { margin-top: 0.25rem; font-size: 0.6875rem; color: var(--mui-down); }
+.mui-root .wm-pick-err::before { content: '! '; font-weight: 700; }
+
+.mui-root .wm-pick-empty { padding: 1rem; color: var(--mui-faint); font-style: italic; font-size: 0.75rem; }
+
+/* Entrance (§7.1) is AnimatedList's own: each row scales .7→1 and fades in (200 ms, upstream fixed
+   0.1 s delay; no extra stagger in Phase 1, orchestrator ruling W12). motion pauses with the page (rAF)
+   and MotionConfig reducedMotion="user" drops the scale under reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .mui-root .wm-pick-row { transition: none; }
+}

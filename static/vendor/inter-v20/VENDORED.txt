@@ -1,0 +1,46 @@
+Inter, Google Fonts release v20, weights 400 / 500 / 600 / 700 (normal style), vendored for Mason on 2026-11-18
+(UIFIX2 item 3).
+
+Why: templates/mason_v2.html and ui/harness.html loaded the font from Google Fonts. It now ships with Mason, so
+the page looks the same with no internet and the public repository has no CDN dependency.
+
+Source:
+  stylesheet  https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap
+              (as sent to Chrome on 2026-11-18; that is what the page asked for, and nothing else: no italics,
+              no other weights)
+  font files  the 7 files that stylesheet names, one per alphabet range. Each is one "variable" file that holds
+              all four weights, which is why 28 @font-face blocks point at only 7 files.
+    inter-v20-cyrillic-ext.woff2  https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2JL7SUc.woff2
+    inter-v20-cyrillic.woff2      https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa0ZL7SUc.woff2
+    inter-v20-greek-ext.woff2     https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2ZL7SUc.woff2
+    inter-v20-greek.woff2         https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1pL7SUc.woff2
+    inter-v20-vietnamese.woff2    https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2pL7SUc.woff2
+    inter-v20-latin-ext.woff2     https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7SUc.woff2
+    inter-v20-latin.woff2         https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2
+  inter.css   Google's stylesheet with a 4-line header added and each of the 28 font addresses replaced by the
+              file name above (./inter-v20-<range>.woff2). Nothing else differs: same 28 @font-face blocks, same
+              unicode-range lines, same font-display: swap.
+How verified: Google publishes no checksums for these files, so the check is by behaviour. The files were fetched
+over https from fonts.gstatic.com, the hashes below were recorded at download, and the page was rendered in
+headless Chromium once with Google Fonts and once with these files and every outside host blocked: same font
+picked for every text element and same text widths (see the UIFIX2 report). All 7 alphabet ranges are kept, so a
+headline in Greek, Cyrillic or Vietnamese looks as it did. A browser fetches a range only when the page shows a
+character from it; an English-only page loads inter-v20-latin.woff2 (48 KB) and nothing else.
+
+Licence: SIL Open Font License 1.1, Copyright 2020 The Inter Project Authors (https://github.com/rsms/inter).
+  OFL.txt   the licence text (github.com/google/fonts, ofl/inter/OFL.txt)
+Project: https://rsms.me/inter/  ·  https://fonts.google.com/specimen/Inter
+
+Do not edit these files. To upgrade, add a new versioned folder and change the link tag at the top of
+templates/mason_v2.html and of ui/harness.html.
+
+file                           bytes   sha256
+OFL.txt                          4377  5b9321a4298cfeb6b34354164a1c3afc3db114569984c502b9b35d988fd58c57
+inter-v20-cyrillic-ext.woff2    25960  ca157063339ac4ad418f214f3abfed119b0798ab4d377386ce5c9e5a7a435ebd
+inter-v20-cyrillic.woff2        18748  71d5ee93cc1e9f1d520a3a8b66456de18c7879d8df09d57fcd2eaff75fef0075
+inter-v20-greek-ext.woff2       11232  6e9e020a25f9b56d418f2c085b1d3c09725a4da23fe693a5b463064606732190
+inter-v20-greek.woff2           18996  1be3448e292fbf05ffe176fe1e43f135013d50b1e7d324ad1a558f623d3bb6f6
+inter-v20-latin-ext.woff2       85068  34b9c504cab7a73e37b746343a449132e56cf7b5481af2cb81dc74dcff25c956
+inter-v20-latin.woff2           48256  3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62
+inter-v20-vietnamese.woff2      10252  5c66f9e07e90c6d4ac4922cc68d60de26c17b1858e677fb5e603fce3952b3ff2
+inter.css                        8693  4d9f1134105ed6d8cf73263bc4e0b635f8454e7d60adcf873d62540dc59f4e11

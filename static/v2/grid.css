@@ -1,0 +1,69 @@
+/* static/v2/grid.css — UI overhaul Task 1 (2026-11-16): MasonGrid resize handles on all 4 sides + all 4 corners.
+ *
+ * MasonGrid (templates/mason_v2.html, Grid → GridStack.init) asks Gridstack 13 for handles 'n, ne, e, se, s, sw,
+ * w, nw'. Gridstack's own CSS puts every handle INSIDE the widget, on top of its content (the old e/s strips sat on
+ * the widget's scrollbars). Here each handle's hit area lives in the item's margin band instead: the gutter
+ * Gridstack leaves around .grid-stack-item-content (--gs-item-margin-*: 10px a side, so 20px between widgets).
+ * A handle therefore never covers widget content: clicks, text selection, wheel scrolling and scrollbar drags
+ * inside a widget are never stolen, in or out of edit mode. Corner squares reach 5px into the content box, which
+ * is inside the widget's rounded-corner dead zone (radius 1.125rem = 18px: a 5x5 corner square is outside it).
+ * Visibility keeps the old rule: nothing until the item is hovered (Gridstack autoHide), then the corner brackets
+ * show (as the old SE bracket did); an edge's grip lights up while the pointer is on that edge; everything is
+ * lit while resizing. All visuals are ::after with pointer-events:none. Touch screens: only in edit mode.
+ * Nocturne tokens only (accent-400 + the accent glow used across the template).
+ */
+.grid-stack-item > .ui-resizable-handle{z-index:41;opacity:0;transition:opacity .15s ease;background:none;transform:none}
+
+/* hit areas: edges fill their gutter strip; corners are a small square at the item's corner */
+.grid-stack-item > .ui-resizable-n{top:0;bottom:auto;left:1.5rem;right:1.5rem;width:auto;height:var(--gs-item-margin-top,10px)}
+.grid-stack-item > .ui-resizable-s{bottom:0;top:auto;left:1.5rem;right:1.5rem;width:auto;height:var(--gs-item-margin-bottom,10px)}
+.grid-stack-item > .ui-resizable-e{right:0;left:auto;top:1.5rem;bottom:1.5rem;height:auto;width:var(--gs-item-margin-right,10px)}
+.grid-stack-item > .ui-resizable-w{left:0;right:auto;top:1.5rem;bottom:1.5rem;height:auto;width:var(--gs-item-margin-left,10px)}
+.grid-stack-item > .ui-resizable-ne,.grid-stack-item > .ui-resizable-nw,
+.grid-stack-item > .ui-resizable-se,.grid-stack-item > .ui-resizable-sw{
+  width:calc(var(--gs-item-margin-left,10px) + 5px);height:calc(var(--gs-item-margin-top,10px) + 5px)}
+.grid-stack-item > .ui-resizable-nw{top:0;left:0;right:auto;bottom:auto}
+.grid-stack-item > .ui-resizable-ne{top:0;right:0;left:auto;bottom:auto}
+.grid-stack-item > .ui-resizable-se{bottom:0;right:0;top:auto;left:auto}
+.grid-stack-item > .ui-resizable-sw{bottom:0;left:0;top:auto;right:auto}
+
+/* visuals (never hit-testable: they may overhang the content box) */
+.grid-stack-item > .ui-resizable-handle::after{content:'';position:absolute;pointer-events:none;box-sizing:border-box}
+/* edge grip: a short glowing bar on the widget's border, centred on that edge */
+.grid-stack-item > .ui-resizable-n::after,.grid-stack-item > .ui-resizable-s::after{
+  left:50%;width:2.5rem;height:3px;margin-left:-1.25rem;border-radius:3px;
+  background:var(--color-accent-400,#5fb0ff);box-shadow:0 0 .5rem rgba(74,158,255,.6)}
+.grid-stack-item > .ui-resizable-n::after{bottom:-1px}
+.grid-stack-item > .ui-resizable-s::after{top:-1px}
+.grid-stack-item > .ui-resizable-e::after,.grid-stack-item > .ui-resizable-w::after{
+  top:50%;width:3px;height:2.5rem;margin-top:-1.25rem;border-radius:3px;
+  background:var(--color-accent-400,#5fb0ff);box-shadow:0 0 .5rem rgba(74,158,255,.6)}
+.grid-stack-item > .ui-resizable-e::after{left:-1px}
+.grid-stack-item > .ui-resizable-w::after{right:-1px}
+/* corner bracket: an arc concentric with the widget's rounded corner, 4px outside its border */
+.grid-stack-item > .ui-resizable-ne::after,.grid-stack-item > .ui-resizable-nw::after,
+.grid-stack-item > .ui-resizable-se::after,.grid-stack-item > .ui-resizable-sw::after{
+  width:1.625rem;height:1.625rem;border:0 solid var(--color-accent-400,#5fb0ff);
+  filter:drop-shadow(0 0 3px rgba(74,158,255,.65))}
+.grid-stack-item > .ui-resizable-nw::after{top:calc(var(--gs-item-margin-top,10px) - 4px);left:calc(var(--gs-item-margin-left,10px) - 4px);
+  border-top-width:2px;border-left-width:2px;border-top-left-radius:calc(var(--radius-lg,1.125rem) + 4px)}
+.grid-stack-item > .ui-resizable-ne::after{top:calc(var(--gs-item-margin-top,10px) - 4px);right:calc(var(--gs-item-margin-right,10px) - 4px);
+  border-top-width:2px;border-right-width:2px;border-top-right-radius:calc(var(--radius-lg,1.125rem) + 4px)}
+.grid-stack-item > .ui-resizable-se::after{bottom:calc(var(--gs-item-margin-bottom,10px) - 4px);right:calc(var(--gs-item-margin-right,10px) - 4px);
+  border-bottom-width:2px;border-right-width:2px;border-bottom-right-radius:calc(var(--radius-lg,1.125rem) + 4px)}
+.grid-stack-item > .ui-resizable-sw::after{bottom:calc(var(--gs-item-margin-bottom,10px) - 4px);left:calc(var(--gs-item-margin-left,10px) - 4px);
+  border-bottom-width:2px;border-left-width:2px;border-bottom-left-radius:calc(var(--radius-lg,1.125rem) + 4px)}
+
+/* visibility: corners on item hover; an edge on its own hover; all while resizing */
+.grid-stack-item:hover > .ui-resizable-ne,.grid-stack-item:hover > .ui-resizable-nw,
+.grid-stack-item:hover > .ui-resizable-se,.grid-stack-item:hover > .ui-resizable-sw{opacity:.7}
+.grid-stack-item > .ui-resizable-handle:hover,
+.grid-stack-item.ui-resizable-resizing > .ui-resizable-handle{opacity:1}
+
+/* touch screens: there is no hover, and handles in the gutters would block page scrolling, so they only exist
+   in edit mode there (long-press a widget header to enter it) */
+@media (hover:none) and (pointer:coarse){
+  .grid-stack:not(.mv-editing) > .grid-stack-item > .ui-resizable-handle{display:none !important}
+  .grid-stack.mv-editing > .grid-stack-item > .ui-resizable-handle{opacity:.75}
+}
+@media (prefers-reduced-motion:reduce){ .grid-stack-item > .ui-resizable-handle{transition:none} }

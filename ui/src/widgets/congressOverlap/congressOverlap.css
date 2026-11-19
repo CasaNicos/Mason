@@ -1,0 +1,27 @@
+/* S3-F1 congressOverlap — scoped under .mui-root; Nocturne tokens only. */
+.mui-root .co { display: flex; flex-direction: column; height: 100%; min-height: 0; gap: 0.375rem; }
+.mui-root .co-head { flex: none; display: flex; flex-direction: column; gap: 0.0625rem; }
+.mui-root .co-title { margin: 0; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.16em; color: var(--mui-accent-300); }
+.mui-root .co-enc { color: var(--mui-faint); }
+.mui-root .co-sub { font-size: 0.625rem; color: var(--mui-faint); letter-spacing: 0.02em; }
+.mui-root .co-body { flex: 1 1 auto; min-height: 0; overflow: auto; }
+.mui-root .co-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); gap: 0.375rem; }
+.mui-root .co-card.card-spotlight { padding: 0; border-radius: var(--mui-radius-sm); }
+.mui-root .co-card.is-active.card-spotlight { border-color: var(--mui-accent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--mui-accent) 35%, transparent); }
+.mui-root .co-btn {
+  position: relative; z-index: 1; display: flex; flex-direction: column; gap: 0.3125rem; width: 100%;
+  font: inherit; text-align: left; color: var(--mui-text-2); background: transparent; border: 0;
+  padding: 0.5rem 0.625rem; cursor: pointer; border-radius: inherit;
+}
+.mui-root .co-line { font-size: 0.75rem; line-height: 1.35; overflow-wrap: anywhere; }
+.mui-root .co-tk { color: var(--mui-text); font-size: 0.875rem; font-weight: 800; letter-spacing: 0.02em; }
+.mui-root .co-names { color: var(--mui-muted); }
+.mui-root .co-bar { display: flex; gap: 2px; height: 0.25rem; border-radius: 2px; overflow: hidden; }
+.mui-root .co-bar--empty { background: var(--mui-line); }
+.mui-root .co-bar__buy { background: var(--mui-up); min-width: 2px; }
+.mui-root .co-bar__sell { background: var(--mui-down); min-width: 2px; }
+.mui-root .co-legend { display: flex; gap: 0.5rem; font-size: 0.625rem; color: var(--mui-faint); flex-wrap: wrap; }
+.mui-root .co-legend__buy { color: var(--mui-up); }
+.mui-root .co-legend__sell { color: var(--mui-down); }
+.mui-root .co-legend__on { margin-left: auto; color: var(--mui-accent-300); }
+.mui-root .co-cap { margin: 0.375rem 0 0; font-size: 0.6875rem; color: var(--mui-muted); text-align: center; }

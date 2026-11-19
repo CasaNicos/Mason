@@ -1,0 +1,30 @@
+Gridstack.js 13.2.0, vendored for Mason on 2026-11-18 (UIFIX item 6).
+
+Why: templates/mason_v2.html loaded these two files from cdnjs. They now ship with Mason, so the dashboard
+works with no internet and the public repository has no CDN dependency for its widget grid.
+
+Source (byte-for-byte what the page loaded before):
+  https://cdnjs.cloudflare.com/ajax/libs/gridstack.js/13.2.0/gridstack-all.min.js
+  https://cdnjs.cloudflare.com/ajax/libs/gridstack.js/13.2.0/gridstack.min.css
+Both were checked against the sha512 values cdnjs publishes for 13.2.0 (api.cdnjs.com/libraries/gridstack.js/13.2.0)
+and against the npm package gridstack@13.2.0: gridstack.min.css is identical to dist/gridstack.min.css;
+gridstack-all.min.js is dist/gridstack-all.js as cdnjs re-minified it: one object literal is written `{h:h}`
+instead of `{h}` (same meaning) and the last line (the source-map comment) is left out. Nothing else differs.
+
+Licence: MIT, Copyright (c) 2019-2025 Alain Dumesny (v0.4.0 and older (c) 2014-2018 Pavel Reznikov, Dylan Weiss).
+  LICENSE                        the project's licence text (npm package gridstack@13.2.0, file LICENSE)
+  gridstack-all.js.LICENSE.txt   the banner file the minified script's first line points to (npm dist/)
+Project: https://gridstackjs.com/  ·  https://github.com/gridstack/gridstack.js
+
+Do not edit these files. To upgrade, add a new versioned folder and change the two tags at the top of
+templates/mason_v2.html.
+
+file                           bytes   sha256
+LICENSE                          1135  28d28a6e0b5c6ebca8759b162a644c31cea28aab591060c0d95c7737d8456764
+gridstack-all.js.LICENSE.txt      183  bf14a4eeea81928e7ec85a67f572065966a308845805eac94012d1bc8562320b
+gridstack-all.min.js            88105  f6ab9c451d1f97285d33e5c5d617b8e4cc52c5814c8550b3a5dc2e64b015052e
+gridstack.min.css                5476  3f0a9e63dfe05fa232cc10d79032f13e1cae168b67539b9801a30799c6c1658d
+
+sha512 (the form cdnjs publishes):
+gridstack-all.min.js  sha512-yqvBP1wai71TsNImGeqqArZG6CrwJMUql4av/5CSloX5+zQ1wQLDFBSYvuie6d4nurUA1T8WeqfHdTyNxbzJ3w==
+gridstack.min.css  sha512-1Mr4sOVilpnlEgf5c9fSrd16EXOCCYXHemm4tWH1mIhf9CjjXpiTM+tCcvxruztiAPQ83fMtDjrM8Zqv1Cbn+g==

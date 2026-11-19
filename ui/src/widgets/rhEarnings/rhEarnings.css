@@ -1,0 +1,37 @@
+/* rhEarnings (S3-F4). Nocturne tokens only. Scoped under .mui-root. */
+.mui-root .rhe { display: flex; flex-direction: column; height: 100%; min-height: 0; gap: 0.3125rem; container-type: inline-size; }
+.mui-root .rhe-head { flex: none; display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.625rem; color: var(--mui-faint); letter-spacing: 0.04em; }
+.mui-root .rhe-list { list-style: none; margin: 0; padding: 0 0.25rem 0 0; flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 0.3125rem; }
+.mui-root .rhe-row { padding: 0.375rem 0.5rem; border-radius: var(--mui-radius-sm); background: rgba(120, 150, 220, 0.05); border: 1px solid transparent; }
+.mui-root .rhe-row.is-held { border-color: var(--mui-line); }
+.mui-root .rhe-row__top { display: grid; grid-template-columns: 3.25rem auto minmax(5.5rem, 1fr) minmax(7rem, 1.3fr) auto; align-items: center; gap: 0.5rem; font-size: 0.6875rem; }
+.mui-root .rhe-tk { font-size: 0.8125rem; letter-spacing: 0.02em; }
+.mui-root .rhe-bars { display: block; overflow: visible; }
+.mui-root .rhe-zero { stroke: var(--mui-line-strong); stroke-width: 1; }
+.mui-root .rhe-bar.mui-up { fill: var(--mui-up); }
+.mui-root .rhe-bar.mui-down { fill: var(--mui-down); }
+.mui-root .rhe-bar.mui-flat { fill: var(--mui-muted); }
+.mui-root .rhe-slot-empty { fill: var(--mui-panel-2); }
+.mui-root .rhe-last { color: var(--mui-text-2); white-space: nowrap; }
+.mui-root .rhe-next { color: var(--mui-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mui-root .rhe-next b { color: var(--mui-text); font-weight: 600; }
+.mui-root .rhe-imp { color: var(--mui-text); white-space: nowrap; text-align: right; }
+.mui-root .rhe-row__sub { display: flex; align-items: center; flex-wrap: wrap; gap: 0.25rem 0.5rem; margin-top: 0.25rem; padding-left: 3.75rem; }
+.mui-root .rhe-row__sub:empty { display: none; }
+.mui-root .rhe-accts { display: inline-flex; flex-wrap: wrap; gap: 0.25rem; }
+.mui-root .rhe-acct { font-size: 0.625rem; color: var(--mui-muted); border: 1px solid var(--mui-line); border-radius: 999px; padding: 0 0.375rem; }
+/* StarBorder chip: K7 — only .is-live loops; .is-static switches the React Bits CSS loop off here
+   (no edit to the React Bits file) and shows a solid accent border instead. */
+.mui-root .rhe-chip { display: inline-block; vertical-align: middle; }
+.mui-root .rhe-chip .inner-content { font-size: 0.625rem; padding: 0.0625rem 0.5rem; letter-spacing: 0.02em; font-weight: 600; }
+.mui-root .rhe-chip.is-static .border-gradient-top,
+.mui-root .rhe-chip.is-static .border-gradient-bottom { animation: none !important; display: none; }
+.mui-root .rhe-chip.is-static .inner-content { border-color: var(--mui-accent-700) !important; }
+@container (max-width: 30rem) {
+  .mui-root .rhe-row__top { grid-template-columns: 3.25rem auto 1fr; row-gap: 0.125rem; }
+  .mui-root .rhe-last { display: none; }
+  .mui-root .rhe-imp { grid-column: 3; grid-row: 1; }
+  .mui-root .rhe-next { grid-column: 1 / -1; grid-row: 2; white-space: normal; overflow: visible; }
+  .mui-root .rhe-row__sub { padding-left: 0; }
+}
+.mui-root .rhe-more { font-size: 0.625rem; color: var(--mui-faint); }

@@ -1,0 +1,214 @@
+/* apiConstellation (UI overhaul Task 6). Scoped under .mui-root; Nocturne tokens only (theme.css --mui-*).
+   Node + label positions are written by engine.js (transform); everything else reflows by container query.
+   No scrollbar-width / scrollbar-color: the global ::-webkit-scrollbar theme applies. */
+.mui-root.mui-widget[data-mui-type='apiConstellation'] { overflow: hidden; }
+.mui-root .apic {
+  position: relative; flex: 1 1 auto; width: 100%; height: 100%; min-height: 9rem; overflow: hidden;
+  container: apic / size;
+  background:
+    radial-gradient(ellipse 60% 55% at 50% 50%, rgba(74, 158, 255, 0.07), transparent 70%),
+    radial-gradient(ellipse 120% 90% at 50% 120%, rgba(14, 31, 56, 0.55), transparent 60%);
+  border-radius: var(--mui-radius-md);
+}
+.mui-root .apic-stage { position: absolute; inset: 0; overflow: hidden; }
+.mui-root .apic-canvas { position: absolute; left: 0; top: 0; display: block; pointer-events: none; }
+
+/* ── nodes: a real <button> per source; the engine moves it with transform ── */
+.mui-root .apic-node {
+  --apic-r: 7px;
+  position: absolute; left: 0; top: 0; z-index: 2;
+  width: calc(var(--apic-r) * 2); height: calc(var(--apic-r) * 2);
+  margin: calc(var(--apic-r) * -1) 0 0 calc(var(--apic-r) * -1);
+  padding: 0; border: 0; border-radius: 50%; background: transparent; color: inherit; font: inherit;
+  cursor: pointer; opacity: 0; transition: opacity 0.35s ease; will-change: transform;
+  -webkit-tap-highlight-color: transparent;
+}
+.mui-root .apic-node[data-placed] { opacity: 1; }
+.mui-root .apic-node:focus-visible { outline: 2px solid var(--mui-accent); outline-offset: 4px; }
+.mui-root .apic-node:focus:not(:focus-visible) { outline: none; }
+.mui-root .apic-dot {
+  position: absolute; inset: 0; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--api-tone); color: var(--mui-panel-3);
+  font-size: calc(var(--apic-r) * 1.05); font-weight: 800; line-height: 1;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--api-tone) 60%, transparent),
+    0 0 calc(var(--apic-r) * 1.6) color-mix(in srgb, var(--api-tone) 65%, transparent);
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.18s ease;
+}
+.mui-root .apic-node--down .apic-dot {
+  background: color-mix(in srgb, var(--api-tone) 16%, var(--mui-panel-3));
+  border: 1.5px dashed var(--api-tone); color: var(--api-tone);
+  box-shadow: 0 0 calc(var(--apic-r) * 1.2) color-mix(in srgb, var(--api-tone) 45%, transparent);
+}
+.mui-root .apic-node--unknown .apic-dot {
+  background: var(--mui-panel-3); border: 1.5px solid var(--api-tone); color: var(--api-tone); box-shadow: none;
+}
+/* R3-C: not configured (optional source, no key) = hollow dotted ring, faint, no glow: parked on purpose,
+   clearly different from "not checked" (solid ring, muted) and never an alarm colour */
+.mui-root .apic-node--unconfigured .apic-dot {
+  background: transparent; border: 1.5px dotted var(--api-tone); color: var(--api-tone); box-shadow: none; opacity: 0.85;
+}
+/* APIGPU: the local AI model asleep = a hollow calm-blue ring with a soft halo (the canvas makes it breathe):
+   resting on purpose, never an alarm colour, apart from "not checked" (muted, no halo) and "not configured" (dotted).
+   On the processor (look "slow") it keeps the default filled amber dot, like a limit hit. */
+.mui-root .apic-node--asleep .apic-dot {
+  background: color-mix(in srgb, var(--api-tone) 12%, var(--mui-panel-3)); border: 1.5px solid var(--api-tone);
+  color: var(--api-tone); box-shadow: 0 0 calc(var(--apic-r) * 1.1) color-mix(in srgb, var(--api-tone) 35%, transparent);
+}
+.mui-root .apic-node:hover .apic-dot,
+.mui-root .apic-node:focus-visible .apic-dot,
+.mui-root .apic-node.is-focus .apic-dot { transform: scale(1.22); }
+
+/* labels: two variants measured by the engine; data-labels on the stage picks one (full | short | none) */
+.mui-root .apic-lbl { position: absolute; left: 50%; top: 50%; width: 0; height: 0; pointer-events: none; }
+.mui-root .apic-lbl > span {
+  position: absolute; left: 0; top: 0; white-space: nowrap;
+  font-size: 0.625rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.25;
+  padding: 0.0625rem 0.25rem; border-radius: 0.25rem;
+  color: var(--mui-text-2); background: rgba(10, 13, 24, 0.62);
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.mui-root .apic-node--limit .apic-lbl > span,
+.mui-root .apic-node--slow .apic-lbl > span,
+.mui-root .apic-node--asleep .apic-lbl > span,
+.mui-root .apic-node--down .apic-lbl > span { color: var(--api-tone); }
+.mui-root .apic-node--unknown .apic-lbl > span { color: var(--mui-muted); }
+.mui-root .apic-node--unconfigured .apic-lbl > span { color: var(--mui-faint); background: rgba(10, 13, 24, 0.4); }
+.mui-root .apic-node:hover .apic-lbl > span,
+.mui-root .apic-node:focus-visible .apic-lbl > span,
+.mui-root .apic-node.is-focus .apic-lbl > span { color: var(--mui-text); background: rgba(14, 31, 56, 0.92); }
+.mui-root .apic-stage:not([data-labels='full']) .apic-lbl-full,
+.mui-root .apic-stage:not([data-labels='short']) .apic-lbl-short { visibility: hidden; }
+
+/* ── the core button (MASON + links up); the job ring around it is canvas ── */
+.mui-root .apic-core {
+  --apic-core: 30px;
+  position: absolute; left: 0; top: 0; z-index: 2;
+  width: calc(var(--apic-core) * 2); height: calc(var(--apic-core) * 2);
+  margin: calc(var(--apic-core) * -1) 0 0 calc(var(--apic-core) * -1);
+  border: 0; border-radius: 50%; padding: 0; background: transparent; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.0625rem;
+  color: var(--mui-text); font: inherit; text-shadow: 0 1px 6px rgba(7, 10, 18, 0.85);
+  -webkit-tap-highlight-color: transparent;
+}
+.mui-root .apic-core b {
+  font-size: clamp(0.4375rem, calc(var(--apic-core) * 0.24), 0.6875rem); font-weight: 700; letter-spacing: 0.18em;
+  padding-left: 0.18em;
+}
+.mui-root .apic-core small {
+  font-size: clamp(0.4375rem, calc(var(--apic-core) * 0.26), 0.75rem); font-weight: 600; color: var(--mui-accent-300);
+  font-variant-numeric: tabular-nums;
+}
+.mui-root .apic-core:focus-visible { outline: 2px solid var(--mui-accent); outline-offset: 10px; }
+
+/* ── hover tooltip (positioned by the engine) ── */
+.mui-root .apic-tip {
+  position: absolute; left: 0; top: 0; z-index: 5; pointer-events: none;
+  width: max-content; max-width: min(17.5rem, 82cqw);
+  padding: 0.5rem 0.625rem; border-radius: var(--mui-radius-md);
+  background: rgba(10, 13, 24, 0.93); border: 1px solid var(--mui-line-strong);
+  box-shadow: 0 0.625rem 1.75rem rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(74, 158, 255, 0.06);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  font-size: 0.6875rem; color: var(--mui-text-2);
+}
+.mui-root .apic-tip__head { display: flex; align-items: center; gap: 0.4375rem; margin-bottom: 0.1875rem; }
+.mui-root .apic-tip__head b { color: var(--mui-text); font-size: 0.75rem; letter-spacing: 0.04em; }
+.mui-root .apic-tip__row { display: flex; justify-content: space-between; gap: 0.875rem; margin-top: 0.1875rem; }
+.mui-root .apic-tip__row > span { color: var(--mui-faint); text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.5625rem; padding-top: 0.0625rem; }
+.mui-root .apic-tip__row > b { font-weight: 600; color: var(--mui-text); text-align: right; }
+.mui-root .apic-tip__detail {
+  margin-top: 0.3125rem; color: var(--mui-text-2); overflow-wrap: anywhere;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.mui-root .apic-tip__err { color: var(--mui-down); }
+.mui-root .apic-tip__hint { margin-top: 0.375rem; color: var(--mui-faint); font-size: 0.5625rem; letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* ── HUD bar: legend + freshness, part of the layout's safe area ── */
+.mui-root .apic-bar {
+  position: absolute; left: 0.625rem; right: 0.625rem; bottom: 0.375rem; z-index: 3; cursor: default;
+  display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+  font-size: 0.5625rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mui-faint);
+  pointer-events: none; white-space: nowrap; overflow: hidden;
+}
+.mui-root .apic-legend, .mui-root .apic-bar__right { display: flex; align-items: center; gap: 0.625rem; min-width: 0; }
+.mui-root .apic-legend { pointer-events: auto; }
+.mui-root .apic-legend > span[class*='api-tone'] { color: var(--api-tone); }
+.mui-root .apic-legend__hint { color: var(--mui-faint); overflow: hidden; text-overflow: ellipsis; }
+.mui-root .apic-bar .api-stale { pointer-events: auto; text-transform: none; }
+
+/* ── overlay states (loading / error / monitor starting) ── */
+.mui-root .apic-overlay {
+  position: absolute; left: 50%; bottom: 2rem; transform: translateX(-50%); z-index: 4;
+  max-width: calc(100% - 2rem); display: flex; align-items: center; gap: 0.625rem; flex-wrap: wrap; justify-content: center;
+  padding: 0.4375rem 0.75rem; border-radius: 999px; font-size: 0.75rem; color: var(--mui-text-2);
+  background: rgba(10, 13, 24, 0.86); border: 1px solid var(--mui-line); text-align: center;
+}
+
+/* ── focus card (SpotlightCard; ElectricBorder when the link is down) ── */
+.mui-root .apic-card { position: absolute; z-index: 6; display: flex; flex-direction: column; min-height: 0; }
+.mui-root .apic[data-dock='right'] .apic-card { top: 0.625rem; right: 0.625rem; bottom: 0.625rem; width: min(21rem, 44%); }
+.mui-root .apic[data-dock='bottom'] .apic-card { left: 0.5rem; right: 0.5rem; bottom: 0.5rem; max-height: 60%; }
+.mui-root .apic[data-dock='bottom'][data-card='1'] .apic-bar { display: none; }
+.mui-root .apic-card > .apic-card__eb { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; border-radius: 14px; }
+.mui-root .apic-card .eb-content { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.mui-root .apic[data-dock='bottom'] .apic-card > .apic-card__eb,
+.mui-root .apic[data-dock='bottom'] .apic-card .eb-content { flex: 0 1 auto; }
+.mui-root .apic-card .card-spotlight.apic-card__in {
+  flex: 1 1 auto; min-height: 0; overflow: auto; overscroll-behavior: contain;
+  padding: 0.75rem 0.875rem 0.875rem; border-radius: 14px;
+  background: rgba(10, 13, 24, 0.9); border: 1px solid color-mix(in srgb, var(--api-tone) 35%, var(--mui-line));
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.55);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  animation: apic-card-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes apic-card-in { from { opacity: 0; transform: translateY(6px) scale(0.985); } to { opacity: 1; transform: none; } }
+.mui-root .apic-card__top { display: flex; align-items: center; gap: 0.5rem; }
+.mui-root .apic-card__kind { color: var(--mui-faint); font-size: 0.625rem; letter-spacing: 0.12em; text-transform: uppercase; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mui-root .apic-card__x {
+  flex: none; width: 1.625rem; height: 1.625rem; border-radius: 50%; cursor: pointer;
+  border: 1px solid var(--mui-line); background: transparent; color: var(--mui-muted); font-size: 1rem; line-height: 1;
+}
+.mui-root .apic-card__x:hover { color: var(--mui-text); border-color: var(--mui-line-strong); }
+.mui-root .apic-card__title { margin: 0.5rem 0 0.125rem; font-size: 1.0625rem; font-weight: 700; letter-spacing: 0.03em; color: var(--mui-text); }
+.mui-root .apic-enc { color: var(--mui-accent-300); opacity: 0.75; }
+.mui-root .apic-card__id { margin-bottom: 0.625rem; }
+.mui-root .apic-card__kv { row-gap: 0.4375rem; }
+.mui-root .apic-card__detail { color: var(--mui-text); }
+.mui-root .apic-card__note { color: var(--mui-muted); font-size: 0.75rem; }
+.mui-root .apic-card__hint {
+  margin: 0 0 0.625rem; padding: 0.375rem 0.5rem; border-radius: var(--mui-radius-sm);
+  border: 1px dashed color-mix(in srgb, var(--api-tone) 60%, transparent); color: var(--mui-text-2); font-size: 0.75rem;
+}
+.mui-root .apic-card__hint > span[aria-hidden] { color: var(--api-tone); margin-right: 0.3125rem; }
+.mui-root .apic-tip__hint--nc { color: var(--mui-muted); }
+/* APIGPU: the local model's "what this means" line: a solid tone bar (the dashed box belongs to "not configured") */
+.mui-root .apic-card__hint--model {
+  border: 0; border-left: 2px solid var(--api-tone); border-radius: 0 var(--mui-radius-sm) var(--mui-radius-sm) 0;
+  background: color-mix(in srgb, var(--api-tone) 9%, transparent); color: var(--mui-text);
+}
+.mui-root .apic-fact { display: flex; align-items: center; flex-wrap: wrap; gap: 0.25rem 0.5rem; }
+.mui-root .apic-fact__v { font-variant-numeric: tabular-nums; }
+.mui-root .apic-fact--model .apic-fact__v, .mui-root .apic-fact--card .apic-fact__v { font-family: var(--mui-mono); font-size: 0.6875rem; color: var(--mui-text); }
+.mui-root .apic-tip__tone { color: var(--api-tone); }
+.mui-root .apic-jobs { list-style: none; margin: 0.75rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.3125rem; }
+.mui-root .apic-job {
+  display: grid; grid-template-columns: auto 1fr; gap: 0.125rem 0.5rem; align-items: center;
+  padding: 0.3125rem 0.4375rem; border-radius: var(--mui-radius-sm); background: rgba(120, 150, 220, 0.05); border: 1px solid var(--mui-line);
+}
+.mui-root .apic-job__name { font-family: var(--mui-mono); font-size: 0.6875rem; color: var(--mui-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mui-root .apic-job__meta { grid-column: 1 / -1; font-size: 0.625rem; color: var(--mui-faint); }
+.mui-root .apic-job__err { grid-column: 1 / -1; font-size: 0.625rem; color: var(--mui-down); overflow-wrap: anywhere; }
+
+/* ── container queries: the chrome thins out as the widget shrinks (the orbit itself re-plans in JS) ── */
+@container apic (max-width: 34rem) { .mui-root .apic-legend__hint { display: none; } }
+@container apic (max-width: 24rem) {
+  .mui-root .apic-legend__t { display: none; } /* glyph-only legend; the full text is in its title */
+  .mui-root .apic-legend { gap: 0.375rem; }
+  .mui-root .apic-card__title { font-size: 0.9375rem; }
+}
+@container apic (max-height: 13rem) { .mui-root .apic-bar { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .mui-root .apic-node, .mui-root .apic-dot { transition: none; }
+  .mui-root .apic-card .card-spotlight.apic-card__in { animation: none; }
+}

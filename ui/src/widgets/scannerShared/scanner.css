@@ -1,0 +1,48 @@
+/* Scanner widgets: shared chrome (header strip, link channels, reconnect banner, qwen/advice).
+ * Link colors are Nocturne tokens (hex only as the same fallbacks theme.css uses). Each channel
+ * also carries a glyph + letter, so color is never the only signal. Scoped under .mui-root. */
+.mui-root .sc-link--a { --sc-link: var(--color-accent-600, #2f86e8); }
+.mui-root .sc-link--b { --sc-link: var(--color-warn, #e0b35a); }
+.mui-root .sc-link--c { --sc-link: var(--speak-cyan, #22d3ee); }
+.mui-root .sc-link--d { --sc-link: var(--color-negative, #e0768a); }
+
+.mui-root .sc-bar {
+  display: flex; align-items: center; gap: 0.5rem; flex: none; min-width: 0;
+  padding: 0 0 0.375rem; font-size: 0.6875rem; color: var(--mui-muted); white-space: nowrap; overflow: hidden;
+}
+.mui-root .sc-sort, .mui-root .sc-run { color: var(--mui-faint); overflow: hidden; text-overflow: ellipsis; }
+.mui-root .sc-count { color: var(--mui-text-2); font-variant-numeric: tabular-nums; }
+.mui-root .sc-scan-pick {
+  font: inherit; font-size: 0.75rem; font-weight: 700; color: var(--mui-text); background: transparent;
+  border: 1px solid transparent; border-radius: var(--mui-radius-sm); padding: 0.0625rem 0.25rem;
+  min-width: 0; max-width: 14rem; flex: 0 1 auto; text-overflow: ellipsis; cursor: pointer;
+}
+.mui-root .sc-scan-pick:hover { border-color: var(--mui-line-strong); }
+.mui-root .sc-scan-pick option { background: var(--mui-panel-2); color: var(--mui-text); }
+
+.mui-root .sc-link { position: relative; flex: none; display: inline-flex; }
+.mui-root .sc-link-btn, .mui-root .sc-link-opt {
+  font: inherit; font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.04em; cursor: pointer;
+  color: var(--sc-link); background: color-mix(in srgb, var(--sc-link) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--sc-link) 60%, transparent); border-radius: 999px;
+  padding: 0.0625rem 0.5rem; line-height: 1.3;
+}
+.mui-root .sc-link-btn:hover { background: color-mix(in srgb, var(--sc-link) 22%, transparent); }
+.mui-root .sc-link-menu {
+  position: absolute; top: calc(100% + 0.25rem); left: 0; z-index: 5; display: flex; gap: 0.25rem;
+  padding: 0.25rem; background: var(--mui-panel-3); border: 1px solid var(--mui-line-strong);
+  border-radius: var(--mui-radius-sm); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+.mui-root .sc-link-opt.is-on { box-shadow: 0 0 0 1px var(--sc-link); }
+
+/* the widget's own link accent: a thin channel-colored rail on the left */
+.mui-root .sc-list, .mui-root .scc { border-left: 2px solid color-mix(in srgb, var(--sc-link) 70%, transparent); padding-left: 0.375rem; }
+
+.mui-root .sc-reconnect {
+  flex: none; font-size: 0.6875rem; color: var(--mui-warn); padding: 0.1875rem 0.5rem; margin-bottom: 0.25rem;
+  border: 1px solid color-mix(in srgb, var(--mui-warn) 45%, transparent); border-radius: var(--mui-radius-sm);
+  background: color-mix(in srgb, var(--mui-warn) 9%, transparent); overflow-wrap: anywhere;
+}
+.mui-root .sc-qwen { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.mui-root .sc-qwen--pending, .mui-root .sc-qwen--failed { color: var(--mui-faint); font-style: italic; }
+.mui-root .sc-exit { font-size: 0.625rem; color: var(--mui-faint); text-transform: uppercase; letter-spacing: 0.05em; }

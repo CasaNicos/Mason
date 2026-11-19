@@ -1,0 +1,71 @@
+/* newsTimeline — the Sentiment river (UI overhaul Task 5). Nocturne tokens only. */
+.mui-root .nw-tl { container: nwtl / size; gap: 0.3125rem; }
+.mui-root .nw-tl__bar { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex: none; min-width: 0; flex-wrap: wrap; }
+.mui-root .nw-tl__legend { display: flex; flex-wrap: wrap; gap: 0.125rem 0.625rem; font-size: 0.625rem; color: var(--mui-muted); min-width: 0; }
+.mui-root .nw-tl__key { display: inline-flex; align-items: center; gap: 0.25rem; white-space: nowrap; }
+.mui-root .nw-tl__key--up { color: var(--mui-up); }
+.mui-root .nw-tl__key--down { color: var(--mui-down); }
+.mui-root .nw-tl__key--vol::before {
+  content: ''; width: 0.75rem; height: 0.4375rem; border-radius: 0.25rem; background: rgba(141, 196, 255, 0.2); border: 1px solid rgba(141, 196, 255, 0.35);
+}
+.mui-root .nw-tl__key--mat { color: var(--mui-warn); }
+.mui-root .nw-tl__key--pick { color: var(--color-accent-100, #eaf4ff); font-family: var(--mui-mono); }
+.mui-root .nw-tl__hint { font-size: 0.625rem; color: var(--mui-faint); white-space: nowrap; }
+
+.mui-root .nw-tl__stage {
+  position: relative; flex: 1 1 auto; min-height: 0; cursor: crosshair; touch-action: pan-y; user-select: none;
+  border-radius: var(--mui-radius-md); outline: none;
+  background: linear-gradient(180deg, rgba(95, 209, 160, 0.035), transparent 45%, transparent 55%, rgba(224, 118, 138, 0.035));
+  border: 1px solid rgba(120, 150, 220, 0.08);
+}
+.mui-root .nw-tl__stage:focus-visible { outline: 2px solid var(--mui-accent); outline-offset: 1px; }
+.mui-root .nw-tl__stage.is-drag { cursor: ew-resize; }
+.mui-root .nw-tl__svg { display: block; overflow: visible; }
+
+.mui-root .nw-tl__grid { stroke: rgba(120, 150, 220, 0.07); stroke-width: 1; }
+.mui-root .nw-tl__grid.is-major { stroke: rgba(120, 150, 220, 0.16); }
+.mui-root .nw-tl__mid { stroke: rgba(141, 196, 255, 0.28); stroke-width: 1; stroke-dasharray: 2 4; }
+.mui-root .nw-tl__env { fill: rgba(141, 196, 255, 0.1); stroke: rgba(141, 196, 255, 0.28); stroke-width: 1; }
+.mui-root .nw-tl__bull {
+  fill: color-mix(in srgb, var(--mui-up) 34%, transparent); stroke: var(--mui-up); stroke-width: 1.4;
+  filter: drop-shadow(0 0 0.375rem color-mix(in srgb, var(--mui-up) 55%, transparent));
+}
+.mui-root .nw-tl__bear {
+  fill: color-mix(in srgb, var(--mui-down) 34%, transparent); stroke: var(--mui-down); stroke-width: 1.4;
+  filter: drop-shadow(0 0 0.375rem color-mix(in srgb, var(--mui-down) 55%, transparent));
+}
+.mui-root .nw-tl__pick { fill: none; stroke: var(--color-accent-100, #eaf4ff); stroke-width: 1.6; stroke-linejoin: round; filter: drop-shadow(0 0 0.25rem rgba(141, 196, 255, 0.8)); }
+.mui-root .nw-tl__mat { fill: var(--mui-warn); stroke: rgba(10, 13, 24, 0.8); stroke-width: 0.8; }
+.mui-root .nw-tl__now { stroke: var(--mui-accent-300); stroke-width: 1; stroke-dasharray: 3 3; opacity: 0.7; }
+.mui-root .nw-tl__dim { fill: rgba(7, 10, 18, 0.55); pointer-events: none; }
+.mui-root .nw-tl__sel { fill: rgba(74, 158, 255, 0.1); stroke: var(--mui-accent); stroke-width: 1; pointer-events: none; }
+.mui-root .nw-tl__cross { stroke: var(--mui-accent-300); stroke-width: 1; opacity: 0.8; pointer-events: none; }
+.mui-root .nw-tl__tick { fill: var(--mui-faint); font-size: 10px; font-family: var(--mui-font); font-variant-numeric: tabular-nums; }
+.mui-root .nw-tl__tick.is-major { fill: var(--mui-muted); font-weight: 600; }
+
+/* the river reveals left → right once when it first draws (no loop) */
+.mui-root .nw-tl__flow { animation: nw-tl-reveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1 both; }
+@keyframes nw-tl-reveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+.mui-root .nw-tl__read {
+  position: absolute; top: 0.375rem; transform: translateX(-50%); pointer-events: none; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 0.0625rem; white-space: nowrap;
+  font-size: 0.6563rem; color: var(--mui-text-2); background: rgba(10, 13, 24, 0.9);
+  border: 1px solid var(--mui-line-strong); border-radius: var(--mui-radius-sm); padding: 0.25rem 0.5rem;
+  box-shadow: 0 0.375rem 1rem rgba(0, 0, 0, 0.45);
+}
+.mui-root .nw-tl__read b { color: var(--mui-text); font-weight: 600; }
+
+@container nwtl (max-width: 26rem) {
+  .mui-root .nw-tl__key--vol, .mui-root .nw-tl__key--mat, .mui-root .nw-tl__hint { display: none; }
+}
+@container nwtl (max-height: 10rem) {
+  .mui-root .nw-tl__legend { display: none; }
+  .mui-root .nw-tl__read { top: 0.125rem; padding: 0.125rem 0.375rem; flex-direction: row; gap: 0.375rem; }
+}
+@container nwtl (max-height: 7rem) {
+  .mui-root .nw-tl__bar { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mui-root .nw-tl__flow { animation: none; }
+}

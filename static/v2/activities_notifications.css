@@ -1,0 +1,188 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Task 7 (UI overhaul 2026-11-16) — Activities + Notifications as widget grids.
+   Paired with static/v2/activities_notifications.js.
+
+   Blocks (each one existing DOM node, moved — never rebuilt — into a widget body):
+     #page-activities     #mv-pulse-deck  → "PULSE DECK"           (id act_pulse)
+                          #mv-act-ledger  → "WORK LEDGER"          (id act_ledger)
+     #page-notifications  #vp-centre      → "NOTIFICATION CENTRE"  (id nt_centre)
+                          #vp-col-alerts  → "ALERTS"               (id nt_alerts)
+                          #vp-col-review  → "NEEDS REVIEW"         (id nt_review)
+                          #vp-col-feed    → "THE FEED"             (id nt_feed)
+   The JS adds .is-widget to a block once it lives in a widget; every rule below
+   that changes layout is gated on it, so the pre-grid page looks exactly as before.
+   Each widget body is a size container named "anw" → block internals reflow on width
+   AND height (container queries), like the dashboard's Sector Rotation / Reminders.
+   No scrollbar-width / scrollbar-color here (Task 1 owns the scrollbar theme).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── pre-grid fallback: the console+legend wrapper keeps today's 1.4rem gap ── */
+.an-centre{display:flex;flex-direction:column;gap:1.4rem}
+
+/* ── shared: a widget body that hosts a block hands its whole box to the block.
+   The JS tags that body .an-host; the HOST is the size container (a container
+   query can't restyle the container itself, and the block needs to — e.g. the
+   ledger's grid areas), so every block is queried against its widget's body box. */
+.an-host,.m-widget-body.an-host{display:flex;flex-direction:column;overflow:hidden;padding:.625rem .875rem .75rem;
+  container-name:anw;container-type:size}
+.an-block.is-widget{flex:1 1 auto;min-width:0;min-height:0;display:flex;flex-direction:column}
+/* the old page wrappers are emptied once their blocks move into the grid */
+.an-emptied{display:none !important}
+
+/* ══ PULSE DECK ══════════════════════════════════════════════════════════════ */
+.pulse-deck.is-widget{margin:0;position:relative}
+.pulse-deck.is-widget .pd-kicker{display:none}            /* the widget title already says PULSE DECK */
+/* controls float over the orb's top-right corner so the canvas gets the full box */
+.pulse-deck.is-widget .pd-head{position:absolute;top:0;right:0;z-index:3;pointer-events:none}
+.pulse-deck.is-widget .pd-controls{pointer-events:auto;gap:.45rem}
+.pulse-deck.is-widget .pd-stage{flex:1 1 auto;height:auto;min-height:0;margin-top:0}
+.pulse-deck.is-widget .pd-select,
+.pulse-deck.is-widget .pd-btn{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.pulse-deck.is-widget .pd-select{background:rgba(13,20,36,.82)}
+.pulse-deck.is-widget .pd-btn{background:rgba(13,20,36,.6);padding:.4rem .75rem}
+.pulse-deck.is-widget .pd-btn:hover{background:rgba(79,209,255,.14)}
+@container anw (max-width:26rem){
+  .pulse-deck.is-widget .pd-select{font-size:.68rem;padding:.3rem .4rem}
+  .pulse-deck.is-widget .pd-btn{font-size:.7rem;padding:.3rem .55rem}
+}
+/* tiny box: keep Refresh, drop the spin picker (the orb keeps spinning at the chosen speed) */
+@container anw (max-width:17rem){ .pulse-deck.is-widget .pd-select{display:none} }
+@container anw (max-height:9rem){ .pulse-deck.is-widget .pd-head{display:none} }
+
+/* ══ WORK LEDGER ═════════════════════════════════════════════════════════════
+   grid: [tiers] / [feed head] / [scrolling cards + Load more]. On a wide box the
+   tiers and the feed head share one row (denser); on a short box the head row
+   collapses to the tiers + limit only. */
+.an-ledger.is-widget{display:grid;grid-template-columns:minmax(0,1fr);
+  grid-template-rows:auto auto minmax(0,1fr);grid-template-areas:"tiers" "head" "scroll";column-gap:.75rem}
+.an-ledger.is-widget .m-act-tiers{grid-area:tiers;margin:0 0 .45rem;min-width:0}
+.an-ledger.is-widget .m-act-feedhead{grid-area:head;margin:0 0 .55rem;min-width:0;flex-wrap:wrap;row-gap:.35rem}
+.an-ledger.is-widget .m-act-feedtitle{display:none}        /* the widget title already says WORK LEDGER */
+.an-ledger.is-widget .an-ledger-scroll{grid-area:scroll;min-height:0;overflow-y:auto;overflow-x:hidden;
+  padding:2px 4px 2px 2px;margin:-2px -4px -2px -2px}       /* room for the card hover lift + glow */
+.an-ledger.is-widget .m-act-more{margin:.6rem 0 .2rem}
+@container anw (min-width:40rem){
+  .an-ledger.is-widget{grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);
+    grid-template-areas:"tiers head" "scroll scroll"}
+  .an-ledger.is-widget .m-act-tiers{margin-bottom:.6rem;flex-wrap:nowrap}
+  .an-ledger.is-widget .m-act-feedhead{margin-bottom:.6rem;align-self:start;padding-top:.05rem}
+}
+@container anw (max-width:30rem){
+  .an-ledger.is-widget .m-act-tiers{gap:.3rem}
+  .an-ledger.is-widget .m-act-tiers .act-tier{font-size:.68rem;padding:.3rem .55rem}
+  .an-ledger.is-widget .m-act-cards{grid-template-columns:minmax(0,1fr);gap:.55rem}
+  .an-ledger.is-widget .act-card{padding:.6rem .7rem .65rem}
+}
+@container anw (max-height:15rem){
+  .an-ledger.is-widget .m-act-count{display:none}
+  .an-ledger.is-widget .m-act-tiers{margin-bottom:.3rem}
+  .an-ledger.is-widget .m-act-feedhead{margin-bottom:.35rem}
+}
+
+/* ══ NOTIFICATION CENTRE (console + colour key) ══════════════════════════════
+   The widget is now the frame, so the console drops its own outer border/shadow
+   but keeps the violet radial wash. Wide box → console | key side by side;
+   narrow → stacked, key as a 2-col grid; short → the key folds away (every row
+   chip still carries its type's text + icon, so colour is never the only cue). */
+.an-centre.is-widget{gap:.55rem;overflow-y:auto;overflow-x:hidden}   /* a too-small box scrolls, never hides a button */
+.an-centre.is-widget .vp-console{flex:0 0 auto;padding:.75rem 1rem;gap:1rem;border-radius:.75rem;
+  box-shadow:none;border-color:rgba(160,107,255,.22)}
+.an-centre.is-widget .vp-legend-key{flex:0 0 auto;padding:.45rem .75rem;gap:.3rem .8rem}
+.an-centre.is-widget .vp-gauge{width:96px;height:96px}
+.an-centre.is-widget .vp-gauge .val .n{font-size:1.6rem}
+.an-centre.is-widget .vp-gauge .val .lbl{font-size:.52rem;letter-spacing:.14em}
+.an-centre.is-widget .vp-console-cap .t{display:none}        /* the widget title already says it */
+.an-centre.is-widget .vp-console-cap .d{margin-top:0}
+@container anw (min-width:58rem){
+  .an-centre.is-widget{flex-direction:row;align-items:stretch}
+  .an-centre.is-widget .vp-console{flex:1 1 auto;min-width:0}
+  .an-centre.is-widget .vp-legend-key{flex:0 1 25rem;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    align-content:center}
+}
+@container anw (min-width:58rem) and (min-height:9.5rem){
+  .an-centre.is-widget .vp-gauge{width:118px;height:118px}
+  .an-centre.is-widget .vp-gauge .val .n{font-size:1.9rem}
+}
+@container anw (max-width:34rem){
+  .an-centre.is-widget .vp-console{gap:.6rem .8rem;padding:.6rem .75rem}
+  .an-centre.is-widget .vp-console-cap{flex-basis:100%;order:3;min-width:0}
+  .an-centre.is-widget .vp-legend-key{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@container anw (max-width:22rem){
+  .an-centre.is-widget .vp-gauge{width:72px;height:72px}
+  .an-centre.is-widget .vp-gauge .val .n{font-size:1.25rem}
+  .an-centre.is-widget .vp-gauge .val .lbl{font-size:.5rem;letter-spacing:.14em}
+  .an-centre.is-widget .vp-console-cap .d{display:none}
+  /* icon-only buttons (each has aria-label + title in the markup) so gauge + both fit on one line */
+  .an-centre.is-widget .vp-btn{font-size:0;gap:0;padding:.42rem .5rem}
+  .an-centre.is-widget .vp-btn i{font-size:.95rem}
+  .an-centre.is-widget .vp-console{flex-wrap:wrap}
+  .an-centre.is-widget .vp-legend-key{grid-template-columns:minmax(0,1fr)}
+}
+/* stacked + short: fold the key away (side by side it fits down to ~6rem tall) */
+@container anw (max-width:57.99rem) and (max-height:11rem){
+  .an-centre.is-widget .vp-legend-key{display:none}
+}
+@container anw (max-height:6rem){
+  .an-centre.is-widget .vp-legend-key{display:none}
+}
+@container anw (max-height:11rem){
+  .an-centre.is-widget .vp-console{flex:1 1 auto;padding:.5rem .75rem}
+  .an-centre.is-widget .vp-gauge{width:72px;height:72px}
+  .an-centre.is-widget .vp-gauge .val .n{font-size:1.25rem}
+}
+@container anw (max-height:7.5rem){
+  .an-centre.is-widget .vp-console-cap{display:none}
+  .an-centre.is-widget .vp-gauge{width:64px;height:64px}
+  .an-centre.is-widget .vp-gauge .val .n{font-size:1.1rem}
+  .an-centre.is-widget .vp-gauge .val .lbl{display:none}
+}
+
+/* ══ ALERTS / NEEDS REVIEW / THE FEED (one widget each) ══════════════════════
+   [stat header] over a group that fills the rest; the list scrolls inside the
+   group, so the edge fades stay pinned to the group's top/bottom. */
+.vp-col.is-widget{gap:.55rem}
+.vp-col.is-widget .vp-chead{flex:0 0 auto;padding:.5rem .75rem;border-radius:.6rem}
+.vp-col.is-widget .vp-chead .v{font-size:1.3rem}
+/* the widget head already names the column, so the stat box's label becomes
+   "● UNREAD" (the dot keeps the column's colour; the number beside it is the
+   unread count — see renderNotifications) instead of repeating the title */
+.vp-col.is-widget .vp-chead .k{font-size:0;gap:.4rem}
+.vp-col.is-widget .vp-chead .k i{display:none}
+.vp-col.is-widget .vp-chead .k::after{content:'Unread';font-size:.62rem;letter-spacing:.14em}
+.vp-col.is-widget .vp-group{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.vp-col.is-widget .vp-group > .vp-body{flex:1 1 auto;min-height:0;max-height:none}
+/* rows-to-show menu opens leftwards from the right-hand control (stays inside the widget) */
+.vp-col.is-widget .m-dd[data-vplimit] .m-dd-menu{left:auto;right:0}
+/* wide column → rows flow into a card grid instead of one long strip */
+@container anw (min-width:46rem){
+  .vp-col.is-widget .vp-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(21rem,1fr));
+    gap:.35rem;align-content:start}
+  .vp-col.is-widget .vp-body > .vp-row + .vp-row{border-top:0}
+  .vp-col.is-widget .vp-body > .vp-row{border:1px solid rgba(255,255,255,.05)}
+  .vp-col.is-widget .vp-body > .vp-more,
+  .vp-col.is-widget .vp-body > .vp-empty{grid-column:1/-1}
+}
+@container anw (max-width:21rem){
+  .vp-col.is-widget .vp-chead{padding:.4rem .55rem;gap:.4rem}
+  .vp-col.is-widget .vp-chead .k::after{letter-spacing:.08em;font-size:.58rem}
+  .vp-col.is-widget .vp-chead .v{font-size:1.1rem}
+  .vp-col.is-widget .vp-chead .vp-info{display:none}
+  .vp-col.is-widget .vp-row{gap:.55rem;padding:.6rem .6rem}
+  .vp-col.is-widget .vp-row .txt{font-size:.8rem}
+  .vp-col.is-widget .vp-row .bd{font-size:.72rem}
+  .vp-col.is-widget .vp-row:not(:hover):not(:focus-within) .vp-acts{opacity:.72}   /* no room to discover on hover */
+}
+/* Task 8: the narrowest column (The feed also carries Clear + the rows menu): the word "Unread" gives way, the
+   coloured dot and the count stay, so the stat row never scrolls sideways */
+@container anw (max-width:13rem){
+  .vp-col.is-widget:has(.vp-clear-btn) .vp-chead .k::after{content:none}
+  .vp-col.is-widget .vp-chead .r{gap:.35rem}
+}
+@container anw (max-width:10rem){ .vp-col.is-widget .vp-chead .k::after{content:none} }
+@container anw (max-height:12rem){
+  .vp-col.is-widget{gap:.35rem}
+  .vp-col.is-widget .vp-chead{padding:.3rem .6rem}
+  .vp-col.is-widget .vp-chead .v{font-size:1rem}
+  .vp-col.is-widget .vp-fade.bot{height:40px}
+}

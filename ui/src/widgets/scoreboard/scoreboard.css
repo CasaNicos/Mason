@@ -1,0 +1,154 @@
+/* scoreboard. Nocturne tokens only (no fixed colors), so it follows the theme, light or dark.
+   Scoped under .mui-root. The widget scrolls up and down inside its own box and never sideways: the tables
+   scroll sideways inside their own boxes. Width: container queries. */
+.mui-root .mui-sb {
+  --sb-mason: var(--mui-accent);
+  --sb-spy: var(--mui-text-2);
+  --sb-good: var(--mui-up);
+  --sb-bad: var(--mui-down);
+  --sb-grey: var(--mui-muted);
+  container-type: inline-size; display: flex; flex-direction: column; gap: 0.625rem;
+  height: 100%; min-height: 0; min-width: 0; overflow-y: auto; overflow-x: hidden;
+  font-size: 0.75rem; line-height: 1.45; color: var(--mui-text-2);
+}
+.mui-root .mui-sb > * { flex: none; min-width: 0; }
+.mui-root .mui-sb p { margin: 0; overflow-wrap: anywhere; }
+.mui-root .mui-sb__sub { display: block; font-size: 0.6875rem; font-weight: 400; color: var(--mui-faint); }
+.mui-root .mui-sb__h {
+  margin: 0 0 0.375rem; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--mui-accent-300);
+}
+.mui-root .mui-sb__tag {
+  display: inline-block; margin-left: 0.375rem; padding: 0 0.375rem; border: 1px solid var(--mui-line-strong); border-radius: 999px;
+  font-size: 0.5625rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mui-muted); vertical-align: 0.1em;
+}
+.mui-root .mui-sb__none { color: var(--mui-muted); padding: 0.5rem 0; }
+
+/* ── states ── */
+.mui-root .mui-sb__msg { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.75rem 0.25rem; color: var(--mui-text-2); }
+.mui-root .mui-sb__msgicon {
+  flex: none; display: inline-grid; place-items: center; width: 1.125rem; height: 1.125rem; border-radius: 50%;
+  border: 1px solid var(--mui-warn); color: var(--mui-warn); font-weight: 700; font-size: 0.6875rem;
+}
+
+/* ── bar ── */
+.mui-root .mui-sb__bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem 0.75rem; }
+.mui-root .mui-sb__standing {
+  display: inline-flex; align-items: center; gap: 0.3125rem; padding: 0.125rem 0.5625rem; border-radius: 999px;
+  border: 1px solid var(--mui-line-strong); font-weight: 600; font-size: 0.6875rem; white-space: nowrap; color: var(--mui-text);
+}
+.mui-root .mui-sb__standing[data-tone='up'] { color: var(--sb-good); border-color: color-mix(in srgb, var(--sb-good) 45%, transparent); background: color-mix(in srgb, var(--sb-good) 10%, transparent); }
+.mui-root .mui-sb__standing[data-tone='down'] { color: var(--sb-bad); border-color: color-mix(in srgb, var(--sb-bad) 45%, transparent); background: color-mix(in srgb, var(--sb-bad) 10%, transparent); }
+.mui-root .mui-sb__counts { display: inline-flex; flex-wrap: wrap; gap: 0.125rem 0.4375rem; color: var(--mui-muted); }
+.mui-root .mui-sb__counts b { color: var(--mui-text); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* ── cards ── */
+.mui-root .mui-sb .card-spotlight.mui-sb__card {
+  padding: 0.625rem 0.75rem; border-radius: var(--mui-radius-md);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--mui-accent) 7%, transparent), transparent 60%), var(--mui-panel-3);
+}
+.mui-root .mui-sb__headline { display: flex; flex-direction: column; gap: 0.375rem; }
+.mui-root .mui-sb__line1 { font-size: 0.875rem; line-height: 1.5; color: var(--mui-text); }
+.mui-root .mui-sb__line2 { color: var(--mui-text-2); }
+.mui-root .mui-sb__means {
+  padding: 0.3125rem 0 0.3125rem 0.5625rem; border-left: 2px solid var(--mui-accent-300); color: var(--mui-text-2); font-size: 0.71875rem;
+}
+
+/* ── chart ── */
+.mui-root .mui-sb__chartwrap { display: flex; flex-direction: column; gap: 0.3125rem; }
+.mui-root .mui-sb__legend { display: flex; flex-wrap: wrap; gap: 0.25rem 0.875rem; margin: 0; padding: 0; list-style: none; font-size: 0.6875rem; color: var(--mui-text-2); }
+.mui-root .mui-sb__legend li { display: inline-flex; align-items: center; gap: 0.375rem; }
+.mui-root .mui-sb__legend line { stroke-width: 2; stroke-linecap: round; }
+.mui-root .mui-sb__legend [data-series='mason'] line { stroke: var(--sb-mason); }
+.mui-root .mui-sb__legend [data-series='spy'] line { stroke: var(--sb-spy); stroke-dasharray: 4 3; }
+.mui-root .mui-sb__chart { position: relative; height: clamp(7.5rem, 32cqi, 11rem); border-radius: var(--mui-radius-sm); outline: none; touch-action: pan-y; }
+.mui-root .mui-sb__chart:focus-visible { outline: 2px solid var(--mui-accent); outline-offset: 2px; }
+.mui-root .mui-sb__chart > svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.mui-root .mui-sb__grid { stroke: var(--mui-line); stroke-width: 1; }
+.mui-root .mui-sb__zero { stroke: var(--mui-line-strong); stroke-width: 1; stroke-dasharray: 2 3; }
+.mui-root .mui-sb__tick { fill: var(--mui-faint); font-size: 0.625rem; font-family: var(--mui-mono); font-variant-numeric: tabular-nums; }
+.mui-root .mui-sb__tick.is-zero { fill: var(--mui-muted); }
+.mui-root .mui-sb__stop1 { stop-color: var(--sb-mason); stop-opacity: 0.22; }
+.mui-root .mui-sb__stop2 { stop-color: var(--sb-mason); stop-opacity: 0; }
+.mui-root .mui-sb__line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.mui-root .mui-sb__line[data-series='mason'] { stroke: var(--sb-mason); filter: drop-shadow(0 0 4px color-mix(in srgb, var(--sb-mason) 45%, transparent)); }
+.mui-root .mui-sb__line[data-series='spy'] { stroke: var(--sb-spy); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.mui-root .mui-sb__pt[data-series='mason'], .mui-root .mui-sb__dot[data-series='mason'] { fill: var(--sb-mason); }
+.mui-root .mui-sb__pt[data-series='spy'], .mui-root .mui-sb__dot[data-series='spy'] { fill: var(--sb-spy); }
+.mui-root .mui-sb__dot { stroke: var(--mui-panel-3); stroke-width: 1.5; }
+.mui-root .mui-sb__cursor { stroke: var(--mui-line-strong); stroke-width: 1; }
+/* one-shot reveal, left to right, when the chart first appears (no loop; off under reduced motion) */
+.mui-root .mui-sb__reveal { transform-box: fill-box; transform-origin: 0 50%; animation: mui-sb-reveal 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes mui-sb-reveal { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.mui-root .mui-sb__read { display: flex; flex-wrap: wrap; gap: 0.125rem 0.75rem; font-size: 0.6875rem; color: var(--mui-muted); font-variant-numeric: tabular-nums; }
+.mui-root .mui-sb__read b { font-weight: 600; color: var(--mui-text); }
+.mui-root .mui-sb__read b.mui-up { color: var(--mui-up); }
+.mui-root .mui-sb__read b.mui-down { color: var(--mui-down); }
+.mui-root .mui-sb__readday { color: var(--mui-text-2); }
+
+/* ── tables ── */
+.mui-root .mui-sb__scroll { max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; border-radius: var(--mui-radius-sm); }
+.mui-root .mui-sb__scroll:focus-visible { outline: 2px solid var(--mui-accent); outline-offset: 1px; }
+.mui-root .mui-sb__table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.mui-root .mui-sb__table th, .mui-root .mui-sb__table td { padding: 0.3125rem 0.4375rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--mui-line); font-weight: 400; }
+.mui-root .mui-sb__table thead th { font-size: 0.5625rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mui-muted); white-space: nowrap; vertical-align: bottom; }
+.mui-root .mui-sb__table tbody th { color: var(--mui-text); font-weight: 500; }
+.mui-root .mui-sb__table tbody tr:last-child > * { border-bottom: 0; }
+.mui-root .mui-sb__table .is-num { text-align: right; font-family: var(--mui-mono); font-size: 0.6875rem; white-space: nowrap; }
+.mui-root .mui-sb__table thead .is-num { font-family: inherit; font-size: 0.5625rem; }
+.mui-root .mui-sb__table td.is-num > span:first-child { color: var(--mui-text); }
+.mui-root .mui-sb__table td.is-num > span.mui-up { color: var(--mui-up); }
+.mui-root .mui-sb__table td.is-num > span.mui-down { color: var(--mui-down); }
+.mui-root .mui-sb__periods tbody th { white-space: nowrap; }
+.mui-root .mui-sb__same { color: var(--mui-muted); font-style: italic; text-align: center; }
+.mui-root .mui-sb__ideas tbody th { min-width: 8rem; max-width: 16rem; overflow-wrap: anywhere; }
+.mui-root .mui-sb__ideas tbody tr:hover > * { background: color-mix(in srgb, var(--mui-accent) 6%, transparent); }
+.mui-root .mui-sb__ideas[data-yardstick] tbody > tr > * { background: color-mix(in srgb, var(--mui-text-2) 5%, transparent); }
+.mui-root .mui-sb__verdict { white-space: nowrap; color: var(--sb-grey); }
+.mui-root .mui-sb__verdict[data-tone='good'] { color: var(--sb-good); font-weight: 600; }
+.mui-root .mui-sb__verdict[data-tone='bad'] { color: var(--sb-bad); font-weight: 600; }
+.mui-root .mui-sb__verdict[data-tone='yardstick'] { color: var(--mui-text-2); font-style: italic; }
+.mui-root .mui-sb__cap { margin-top: 0.3125rem; font-size: 0.6875rem; color: var(--mui-faint); }
+
+/* ── target, notes ── */
+.mui-root .mui-sb__target { padding: 0.4375rem 0.625rem; border: 1px dashed var(--mui-line-strong); border-radius: var(--mui-radius-sm); color: var(--mui-text-2); }
+.mui-root .mui-sb__notes { margin: 0; padding: 0 0 0 1rem; display: flex; flex-direction: column; gap: 0.25rem; color: var(--mui-text-2); font-size: 0.71875rem; }
+.mui-root .mui-sb__notes li { overflow-wrap: anywhere; }
+.mui-root .mui-sb__notes li::marker { color: var(--mui-warn); }
+
+/* ── what kinds of calls have worked ── */
+.mui-root .mui-sb__ww { border-top: 1px solid var(--mui-line); padding-top: 0.375rem; }
+.mui-root .mui-sb__toggle {
+  display: flex; align-items: center; gap: 0.375rem; width: 100%; margin: 0; padding: 0.4375rem 0.375rem; border: 0; border-radius: var(--mui-radius-sm);
+  background: none; color: var(--mui-text); font: inherit; font-size: 0.8125rem; font-weight: 600; text-align: left; cursor: pointer;
+}
+.mui-root .mui-sb__toggle:hover { background: color-mix(in srgb, var(--mui-accent) 8%, transparent); }
+.mui-root .mui-sb__toggle:focus-visible { outline: 2px solid var(--mui-accent); outline-offset: 1px; }
+.mui-root .mui-sb__chev { display: inline-block; width: 0.75rem; color: var(--mui-accent-300); font-size: 1rem; line-height: 1; transition: transform 0.18s ease; }
+.mui-root .mui-sb__ww[data-open='1'] .mui-sb__chev { transform: rotate(90deg); }
+.mui-root .mui-sb__wwbody { overflow: hidden; display: flex; flex-direction: column; gap: 0.5rem; padding: 0.25rem 0.125rem 0; }
+.mui-root .mui-sb__lead { color: var(--mui-text-2); }
+.mui-root .mui-sb__calm { color: var(--mui-text); font-weight: 600; }
+.mui-root .mui-sb__leans { padding: 0.3125rem 0 0.3125rem 0.5625rem; border-left: 2px solid var(--mui-accent-300); }
+.mui-root .mui-sb__tbl { display: flex; flex-direction: column; gap: 0.25rem; padding-top: 0.25rem; }
+.mui-root .mui-sb__tbl .mui-sb__h { margin: 0; color: var(--mui-text); text-transform: none; letter-spacing: 0; font-size: 0.75rem; }
+.mui-root .mui-sb__note { font-size: 0.6875rem; color: var(--mui-muted); }
+.mui-root .mui-sb__yard { font-size: 0.6875rem; color: var(--mui-faint); }
+
+/* ── footer ── */
+.mui-root .mui-sb__foot { display: flex; flex-wrap: wrap; gap: 0.125rem 0.75rem; padding-top: 0.25rem; border-top: 1px solid var(--mui-line); font-size: 0.6875rem; color: var(--mui-faint); }
+.mui-root .mui-sb__warn { color: var(--mui-warn); }
+
+/* ── narrow (phone, or a thin widget) ── */
+@container (max-width: 24rem) {
+  .mui-root .mui-sb__line1 { font-size: 0.8125rem; }
+  .mui-root .mui-sb__table th, .mui-root .mui-sb__table td { padding: 0.25rem 0.3125rem; }
+  .mui-root .mui-sb__periods thead th { white-space: normal; }
+}
+@media (pointer: coarse) {
+  .mui-root .mui-sb__toggle { min-height: 2.75rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mui-root .mui-sb__reveal { animation: none; }
+  .mui-root .mui-sb__chev { transition: none; }
+}

@@ -1,0 +1,1 @@
+import{t as e}from"./vendor-react-CR5VJ85Q.js";import"./news-H0-Ra7-V.js";import{t}from"./Feed-BKlQ8UUS.js";var n=e();function r(){return(0,n.jsx)(t,{which:`book`})}export{r as default};

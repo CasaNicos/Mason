@@ -1,0 +1,17 @@
+/* Shared F5 bits (RollNumber, Pills). Scoped under .mui-root; Nocturne tokens via theme.css. */
+.mui-root .mui-roll { display: inline-flex; align-items: baseline; white-space: nowrap; }
+.mui-root .mui-roll__vis { display: inline-flex; align-items: center; gap: 0.0625rem; font-weight: 600; font-variant-numeric: normal; }
+.mui-root .mui-roll__aff { font-weight: 600; }
+.mui-root .mui-roll .counter-container { line-height: 1; }
+.mui-root .mui-f5pills {
+  display: inline-flex; flex: none; gap: 0.125rem; padding: 0.125rem;
+  border: 1px solid var(--mui-line); border-radius: 999px; background: rgba(10, 13, 24, 0.5);
+}
+.mui-root .mui-f5pill {
+  font: inherit; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.04em; cursor: pointer;
+  color: var(--mui-muted); background: transparent; border: 1px solid transparent; border-radius: 999px;
+  padding: 0.0625rem 0.5rem; line-height: 1.4;
+}
+.mui-root .mui-f5pill:hover { color: var(--mui-text); }
+.mui-root .mui-f5pill.is-on { color: var(--mui-text); background: var(--mui-accent-700); border-color: var(--mui-line-strong); }
+.mui-root .mui-f5pill.is-on::before { content: '● '; font-size: 0.5rem; vertical-align: 0.1em; color: var(--mui-accent-300); }

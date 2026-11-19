@@ -1,0 +1,46 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Task 6 (UI overhaul 2026-11-16): API page widget grid. Paired with static/v2/api.js.
+   Everything is gated on #page-api.mv-api-grid-on (set once the grid is built), so the old page
+   looks exactly as before if the grid helper is missing. Nocturne tokens only. No scrollbar-width /
+   scrollbar-color (Task 1 owns the global ::-webkit-scrollbar theme).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* the constellation fills its widget edge to edge; the canvas never scrolls */
+#page-api.mv-api-grid-on .mv-api-cons{overflow:hidden;padding:0}
+#page-api.mv-api-grid-on .mv-api-body{display:flex;flex-direction:column;min-height:0}
+#page-api.mv-api-grid-on .mv-api-body > .mui-root{flex:1 1 auto;min-height:0}
+
+/* ── Opus Director panel (vanilla, moved into its widget): drop the inner card, reflow by width ── */
+#page-api.mv-api-grid-on .mv-api-opus{container:apiopus / inline-size;overflow:auto}
+#page-api.mv-api-grid-on .m-opus-ctl{margin:0}
+#page-api.mv-api-grid-on .m-opus-ctl .opus-row{background:transparent;border:0;border-radius:0;padding:0;align-items:flex-start;gap:.625rem .875rem;flex-wrap:wrap}
+#page-api.mv-api-grid-on .m-opus-ctl .opus-lead{min-width:0;flex:1 1 11rem}
+#page-api.mv-api-grid-on .m-opus-ctl .opus-title{font-size:.9375rem;letter-spacing:.02em;flex-wrap:wrap}
+#page-api.mv-api-grid-on .m-opus-ctl .opus-sub{color:var(--color-neutral-300);overflow-wrap:anywhere}
+#page-api.mv-api-grid-on .m-opus-ctl .opus-cap{max-width:none;color:var(--color-neutral-400);overflow-wrap:anywhere}
+#page-api.mv-api-grid-on .m-opus-ctl .opus-pill.on{background:rgba(95,209,160,.16);color:var(--color-positive)}
+#page-api.mv-api-grid-on .m-opus-ctl .opus-pill.off{background:rgba(139,150,184,.16);color:var(--color-neutral-400)}
+#page-api.mv-api-grid-on .m-opus-ctl .opus-switch{margin-top:.125rem;border-color:rgba(130,170,255,.32);background:rgba(72,80,122,.45)}
+#page-api.mv-api-grid-on .m-opus-ctl .opus-switch.on{background:rgba(95,209,160,.55)}
+#page-api.mv-api-grid-on .m-opus-ctl .opus-switch .knob{background:var(--color-text)}
+#page-api.mv-api-grid-on .m-opus-ctl .opus-switch:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
+#page-api.mv-api-grid-on .m-opus-ctl .opus-run button{border-color:rgba(130,170,255,.32);background:rgba(28,63,110,.45);color:var(--color-text)}
+#page-api.mv-api-grid-on .m-opus-ctl .opus-run button:hover{background:rgba(28,63,110,.8);border-color:var(--color-accent)}
+#page-api.mv-api-grid-on .m-opus-ctl .opus-run button:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
+#page-api.mv-api-grid-on .m-opus-ctl .opus-run-msg{flex-basis:100%;color:var(--color-neutral-300);overflow-wrap:anywhere}
+@container apiopus (max-width: 20rem){
+  #page-api.mv-api-grid-on .m-opus-ctl .opus-run button{flex:1 1 100%}
+  #page-api.mv-api-grid-on .m-opus-ctl .opus-cap{font-size:.65rem}
+}
+@container apiopus (max-width: 15.5rem){
+  #page-api.mv-api-grid-on .m-opus-ctl .opus-switch{order:-1}   /* the switch wraps above the text, not under the buttons */
+}
+@container apiopus (min-width: 34rem){
+  #page-api.mv-api-grid-on .m-opus-ctl .opus-run{margin-top:.75rem}
+}
+
+/* ── fallback (UI bundle failed): the old meta line + cards inside the Source detail widget ── */
+#page-api.mv-api-grid-on .mv-api-sources > #mv-health-fallback{margin-bottom:.5rem}
+#page-api.mv-api-grid-on #mv-health-fallback .m-health-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,17rem),1fr))}
+#page-api.mv-api-grid-on #mv-health-fallback .hdot.down{background:var(--color-negative);box-shadow:0 0 6px rgba(224,118,138,.6)}
+#page-api.mv-api-grid-on #mv-health-fallback .hdot.limit{background:var(--color-warn);box-shadow:0 0 6px rgba(224,179,90,.6)}

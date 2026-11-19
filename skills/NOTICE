@@ -1,0 +1,20 @@
+Vendored third-party code
+=========================
+
+Upstream:  https://github.com/tradermonty/claude-trading-skills
+Licence:   MIT, Copyright (c) 2026 TraderMonty (see LICENSE in this directory)
+Version:   0.1.0 (upstream pyproject.toml). The exact upstream commit is unknown.
+
+This directory holds a subset of 9 skills: canslim-screener,
+earnings-trade-analyzer, macro-regime-detector, market-breadth-analyzer,
+market-top-detector, position-sizer, stanley-druckenmiller-investment,
+theme-detector and vcp-screener.
+
+Changes made for Mason (the vendored subset may differ from upstream):
+  - the upstream scripts/tests/ directory was removed from all 9 skills;
+  - SKILL.md was edited in canslim-screener, market-breadth-analyzer and
+    theme-detector;
+  - scripts/fmp_client.py was edited in market-top-detector.
+
+The MIT licence terms continue to apply to this code. Mason's own LICENSE
+does not cover this directory.

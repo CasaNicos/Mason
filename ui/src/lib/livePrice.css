@@ -1,0 +1,34 @@
+/* MasonUI.livePrice — the live last-price line on a MasonChart (lib/livePrice.js). Colours match the chart's own
+   candles (#5fd1a0 / #e0768a); direction is also carried by the ▲ / ▼ / – glyph in the tag, never colour alone. */
+.mlp{position:absolute;left:0;top:0;width:100%;height:0;z-index:1;pointer-events:none;color:#7fb2ff;
+  font:600 10px/1 Inter,system-ui,sans-serif;font-variant-numeric:tabular-nums;will-change:transform}
+.mlp[hidden]{display:none}
+.mlp[data-dir="up"]{color:#5fd1a0}
+.mlp[data-dir="down"]{color:#e0768a}
+.mlp[data-mode="stale"]{color:#8a94a8}
+.mlp--glide{transition:transform .28s cubic-bezier(.2,.7,.2,1)}
+.mlp-line{position:absolute;left:0;top:0;height:0;border-top:1px dashed currentColor;opacity:.6;transform:translateY(-.5px)}
+.mlp[data-mode="closed"] .mlp-line{opacity:.42}
+.mlp[data-mode="stale"] .mlp-line{opacity:.38;border-top-style:dotted}
+.mlp-dot{position:absolute;top:0;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;background:currentColor;
+  box-shadow:0 0 0 1.5px rgba(11,17,32,.9)}
+.mlp[data-mode="stale"] .mlp-dot{background:transparent;box-shadow:inset 0 0 0 1.5px currentColor}
+.mlp-ping{position:absolute;inset:0;border-radius:50%;background:currentColor;opacity:0}
+.mlp[data-mode="live"] .mlp-ping{animation:mlp-ping 1.8s cubic-bezier(.2,.6,.3,1) infinite}
+@keyframes mlp-ping{0%{transform:scale(1);opacity:.55}70%,100%{transform:scale(3.4);opacity:0}}
+.mlp-tag{position:absolute;right:1px;top:0;transform:translateY(-50%);padding:3px 4px 3px 3px;border-radius:3px;
+  background:currentColor;white-space:nowrap;pointer-events:auto;cursor:default;outline:0;box-sizing:border-box;text-align:center}
+.mlp-tag{-webkit-text-fill-color:#0b1120}
+.mlp[data-mode="stale"] .mlp-tag{background:rgba(22,29,46,.96);-webkit-text-fill-color:#aab3c5;box-shadow:inset 0 0 0 1px rgba(138,148,168,.55)}
+.mlp-tag:focus-visible{box-shadow:0 0 0 2px #0b1120,0 0 0 3.5px #4a9eff}
+.mlp-age{position:absolute;bottom:3px;padding:2px 5px;border-radius:3px;background:rgba(22,29,46,.92);
+  -webkit-text-fill-color:#aab3c5;font-weight:500;white-space:nowrap;box-shadow:inset 0 0 0 1px rgba(138,148,168,.3)}
+.mlp-age:empty{display:none}
+.mlp[data-pin="above"] .mlp-line,.mlp[data-pin="above"] .mlp-dot,
+.mlp[data-pin="below"] .mlp-line,.mlp[data-pin="below"] .mlp-dot{display:none}
+.mlp[data-pin="above"] .mlp-tag{transform:translateY(0)}
+.mlp[data-pin="below"] .mlp-tag{transform:translateY(-100%)}
+@media (prefers-reduced-motion:reduce){
+  .mlp--glide{transition:none}
+  .mlp[data-mode="live"] .mlp-ping{animation:none}
+}

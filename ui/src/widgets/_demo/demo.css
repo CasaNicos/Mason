@@ -1,0 +1,7 @@
+.mui-root .mui-demo { display: flex; flex-direction: column; height: 100%; min-height: 0; gap: 0.375rem; }
+.mui-root .mui-demo__head { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-weight: 600; letter-spacing: 0.08em; }
+.mui-root .mui-demo__stat { color: var(--mui-muted); font-size: 0.75rem; }
+.mui-root .mui-demo__list { flex: 1; min-height: 0; }
+.mui-root .mui-demo__row { display: grid; grid-template-columns: 4.5rem 1fr auto auto; gap: 0.5rem; align-items: baseline; }
+.mui-root .mui-demo__tk { font-weight: 700; overflow: hidden; text-overflow: ellipsis; }
+.mui-root .mui-demo__what { color: var(--mui-text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

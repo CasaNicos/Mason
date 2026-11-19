@@ -1,0 +1,12 @@
+/* scannerChart: header strip + chart fill. Scoped under .mui-root. */
+.mui-root .scc { display: flex; flex-direction: column; height: 100%; min-height: 0; min-width: 0; }
+.mui-root .scc-sym { font-size: 0.875rem; letter-spacing: 0.04em; color: var(--mui-text); }
+.mui-root .scc-body { flex: 1 1 auto; min-height: 0; min-width: 0; position: relative; }
+.mui-root .scc-body > .mui-chart-host { min-height: 3rem; }
+.mui-root .scc-wait { height: 100%; align-items: center; justify-content: center; text-align: center; }
+/* UI overhaul Task 8: a size container (as realmoneyChart's .rmc and congressChart's .cc are), so a short widget can
+   drop its badge/ticker bar: the chart's own header still shows the ticker and % change, and the left border keeps
+   the scanner's link colour. Width queries keep working on the same container. */
+.mui-root .scc { container-type: size; container-name: scc; }
+@container (max-width: 16rem) { .mui-root .scc .sc-sort { display: none; } }
+@container scc (max-height: 10rem) { .mui-root .scc .sc-bar { display: none; } }

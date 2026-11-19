@@ -1,0 +1,842 @@
+{
+  "mason": {
+    "version": "1.0",
+    "owner": "YourName"
+  },
+  "apis": {
+    "anthropic": {
+      "key": "",
+      "note": "LLM rewire COMPLETE for model choice: the old Sonnet 'model' key is deleted; every reader is repointed off it. This key is now used ONLY on the deep-analysis path (Opus 4.8) via the mason_llm gateway. All model/endpoint policy lives in the top-level 'llm' block below (deep=Opus, local=qwen, phi=fallback)."
+    },
+    "alpha_vantage": {
+      "key": "",
+      "base_url": "https://www.alphavantage.co/query",
+      "note": "Backup only \u2014 25 requests/day. Primary data source is now yfinance."
+    },
+    "fmp": {
+      "key": "",
+      "base_url": "https://financialmodelingprep.com/api/v3",
+      "note": "Used for: earnings calendar, economic calendar, institutional flows, sector data"
+    },
+    "yfinance": {
+      "note": "Primary data source. No API key needed. Unlimited quotes, options chains, historicals."
+    },
+    "fred": {
+      "key": "",
+      "note": "Free key from fred.stlouisfed.org/docs/api/api_key.html. Empty = FRED source skipped."
+    },
+    "eia": {
+      "key": "",
+      "note": "Free key from eia.gov/opendata/register.php. Empty = EIA source skipped."
+    }
+  },
+  "paper_trading": {
+    "provider": "alpaca",
+    "enabled": false,
+    "api_key": "",
+    "api_secret": "",
+    "base_url": "https://paper-api.alpaca.markets/v2"
+  },
+  "schedule": {
+    "morning_briefing": "8:00 AM",
+    "market_close_summary": "4:30 PM"
+  },
+  "analyst_desk": {
+    "phase": 3,
+    "health_monitor": {
+      "enabled": false,
+      "default_interval_seconds": 120
+    },
+    "notifications": {
+      "material_news_bridge": true
+    },
+    "scan": {
+      "enabled": false,
+      "max_tickers_per_cycle": 8,
+      "hourly": true,
+      "breaking_threshold": 0.8
+    },
+    "anchors": {
+      "enabled": false,
+      "times_et": [
+        "07:00",
+        "13:00"
+      ]
+    },
+    "worker": {
+      "yield_sleep_seconds": 5,
+      "min_seconds_between_calls": 3,
+      "max_busy_wait_seconds": 300
+    },
+    "report": {
+      "hourly_light": true
+    },
+    "debate": {
+      "enabled": false,
+      "breaking_threshold": 0.8,
+      "max_per_hour": 4,
+      "max_per_day": 20
+    },
+    "recommendations": {
+      "enabled": false,
+      "cooldown_hours": 12,
+      "grade_min_hours": 4,
+      "grade_max_hours": 72,
+      "dead_band_pct": 0.5,
+      "track_record_source": "tradable"
+    },
+    "factcheck": {
+      "enabled": false,
+      "tag_filter": {
+        "enabled": false,
+        "macro_min": 3
+      },
+      "layer1": {
+        "enabled": false
+      },
+      "layer2": {
+        "enabled": false
+      },
+      "qwen_diff": {
+        "enabled": false
+      },
+      "chat": {
+        "enabled": false,
+        "run_diff": false
+      },
+      "universe_refresh": {
+        "enabled": false,
+        "interval_hours": 24
+      },
+      "materiality_floor": 0.5,
+      "price_band_pct": 5.0,
+      "ticker_allowlist": [
+        "QQQ",
+        "SPY",
+        "USO",
+        "XLE",
+        "IEF",
+        "BTCUSD",
+        "VXUS",
+        "ARKW",
+        "QTUM"
+      ]
+    },
+    "macro": {
+      "enabled": false,
+      "materiality_floor": 0.5,
+      "breaking_threshold": 0.8,
+      "max_per_digest": 25,
+      "digest_hourly": true,
+      "notify_breaking": true
+    },
+    "opus_director": {
+      "enabled": false,
+      "ab_qwen": true,
+      "horizons_days": [
+        1,
+        5,
+        30,
+        90
+      ],
+      "review_reminder": true,
+      "v2": {
+        "enabled": false,
+        "model": "claude-opus-5-5",
+        "effort": "medium",
+        "max_output_tokens": "",
+        "expected_output_tokens": "",
+        "anchor_input_token_budget": "",
+        "event_input_token_budget": "",
+        "max_dossiers_anchor": 6,
+        "max_dossiers_event": 2,
+        "max_predictions_anchor": 5,
+        "max_predictions_event": 3,
+        "daily_usd_cap": 2.0,
+        "monthly_usd_cap": 44.0,
+        "trading_days_only": true,
+        "ab_qwen": false,
+        "qwen_input_token_budget": "",
+        "web": {
+          "enabled": false,
+          "max_searches": 2,
+          "max_fetches": 1,
+          "search_cost_usd": 0.01,
+          "blocked_domains": [
+            "reddit.com",
+            "x.com",
+            "twitter.com",
+            "tiktok.com",
+            "youtube.com",
+            "facebook.com",
+            "instagram.com",
+            "quora.com",
+            "pinterest.com",
+            "stocktwits.com"
+          ]
+        },
+        "min_dossier_score": 0.65,
+        "web_anchor": false,
+        "web_event": true,
+        "input_token_factor": "",
+        "max_followup_dossiers": 3,
+        "lean_kinds": [
+          "anchor_1300"
+        ],
+        "lean_dossier_tokens": "",
+        "lean_expected_output_tokens": "",
+        "writeups_give_room_when_full": true,
+        "writeups_keep_option_rows": true,
+        "writeups_drop_empty_debate": true
+      },
+      "grading": {
+        "memory_source": "tradable"
+      }
+    }
+  },
+  "order_builder": {
+    "default_notional": 1000
+  },
+  "llm": {
+    "deep": {
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    "local": {
+      "provider": "ollama",
+      "base_url": "http://localhost:11434",
+      "workhorse": "qwen3.5:4b",
+      "fallback": "phi4-mini",
+      "num_ctx": 40960,
+      "temperature": 0.3,
+      "think": false
+    },
+    "retry_backoff_seconds": [
+      15,
+      30,
+      60,
+      120,
+      240,
+      300,
+      300,
+      300,
+      300,
+      300
+    ],
+    "trace": true,
+    "trace_log_cap": 0,
+    "chat_models": {
+      "models": [
+        {
+          "id": "qwen3.5:4b",
+          "label": "Qwen 3.5 4B",
+          "provider": "ollama",
+          "tools": true
+        },
+        {
+          "id": "phi4-mini",
+          "label": "Phi-4 mini",
+          "provider": "ollama",
+          "tools": false
+        },
+        {
+          "id": "claude-haiku-5-5",
+          "label": "Haiku 5.5",
+          "provider": "anthropic",
+          "tools": false
+        },
+        {
+          "id": "claude-sonnet-5-5",
+          "label": "Sonnet 5.5",
+          "provider": "anthropic",
+          "tools": true
+        },
+        {
+          "id": "claude-opus-5-5",
+          "label": "Opus 5.5",
+          "provider": "anthropic",
+          "tools": true
+        },
+        {
+          "id": "claude-fable-5-2",
+          "label": "Fable 5.2",
+          "provider": "anthropic",
+          "tools": true
+        }
+      ]
+    },
+    "restart_on_local_outage": false
+  },
+  "catalyst": {
+    "sources": {
+      "enabled": false,
+      "app_charts": true,
+      "edgar_forms": true,
+      "ipo_calendar": true,
+      "clinical_trials": true,
+      "fda": true,
+      "pr_wires": true,
+      "prediction_markets": true,
+      "fred": true,
+      "eia": true,
+      "econ_calendar": true,
+      "sec_forms_timeout_s": 30
+    },
+    "triage": {
+      "enabled": false,
+      "universe": "broad",
+      "alert_threshold": 0.7,
+      "dossier_threshold": 0.6,
+      "event_call_threshold": 0.85,
+      "story_window_hours": 72,
+      "alert_offbook_score": 0.8
+    },
+    "dossier": {
+      "enabled": false,
+      "ticker_ttl_seconds": 1800,
+      "macro_ttl_seconds": 900,
+      "max_tokens_per_ticker": ""
+    },
+    "event_call": {
+      "enabled": false,
+      "max_per_day": 1,
+      "min_minutes_to_next_anchor": 90,
+      "max_story_age_hours": 12,
+      "escalation": {
+        "enabled": false,
+        "max_per_day": 2,
+        "window_et": [
+          "09:35",
+          "15:30"
+        ],
+        "book_actions": false
+      }
+    }
+  },
+  "memory": {
+    "theses": {
+      "enabled": false,
+      "match_min_overlap": 2,
+      "default_review_days": 60
+    },
+    "retention": {
+      "keep_market_material": 0.6
+    },
+    "search": {
+      "enabled": false,
+      "index_path": "mason_search.db",
+      "director_tools": true,
+      "max_tool_calls": 6,
+      "sql_row_cap": 300,
+      "lookup_summary_line": true
+    }
+  },
+  "index_desk": {
+    "enabled": false,
+    "allocator": {
+      "enabled": false,
+      "effort": "medium",
+      "daily_reserve_usd": 0.3
+    }
+  },
+  "autotrade": {
+    "approve_enabled": false,
+    "auto_place": false,
+    "max_pct_per_trade": 2.0,
+    "max_open_exposure_pct": 80.0,
+    "max_trades_per_day": 10,
+    "daily_loss_stop_pct": 3.0,
+    "min_confidence_auto": 0.65,
+    "no_new_margin": true,
+    "tiers_enabled": true,
+    "tiers": {
+      "learning": {
+        "min_p": 0.45,
+        "usd_max": 1250,
+        "max_pct": 1.5
+      },
+      "normal": {
+        "min_p": 0.65,
+        "usd_max": 2000
+      },
+      "high": {
+        "min_p": 0.72,
+        "usd_max": 4000
+      }
+    },
+    "normal_requires_own_n": 10,
+    "call_premium_cap_usd": 1250,
+    "put_premium_cap_usd": 1250,
+    "allow_0dte": true,
+    "zero_dte_underlyings": [
+      "SPY",
+      "QQQ"
+    ],
+    "zero_dte_last_entry_et": "14:30",
+    "zero_dte_flat_by_et": "15:15",
+    "respect_regime_veto": false,
+    "queue_premarket": true,
+    "entry_open_delay_min": 5,
+    "exits": {
+      "enabled": false,
+      "opt_exit_dte": 1,
+      "time_stop_sessions": {
+        "0-5DTE": 5,
+        "swing": 10,
+        "30d": 30,
+        "90d+": 90
+      },
+      "default_opt_stop_pct": null,
+      "default_opt_target_pct": null,
+      "default_stock_stop_pct": null,
+      "opt_stop_confirm_window_s": 900
+    },
+    "learning": {
+      "prior_n": 20,
+      "prior_p": 0.5,
+      "min_n_segment": 10
+    },
+    "sizing": {
+      "show_book": true,
+      "enabled": false,
+      "show_spend_table": true
+    },
+    "limits": {
+      "max_loss": {
+        "enabled": false
+      },
+      "symbol_cap": {
+        "enabled": false
+      },
+      "sector_cap": {
+        "enabled": false
+      },
+      "earnings": {
+        "enabled": false
+      }
+    },
+    "value_gate": {
+      "require_levels": {
+        "enabled": false
+      },
+      "min_reward_risk": {
+        "enabled": false
+      },
+      "min_expected_value": {
+        "enabled": false
+      },
+      "priced_in": {
+        "enabled": false
+      }
+    },
+    "option_snap_features": {
+      "enabled": false
+    },
+    "short_as_put": {
+      "enabled": false,
+      "tell_director": true,
+      "tell_quick_checks": true
+    },
+    "option_orders": {
+      "enabled": false,
+      "entry": {
+        "enabled": false
+      },
+      "exit": {
+        "enabled": false
+      },
+      "filters": {
+        "two_sided": {
+          "enabled": false
+        },
+        "spread": {
+          "enabled": false
+        },
+        "open_interest": {
+          "enabled": false
+        },
+        "quote_age": {
+          "enabled": false
+        },
+        "delta": {
+          "enabled": false
+        }
+      },
+      "placing_recovery": {
+        "enabled": false
+      }
+    }
+  },
+  "activity": {
+    "enabled": false,
+    "api_summaries": true,
+    "chat_tool_calls": true
+  },
+  "watchlist": {
+    "enabled": false,
+    "cap": 25,
+    "infra_symbols": [
+      "SPY",
+      "QQQ",
+      "IWM",
+      "XLK",
+      "XLF",
+      "XLE",
+      "XLV",
+      "XLI",
+      "XLY",
+      "XLP",
+      "XLU",
+      "XLB",
+      "XLRE",
+      "XLC",
+      "SMH",
+      "ARKX",
+      "UFO"
+    ],
+    "sector_etf": {
+      "HOOD": "XLF",
+      "IONQ": "XLK",
+      "RKLB": "UFO",
+      "SPCX": "UFO"
+    },
+    "stream": {
+      "enabled": false,
+      "mode": "ws",
+      "backfill_minutes": 120
+    },
+    "extended": {
+      "enabled": false,
+      "poll_seconds": 120
+    },
+    "sip_reconcile": {
+      "enabled": false,
+      "at_et": "16:20"
+    },
+    "options": {
+      "enabled": false,
+      "every_minutes": 15,
+      "min_dte": 7
+    },
+    "digests": {
+      "enabled": false,
+      "slots_et": {
+        "pre": "06:40",
+        "mid": "10:30",
+        "preanchor": "12:40",
+        "close": "16:15"
+      },
+      "event_throttle_minutes": 60,
+      "max_busy_wait_seconds": 300,
+      "yield_sleep_seconds": 5
+    },
+    "alpaca_sync": {
+      "enabled": false,
+      "pull_seconds": 300,
+      "mason_list": "Mason",
+      "nico_list": "Mine"
+    },
+    "opus_wake": {
+      "enabled": false,
+      "min_score": 0.85
+    },
+    "notify": {
+      "enabled": false,
+      "move_steps_pct": [
+        3,
+        5,
+        8,
+        12
+      ],
+      "atr_mult": 1.5,
+      "rvol_spike": 3.0,
+      "rvol_min_move_pct": 1.5,
+      "gap_pct": 3.0,
+      "position_pnl_steps_pct": [
+        5,
+        10,
+        20,
+        35,
+        50
+      ],
+      "stop_target_proximity_pct": 1.0,
+      "rel_strength_pct": 2.0
+    },
+    "retention": {
+      "bars_1m_days": 30,
+      "bars_5m_days": 365
+    }
+  },
+  "robinhood": {
+    "enabled": false,
+    "token_file": "",
+    "accounts": [
+      "Brokerage A",
+      "Household"
+    ],
+    "poll_seconds": {
+      "positions": 300,
+      "quotes": 60
+    },
+    "personal_positions_sync": {
+      "enabled": false,
+      "label_map": {},
+      "transfers": {
+        "enabled": false
+      }
+    },
+    "watchlist_sync": {
+      "enabled": false,
+      "push_list": "Mason"
+    },
+    "alerts_mirror": {
+      "enabled": false
+    },
+    "tape": {
+      "enabled": false
+    },
+    "brain_context": {
+      "enabled": false
+    }
+  },
+  "rh_expansion": {
+    "personal_scope": {
+      "exclude_accounts": [
+        "Household"
+      ]
+    },
+    "history": {
+      "enabled": false,
+      "backfill_span": "all",
+      "stories_per_day": 5,
+      "story_min_abs_pl": 1
+    },
+    "rate": {
+      "bulk_per_s": 2,
+      "live_per_s": 4
+    },
+    "price_cache": {
+      "enabled": false,
+      "xcheck_tolerance_pct": 0.5
+    },
+    "option_bars": {
+      "enabled": false,
+      "interval_intraday": "5minute",
+      "regrade_write": true
+    },
+    "priors": {
+      "enabled": false,
+      "min_n": 10
+    },
+    "pead": {
+      "enabled": false,
+      "universe": [
+        "sp500",
+        "ndx100",
+        "holdings",
+        "watchlist"
+      ],
+      "session_sweep": {
+        "enabled": false
+      }
+    },
+    "regimes": {
+      "enabled": false
+    },
+    "congress": {
+      "enabled": false,
+      "notify": false,
+      "poll_hours": 6,
+      "leaderboard_min_n": 8
+    },
+    "crowd": {
+      "enabled": false,
+      "allow_follow": false,
+      "snapshot_time_et": "16:30",
+      "lists": [
+        "100 Most Popular"
+      ]
+    },
+    "behavior": {
+      "enabled": false
+    },
+    "whatif": {
+      "enabled": false
+    },
+    "pvr": {
+      "enabled": false
+    },
+    "exposure": {
+      "enabled": false,
+      "etf_source": [
+        "sec_nport",
+        "yfinance_top"
+      ]
+    },
+    "brain_context": {
+      "enabled": false,
+      "max_tokens": ""
+    },
+    "ui": {
+      "enabled": false
+    }
+  },
+  "scanners": {
+    "enabled": false,
+    "poll_seconds": {
+      "rth": 60,
+      "extended": 300
+    },
+    "debounce": {
+      "enter_polls": 2,
+      "exit_polls": 5
+    },
+    "triage": {
+      "enabled": false,
+      "max_per_hour": 20,
+      "propose_min_score": 0.7,
+      "skip_trade_stories": true
+    },
+    "opus_section": {
+      "enabled": false,
+      "max_items": 8,
+      "tokens": ""
+    },
+    "grading": {
+      "enabled": false,
+      "horizons_sessions": [
+        1,
+        5
+      ]
+    },
+    "event_wake": {
+      "enabled": false
+    },
+    "trade_path": {
+      "enabled": false
+    }
+  },
+  "backup": {
+    "dir": "~/Documents/Mason_Backups",
+    "offsite_cmd": "~/mason/tools/backup_to_usb.sh {path}",
+    "offsite_timeout_s": 1800
+  },
+  "protect": {
+    "enabled": false,
+    "place_orders": true
+  },
+  "news": {
+    "edgar": {
+      "all_filers_enabled": false
+    },
+    "scoring": {
+      "mode": "classify",
+      "strip_live_marker": true
+    },
+    "deals": {
+      "enabled": false,
+      "big_partner_floor": 0.7
+    }
+  },
+  "desk_check": {
+    "enabled": false,
+    "apply_actions": true,
+    "notes_to_director": false,
+    "daily_usd_cap": 0.5,
+    "max_closes_per_day": 1,
+    "news": {
+      "enabled": false,
+      "any_ticker": false
+    },
+    "move": {
+      "enabled": false
+    },
+    "position": {
+      "enabled": false
+    },
+    "earnings": {
+      "enabled": false,
+      "large_cap": false
+    },
+    "passes": {
+      "after_close": {
+        "enabled": false
+      },
+      "before_open": {
+        "enabled": false
+      }
+    }
+  },
+  "model_budget": {
+    "daily_usd_cap": 3.5
+  },
+  "calendar": {
+    "chat_tool": {
+      "enabled": false
+    },
+    "director_block": {
+      "enabled": false
+    },
+    "desk_check_block": {
+      "enabled": false
+    },
+    "tool": {
+      "enabled": false
+    },
+    "feeds": {
+      "biocal": true
+    },
+    "biocal": {
+      "show_models": "held",
+      "notify_days": 3
+    }
+  },
+  "option_snaps": {
+    "enabled": false
+  },
+  "overnight": {
+    "enabled": false,
+    "director_block": {
+      "enabled": false,
+      "keep_when_full": true
+    },
+    "desk_check_block": {
+      "enabled": false
+    },
+    "alerts": {
+      "enabled": false
+    }
+  },
+  "idle_cash": {
+    "enabled": false,
+    "shadow": false,
+    "fund": "VOO"
+  },
+  "chat": {
+    "trader_desk": {
+      "enabled": false
+    },
+    "local_small_prompt": {
+      "enabled": false
+    },
+    "declined_answer_gets_facts": true
+  },
+  "learning": {
+    "grader": {
+      "option_facts": true
+    }
+  },
+  "selfcheck": {
+    "option_rows": true,
+    "agent_loop_errors": true
+  },
+  "options_journal": {
+    "close_pnl_check": true
+  },
+  "ui": {
+    "live_price_overlay": {
+      "enabled": false,
+      "poll_s": 5
+    }
+  }
+}

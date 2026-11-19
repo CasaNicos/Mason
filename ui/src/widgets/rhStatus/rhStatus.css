@@ -1,0 +1,22 @@
+/* rhStatus (S3-F4). Nocturne tokens only. Scoped under .mui-root. */
+.mui-root .rhs { display: flex; flex-direction: column; height: 100%; min-height: 0; gap: 0.4375rem; overflow-y: auto; }
+.mui-root .rhs-pills {
+  flex: none; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(max-content, 1fr); gap: 0.375rem;
+  overflow-x: auto; padding-bottom: 0.125rem; /* scrollbar: the global theme (templates/mason_v2.html) */
+}
+.mui-root .rhs-pill { min-width: 0; height: 3.375rem; }
+.mui-root .rhs-pill .glass-surface__content { padding: 0.25rem 0.625rem; justify-content: flex-start; }
+.mui-root .rhs-pill__in { display: flex; flex-direction: column; gap: 0; width: 100%; min-width: 0; line-height: 1.25; }
+.mui-root .rhs-pill__label { grid-column: 1 / -1; font-size: 0.5625rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mui-muted); white-space: nowrap; }
+.mui-root .rhs-pill__value { font-size: 0.8125rem; font-weight: 600; white-space: nowrap; }
+.mui-root .rhs-pill__sub { font-size: 0.625rem; color: var(--mui-faint); white-space: nowrap; }
+.mui-root .rhs-pill.is-ok .rhs-pill__value { color: var(--mui-up); }
+.mui-root .rhs-pill.is-bad .rhs-pill__value { color: var(--mui-down); }
+.mui-root .rhs-pill.is-warn .rhs-pill__value { color: var(--mui-warn); }
+.mui-root .rhs-mods { list-style: none; margin: 0; padding: 0; flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; font-size: 0.6875rem; align-content: flex-start; }
+.mui-root .rhs-mods li { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 0.375rem; min-width: 0; max-width: 100%; }
+.mui-root .rhs-on { color: var(--mui-up); }
+.mui-root .rhs-on::before { content: '● '; }
+.mui-root .rhs-off { color: var(--mui-muted); }
+.mui-root .rhs-off::before { content: '○ '; }
+.mui-root .rhs-err { color: var(--mui-down); overflow-wrap: anywhere; }

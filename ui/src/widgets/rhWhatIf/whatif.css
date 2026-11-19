@@ -1,0 +1,47 @@
+/* rhWhatIf. Scoped under .mui-root; Nocturne tokens only. Cost / saved carry words, never color alone. */
+.mui-root .mui-wi { display: flex; flex-direction: column; height: 100%; min-height: 0; gap: 0.3125rem; container-type: size; }
+.mui-root .mui-wi__top { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; flex: none; }
+.mui-root .mui-wi__q { font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mui-muted); }
+.mui-root .mui-wi__body { display: flex; flex-direction: column; flex: 1; min-height: 0; gap: 0.3125rem; overflow-y: auto; overflow-x: hidden; padding-right: 0.125rem; }
+.mui-root .mui-wi__total {
+  flex: none; padding: 0.5rem 0.625rem; border-radius: var(--mui-radius-md);
+  background: linear-gradient(160deg, var(--mui-accent-900), rgba(10, 13, 24, 0.55)); border: 1px solid var(--mui-line-strong);
+}
+.mui-root .mui-wi__total.is-pending { background: rgba(10, 13, 24, 0.55); border-style: dashed; }
+.mui-root .mui-wi__big { display: flex; align-items: center; flex-wrap: wrap; gap: 0.25rem 0.375rem; font-size: 1.25rem; font-weight: 700; line-height: 1.2; }
+.mui-root .mui-wi__w { font-size: 0.8125rem; font-weight: 500; color: var(--mui-text-2); }
+.mui-root .is-cost { color: var(--mui-down); }
+.mui-root .is-saved { color: var(--mui-up); }
+.mui-root .mui-wi__accts { display: flex; flex-wrap: wrap; gap: 0.25rem; flex: none; }
+.mui-root .mui-wi__acct {
+  font-size: 0.6875rem; padding: 0.0625rem 0.4375rem; border-radius: 999px; border: 1px solid var(--mui-line);
+  background: rgba(120, 150, 220, 0.05); white-space: nowrap;
+}
+.mui-root .mui-wi__lh { flex: none; }
+.mui-root .mui-wi__pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.375rem; flex: none; }
+@container (max-width: 220px) {
+  .mui-root .mui-wi__pair { grid-template-columns: minmax(0, 1fr); }
+}
+.mui-root .mui-wi__side { min-width: 0; padding: 0.375rem; border-radius: var(--mui-radius-sm); border: 1px solid var(--mui-line); background: rgba(10, 13, 24, 0.4); }
+.mui-root .mui-wi__sidet { margin: 0 0 0.25rem; font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mui-muted); font-weight: 600; }
+.mui-root .mui-wi__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+.mui-root .mui-wi__row { padding: 0.25rem 0.375rem; border-radius: var(--mui-radius-sm); background: rgba(120, 150, 220, 0.05); min-width: 0; }
+.mui-root .mui-wi__row.is-pending { opacity: 0.75; }
+.mui-root .mui-wi__l1 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 0.375rem; min-width: 0; }
+.mui-root .mui-wi__tk { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 0 1 auto; min-width: 2.5rem; max-width: 100%; }
+.mui-root .mui-wi__tag { font-size: 0.625rem; color: var(--mui-faint); white-space: nowrap; }
+.mui-root .mui-wi__amt { margin-left: auto; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+.mui-root .mui-wi__l2 { display: flex; flex-wrap: wrap; gap: 0 0.5rem; }
+.mui-root .mui-wi__foot { flex: none; display: flex; flex-direction: column; gap: 0.125rem; border-top: 1px solid var(--mui-line); padding-top: 0.25rem; }
+
+/* ── compact (meta minimum on 1280 / 900 / 600 px viewports): the two exit lists come right under
+ *    the total, so Most costly and Best are both on screen; per-account pills move below them ── */
+@container (max-height: 440px) {
+  .mui-root .mui-wi__q { display: none; }
+  .mui-root .mui-wi__top { justify-content: flex-end; }
+  .mui-root .mui-wi__total { padding: 0.3125rem 0.5rem; }
+  .mui-root .mui-wi__w { font-size: 0.75rem; }
+  .mui-root .mui-wi__pair { order: 1; }
+  .mui-root .mui-wi__accts, .mui-root .mui-wi__lh { order: 2; }
+  .mui-root .mui-wi__foot { order: 3; }
+}

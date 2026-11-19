@@ -1,0 +1,57 @@
+/* rhAccounts (S3-F4). Nocturne tokens only (theme.css). Scoped under .mui-root. */
+.mui-root .rha { display: flex; flex-direction: column; min-height: 0; height: 100%; gap: 0.375rem; container-type: inline-size; }
+.mui-root .rha-head {
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.25rem 0.625rem; flex: none;
+  padding: 0 0.125rem 0.375rem; border-bottom: 1px solid var(--mui-line);
+}
+.mui-root .rha-head__label { font-size: 0.625rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mui-muted); }
+.mui-root .rha-head__eq { font-weight: 600; font-variant-numeric: normal; }
+.mui-root .rha-head__all { margin-left: auto; color: var(--mui-faint); font-size: 0.6875rem; }
+.mui-root .rha-list { list-style: none; margin: 0; padding: 0 0.25rem 0 0; flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 0.3125rem; }
+.mui-root .rha-acct {
+  border-radius: var(--mui-radius-sm); background: rgba(120, 150, 220, 0.05); border: 1px solid transparent;
+  transition: border-color 0.15s, background 0.15s;
+}
+.mui-root .rha-acct:hover, .mui-root .rha-acct.is-open { border-color: var(--mui-line-strong); background: rgba(74, 158, 255, 0.07); }
+.mui-root .rha-acct.is-family { background: rgba(120, 150, 220, 0.025); }
+.mui-root .rha-acct__main {
+  all: unset; box-sizing: border-box; cursor: pointer; width: 100%;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 0.5rem;
+  padding: 0.375rem 0.5rem; border-radius: var(--mui-radius-sm);
+}
+.mui-root .rha-acct__main:focus-visible { outline: 2px solid var(--mui-accent); outline-offset: 1px; }
+.mui-root .rha-acct__cash { display: inline-flex; align-items: center; gap: 0.3125rem; }
+.mui-root .rha-acct__cashpct { font-size: 0.625rem; color: var(--mui-muted); white-space: nowrap; min-width: 3.6rem; }
+.mui-root .rha-ring { flex: none; }
+.mui-root .rha-ring__track { fill: none; stroke: var(--mui-panel-2); stroke-width: 3; }
+.mui-root .rha-ring__arc { fill: none; stroke: var(--mui-accent); stroke-width: 3; stroke-linecap: round; }
+.mui-root .rha-acct__name { display: flex; align-items: baseline; gap: 0.375rem; min-width: 0; flex-wrap: wrap; }
+.mui-root .rha-acct__name b { overflow-wrap: anywhere; min-width: 0; max-width: 100%; }
+.mui-root .rha-acct__mask { color: var(--mui-faint); font-size: 0.6875rem; font-family: var(--mui-mono); }
+.mui-root .rha-fam { color: var(--mui-accent-300); border-color: var(--mui-accent-700); text-transform: lowercase; letter-spacing: 0.04em; }
+.mui-root .rha-acct__eq { display: flex; flex-direction: column; align-items: flex-end; gap: 0.0625rem; }
+.mui-root .rha-money { display: inline-flex; align-items: center; font-weight: 600; white-space: nowrap; }
+.mui-root .rha-money__roll { display: inline-flex; align-items: center; }
+.mui-root .rha-money__grp { display: inline-flex; align-items: center; }
+.mui-root .rha-money .counter-counter { line-height: 1; }
+.mui-root .rha-day { font-size: 0.6875rem; white-space: nowrap; }
+.mui-root .rha-day__pct { opacity: 0.8; }
+.mui-root .rha-acct__chev { color: var(--mui-faint); font-size: 0.6875rem; }
+.mui-root .rha-acct__sub {
+  display: flex; flex-wrap: wrap; gap: 0.125rem 0.75rem; padding: 0 0.5rem 0.375rem 2.6rem;
+  font-size: 0.6875rem; color: var(--mui-text-2);
+}
+.mui-root .rha-idle { color: var(--mui-warn); }
+.mui-root .rha-idle::before { content: '◷ '; }
+.mui-root .rha-div { color: var(--mui-muted); }
+.mui-root .rha-acct__detail { padding: 0 0.5rem 0.5rem 2.6rem; font-size: 0.6875rem; }
+.mui-root .rha-top { list-style: none; margin: 0.25rem 0 0; padding: 0; display: grid; gap: 0.1875rem; }
+.mui-root .rha-top li { display: grid; grid-template-columns: 3.5rem 1fr 3rem; align-items: center; gap: 0.5rem; }
+.mui-root .rha-top li > span:last-child { text-align: right; color: var(--mui-text-2); }
+.mui-root .rha-top__bar { height: 0.25rem; border-radius: 0.25rem; background: var(--mui-panel-2); overflow: hidden; }
+.mui-root .rha-top__bar > span { display: block; height: 100%; background: var(--mui-accent); border-radius: 0 0.25rem 0.25rem 0; }
+@container (max-width: 22rem) {
+  .mui-root .rha-acct__cashpct, .mui-root .rha-acct__mask, .mui-root .rha-day__pct { display: none; }
+  .mui-root .rha-acct__sub, .mui-root .rha-acct__detail { padding-left: 0.5rem; }
+  .mui-root .rha-head__all { display: none; }
+}

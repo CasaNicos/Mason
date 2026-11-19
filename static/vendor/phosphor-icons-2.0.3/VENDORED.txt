@@ -1,0 +1,31 @@
+Phosphor Icons 2.0.3 (npm @phosphor-icons/web@2.0.3), "regular" style only, vendored for Mason on 2026-11-18
+(UIFIX2 item 3).
+
+Why: templates/mason_v2.html and ui/harness.html loaded the icon stylesheet from unpkg. It now ships with Mason,
+so the icons show with no internet and the public repository has no CDN dependency.
+
+Source (byte-for-byte what the page loaded before):
+  https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css
+  https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/Phosphor.woff2      (asked for by style.css)
+How verified: both files are byte-identical to src/regular/style.css and src/regular/Phosphor.woff2 in the npm
+package @phosphor-icons/web@2.0.3 (package integrity
+sha512-9oYmohi2fo87w3DbtfjBoJxrklVojgXq2wuGcqxKccj2TxMq7UIusKDrGUZYOQHM9pUKkh+kvfmutETMGDR6gg==, checked against
+`npm view @phosphor-icons/web@2.0.3 dist.integrity`).
+
+What is NOT here, on purpose:
+  - the other icon styles (thin, light, bold, fill, duotone): the page uses only the regular "ph ph-…" icons;
+  - Phosphor.woff, Phosphor.ttf, Phosphor.svg (351 KB, 351 KB, 1.2 MB): style.css is kept unchanged, so it still
+    names them as fallbacks after the woff2 file. A browser takes the first format it supports, and every
+    browser since 2016 supports woff2, so they are never asked for (checked in headless Chromium: 0 requests).
+
+Licence: MIT, Copyright (c) 2020-2021 Phosphor Icons.
+  LICENSE   the project's licence text (npm package @phosphor-icons/web@2.0.3, file LICENSE)
+Project: https://phosphoricons.com/  ·  https://github.com/phosphor-icons/web
+
+Do not edit these files. To upgrade, add a new versioned folder and change the link tag at the top of
+templates/mason_v2.html and of ui/harness.html.
+
+file                           bytes   sha256
+LICENSE                          1076  687fbe52d0eb5c2353eca27a4037e889145ee0b584d3b1abf67581c4a4a4e47c
+Phosphor.woff2                 105964  fa7cddfb3b817b5e68b6f6386685014716432a95f58a92cff4d21741f174399e
+style.css                       63985  ae360472b03f686e8327d0440ac943bbf3e25ae3a833e7ff530aef1ce33ab44d
